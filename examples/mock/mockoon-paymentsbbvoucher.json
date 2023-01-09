@@ -542,10 +542,10 @@
         },
         {
           "uuid": "e38c51a0-6bf0-4bad-a089-0dafd4f37299",
-          "body": "{\n  \"message\": \"Invalid Gov Stack Building Block\"\n}",
+          "body": "{\n  \"message\": \"Gov Stack Building Block does not exist\"\n}",
           "latency": 0,
           "statusCode": 460,
-          "label": "Invalid Gov Stack Building Block",
+          "label": "Gov Stack Building Block does not exist",
           "headers": [],
           "bodyType": "INLINE",
           "filePath": "",

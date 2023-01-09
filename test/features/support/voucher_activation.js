@@ -5,17 +5,6 @@ const { localhost } = require('./helpers/helpers');
 let specVoucherActivation;
 
 const baseUrl = `${localhost}vouchers/voucher_activation`;
-const validBodyValue = {
-    "voucher_serial_number": 223,
-    "Gov_Stack_BB": "example Gov_Stack_BB"
-}
-const invalidSerialNumberBodyValue = {
-    "voucher_serial_number": 0,
-    "Gov_Stack_BB": "example Gov_Stack_BB"
-}
-const invalidGovStackBBBodyValue = {
-    "voucher_serial_number": 223
-}
 
 Before(() => {
     specVoucherActivation = pactum.spec();
@@ -33,7 +22,10 @@ When(
   'The user triggers an action with a valid payload to activate a pre-activated voucher', () => {
     specVoucherActivation
       .patch(baseUrl)
-      .withBody(validBodyValue);
+      .withBody({
+    "voucher_serial_number": 223,
+    "Gov_Stack_BB": "example Gov_Stack_BB"
+  });
 });
 
 Then('The user successfully activates a pre-activated voucher', async () => {
@@ -64,7 +56,10 @@ When(
   'The user triggers an action with an invalid serial number to activate a pre-activated voucher', () => {
     specVoucherActivation
     .patch(baseUrl)
-    .withBody(invalidSerialNumberBodyValue);
+    .withBody({
+    "voucher_serial_number": 0,
+    "Gov_Stack_BB": "example Gov_Stack_BB"
+});
   }
 );
   
@@ -74,19 +69,21 @@ Then('The result of the operation returns an error because of an invalid serial 
   specVoucherActivation.response().should.have.body({"message": "Invalid voucher serial number"});
 });
 
-// Scenario: The user is not able to activate a pre-activated voucher because of an invalid Gov Stack Building Block
+// Scenario: The user is not able to activate a pre-activated voucher because of Gov Stack Building Block does not exist
 When(
     'The user triggers an action with an invalid Gov Stack Building Block to activate a pre-activated voucher', () => {
       specVoucherActivation
       .patch(baseUrl)
-      .withBody(invalidGovStackBBBodyValue);
+      .withBody({
+        "voucher_serial_number": 223
+    });
   }
 );
     
-Then('The result of the operation returns an error because of an invalid Gov Stack Building Block', async () => {
+Then('The result of the operation returns an error because of Gov Stack Building Block does not exist', async () => {
   await specVoucherActivation.toss();
   specVoucherActivation.response().should.have.status(460);
-  specVoucherActivation.response().should.have.body({"message": "Invalid Gov Stack Building Block"});
+  specVoucherActivation.response().should.have.body({"message": "Gov Stack Building Block does not exist"});
 });
 
 After(() => {

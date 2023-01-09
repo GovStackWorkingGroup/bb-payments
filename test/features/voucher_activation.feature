@@ -18,6 +18,6 @@ Feature: The VoucherActivation API is used to activate a pre-activated voucher
     When The user triggers an action with an invalid serial number to activate a pre-activated voucher
     Then The result of the operation returns an error because of an invalid serial number
 
-  Scenario: The user is not able to activate a pre-activated voucher because of an invalid Gov Stack Building Block
+  Scenario: The user is not able to activate a pre-activated voucher because of Gov Stack Building Block does not exist
     When The user triggers an action with an invalid Gov Stack Building Block to activate a pre-activated voucher
-    Then The result of the operation returns an error because of an invalid Gov Stack Building Block
+    Then The result of the operation returns an error because of Gov Stack Building Block does not exist
