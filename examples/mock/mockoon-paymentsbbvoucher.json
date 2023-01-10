@@ -433,7 +433,14 @@
             {
               "target": "body",
               "modifier": "voucher_number",
-              "value": "^\\d$",
+              "value": "^((?!(0))[0-9]{0,19})",
+              "invert": false,
+              "operator": "regex"
+            },
+            {
+              "target": "body",
+              "modifier": "voucher_number",
+              "value": "",
               "invert": true,
               "operator": "null"
             },
@@ -500,7 +507,14 @@
             {
               "target": "body",
               "modifier": "voucher_number",
-              "value": "^\\d$",
+              "value": "^((?!(0))[0-9]{0,19})$",
+              "invert": false,
+              "operator": "regex"
+            },
+            {
+              "target": "body",
+              "modifier": "voucher_number",
+              "value": "",
               "invert": true,
               "operator": "null"
             },
@@ -574,7 +588,7 @@
             {
               "target": "body",
               "modifier": "voucher_number",
-              "value": "^\\d$",
+              "value": "",
               "invert": false,
               "operator": "null"
             },
@@ -648,7 +662,14 @@
             {
               "target": "body",
               "modifier": "voucher_number",
-              "value": "^\\d$",
+              "value": "^((?!(0))[0-9]{0,19})$",
+              "invert": false,
+              "operator": "regex"
+            },
+            {
+              "target": "body",
+              "modifier": "voucher_number",
+              "value": "",
               "invert": true,
               "operator": "null"
             },
@@ -715,7 +736,14 @@
             {
               "target": "body",
               "modifier": "voucher_number",
-              "value": "^\\d$",
+              "value": "^((?!(0))[0-9]{0,19})$",
+              "invert": false,
+              "operator": "regex"
+            },
+            {
+              "target": "body",
+              "modifier": "voucher_number",
+              "value": "",
               "invert": true,
               "operator": "null"
             },
