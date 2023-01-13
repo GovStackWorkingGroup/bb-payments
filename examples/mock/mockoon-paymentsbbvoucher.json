@@ -411,6 +411,294 @@
       ],
       "enabled": true,
       "responseMode": null
+    },
+    {
+      "uuid": "11e0eb75-3513-4c7c-9a33-bdc4c9405d42",
+      "documentation": "Check the status of the Voucher. The API will respond with Not Pre-Activated Pre-Activated Activated Suspended Blocked Purged Not Existing",
+      "method": "get",
+      "endpoint": "vouchers/voucherstatuscheck/:voucherserialnumber",
+      "responses": [
+        {
+          "uuid": "cd774659-0642-48d6-9636-1207a9ca9066",
+          "body": "{\n  \"message\": \"Invalid request\"\n}",
+          "latency": 0,
+          "statusCode": 400,
+          "label": "Invalid request",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "null",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true
+        },
+        {
+          "uuid": "e0d54c47-f7c9-42f9-9a50-e03b765ffc4e",
+          "body": "{\n  \"message\": \"Invalid voucher number\"\n}",
+          "latency": 0,
+          "statusCode": 456,
+          "label": "Invalid voucher number",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "^.{1,}$",
+              "invert": false,
+              "operator": "regex"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "invalidNumber",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "null",
+              "invert": true,
+              "operator": "equals"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "",
+              "invert": true,
+              "operator": "null"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false
+        },
+        {
+          "uuid": "6943cbd5-4a40-43b9-9e31-ddae3e9213a0",
+          "body": "{\n  \"message\": \"Voucher number already used\"\n}",
+          "latency": 0,
+          "statusCode": 458,
+          "label": "Voucher number already used",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "^.{1,}$",
+              "invert": false,
+              "operator": "regex"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "alreadyUsed",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "null",
+              "invert": true,
+              "operator": "equals"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "",
+              "invert": true,
+              "operator": "null"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false
+        },
+        {
+          "uuid": "9e5832f1-0574-4630-9df7-5753b08f45e7",
+          "body": "{\n  \"message\": \"Voucher has expired\"\n}",
+          "latency": 0,
+          "statusCode": 459,
+          "label": "Voucher has expired",
+          "headers": [
+            {
+              "key": "",
+              "value": ""
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "^.{1,}$",
+              "invert": false,
+              "operator": "regex"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "expired",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "null",
+              "invert": true,
+              "operator": "equals"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "",
+              "invert": true,
+              "operator": "null"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false
+        },
+        {
+          "uuid": "e5850d88-cc27-4e57-8e1c-7ee43fefd386",
+          "body": "{\n  \"message\": \"Gov Stack Building Block does not exist\"\n}",
+          "latency": 0,
+          "statusCode": 460,
+          "label": "Gov Stack Building Block does not exist",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "^.{1,}$",
+              "invert": false,
+              "operator": "regex"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "notExistingGovStackBB",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "null",
+              "invert": true,
+              "operator": "equals"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "",
+              "invert": true,
+              "operator": "null"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false
+        },
+        {
+          "uuid": "8f7b4800-b1a4-491c-97ec-04b83df506de",
+          "body": "{\n  \"voucher_status\": \"Not Pre-Activated\",\n  \"voucher_amount\": \"string\"\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Voucher status",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "^.{1,}$",
+              "invert": false,
+              "operator": "regex"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "null",
+              "invert": true,
+              "operator": "equals"
+            },
+            {
+              "target": "params",
+              "modifier": "voucherserialnumber",
+              "value": "",
+              "invert": true,
+              "operator": "null"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false
+        }
+      ],
+      "enabled": true,
+      "responseMode": null
     }
   ],
   "proxyMode": false,
