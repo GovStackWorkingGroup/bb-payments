@@ -8,7 +8,7 @@ let serialNumberParam;
 const baseUrl = `${localhost}vouchers/voucherstatuscheck/{voucherserialnumber}`;
 const requestFunction = () =>
   specVoucherCancelation.patch(baseUrl).withBody({
-    'voucherserialnumber': 'string',
+    'voucherserialnumber': `${serialNumberParam}`,
     'Gov_Stack_BB': 'string'
   }).withPathParams('voucherserialnumber', serialNumberParam);
 
@@ -39,12 +39,12 @@ Given('The user wants to cancel a voucher with voucher serial number 4321', () =
   serialNumberParam = '4321';
   return serialNumberParam;
 });
-  
+
 When('The user triggers an action without payload to cancel a voucher', () => {
   specVoucherCancelation.patch(baseUrl).withBody()
     .withPathParams('voucherserialnumber', serialNumberParam);
 });
-  
+
 Then('The result of an operation returns an error because of not providing request payload', async () => {
   await specVoucherCancelation.toss();
   specVoucherCancelation.response().should.have.status(400);
@@ -58,13 +58,13 @@ Given('The user wants to cancel a voucher with voucher serial number 5432', () =
   serialNumberParam = '5432';
   return serialNumberParam;
 });
-    
+
 When('The user triggers an action with an invalid payload to cancel a voucher', () => {
   specVoucherCancelation.patch(baseUrl).withBody({
     'voucherserialnumber': ''
   }).withPathParams('voucherserialnumber', serialNumberParam);
 });
-    
+
 Then('The result of an operation returns an error because of providing an invalid payload', async () => {
   await specVoucherCancelation.toss();
   specVoucherCancelation.response().should.have.status(400);
