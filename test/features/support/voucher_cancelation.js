@@ -3,23 +3,26 @@ const { Given, When, Then, Before, After } = require('@cucumber/cucumber');
 const { localhost } = require('./helpers/helpers');
 
 let specVoucherCancelation;
-let serialNumberParam;
+let voucherSerialNumber;
+let voucherCancelationBodyBody;
 
 const baseUrl = `${localhost}vouchers/voucherstatuscheck/{voucherserialnumber}`;
 const requestFunction = () =>
-  specVoucherCancelation.patch(baseUrl).withBody({
-    'voucherserialnumber': `${serialNumberParam}`,
-    'Gov_Stack_BB': 'string'
-  }).withPathParams('voucherserialnumber', serialNumberParam);
+  specVoucherCancelation.patch(baseUrl).withBody(voucherCancelationBodyBody)
+  .withPathParams('voucherserialnumber', voucherSerialNumber);
 
 Before(() => {
   specVoucherCancelation = pactum.spec();
 });
 
 // Scenario: The user successfully cancels a voucher
-Given('The user wants to cancel a voucher with voucher serial number 1234', () => {
-  serialNumberParam = '1234';
-  return serialNumberParam;
+Given('The user wants to cancel a voucher', () => {
+  voucherSerialNumber = '1234';
+  voucherCancelationBodyBody = {
+    voucherserialnumber: voucherSerialNumber,
+    Gov_Stack_BB: 'Gov_Stack_BB'
+  };
+  return (voucherCancelationBodyBody,voucherSerialNumber);
 });
 
 When('The user triggers an action with a valid payload to cancel a voucher', () => {
@@ -34,56 +37,61 @@ Then('The user successfully cancels the voucher', async () => {
   });
 });
 
-// Scenario: The user is not able to cancel a voucher with voucher serial number 4321
-Given('The user wants to cancel a voucher with voucher serial number 4321', () => {
-  serialNumberParam = '4321';
-  return serialNumberParam;
+// Scenario: The user is not able to cancel the voucher without providing the voucher details
+Given('The user wants to cancel the voucher without providing the voucher details', () => {
+  voucherSerialNumber = '4321';
+  voucherCancelationBodyBody = null;
+  return (voucherCancelationBodyBody,voucherSerialNumber);
 });
 
-When('The user triggers an action without payload to cancel a voucher', () => {
-  specVoucherCancelation.patch(baseUrl).withBody()
-    .withPathParams('voucherserialnumber', serialNumberParam);
-});
-
-Then('The result of an operation returns an error because of not providing request payload', async () => {
-  await specVoucherCancelation.toss();
-  specVoucherCancelation.response().should.have.status(400);
-  specVoucherCancelation.response().should.have.jsonLike({
-    'message': 'Invalid request'
-  });
-});
-
-// Scenario: The user is not able to cancel a voucher with voucher serial number 5432
-Given('The user wants to cancel a voucher with voucher serial number 5432', () => {
-  serialNumberParam = '5432';
-  return serialNumberParam;
-});
-
-When('The user triggers an action with an invalid payload to cancel a voucher', () => {
-  specVoucherCancelation.patch(baseUrl).withBody({
-    'voucherserialnumber': ''
-  }).withPathParams('voucherserialnumber', serialNumberParam);
-});
-
-Then('The result of an operation returns an error because of providing an invalid payload', async () => {
-  await specVoucherCancelation.toss();
-  specVoucherCancelation.response().should.have.status(400);
-  specVoucherCancelation.response().should.have.jsonLike({
-    'message': 'Invalid request'
-  });
-});
-
-// Scenario: The user is not able to cancel an invalid voucher with voucher serial number 3214
-Given('The user wants to cancel a voucher with voucher serial number 3214', () => {
-  serialNumberParam = '3214';
-  return serialNumberParam;
-});
-
-When('The user triggers an action with a valid payload to cancel an invalid voucher', () => {
+When('The user triggers an action to cancel the voucher without providing the voucher details', () => {
   requestFunction();
 });
 
-Then('The result of an operation returns an error because of an invalid voucher', async () => {
+Then('The result of an operation returns an error because of not providing the voucher details', async () => {
+  await specVoucherCancelation.toss();
+  specVoucherCancelation.response().should.have.status(400);
+  specVoucherCancelation.response().should.have.jsonLike({
+    'message': 'Invalid request'
+  });
+});
+
+// Scenario: The user is not able to cancel the voucher with invalid voucher details
+Given('The user wants to cancel the voucher with invalid voucher details', () => {
+  voucherSerialNumber = '5432';
+  voucherCancelationBodyBody = {
+    voucherserialnumber: ''
+  };
+  return (voucherCancelationBodyBody,voucherSerialNumber);
+});
+
+When('The user triggers an action with invalid voucher details to cancel the voucher', () => {
+  requestFunction();
+});
+
+Then('The result of an operation returns an error because of providing invalid voucher details', async () => {
+  await specVoucherCancelation.toss();
+  specVoucherCancelation.response().should.have.status(400);
+  specVoucherCancelation.response().should.have.jsonLike({
+    'message': 'Invalid request'
+  });
+});
+
+// Scenario: The user is not able to cancel the invalid voucher
+Given('The user wants to cancel the invalid voucher', () => {
+  voucherSerialNumber = '3214';
+  voucherCancelationBodyBody = {
+    voucherserialnumber: voucherSerialNumber,
+    Gov_Stack_BB: 'Gov_Stack_BB'
+  };
+  return (voucherCancelationBodyBody,voucherSerialNumber);
+});
+
+When('The user triggers an action with a valid payload to cancel the invalid voucher', () => {
+  requestFunction();
+});
+
+Then('The result of an operation returns an error because of the invalid voucher', async () => {
   await specVoucherCancelation.toss();
   specVoucherCancelation.response().should.have.status(463);
   specVoucherCancelation.response().should.have.jsonLike({
@@ -91,14 +99,18 @@ Then('The result of an operation returns an error because of an invalid voucher'
   });
 });
 
-// Scenario: The user is not able to cancel already canceled voucher with voucher serial number 2134
-Given('The user wants to cancel a voucher with voucher serial number 2134', () => {
-  serialNumberParam = '2134';
-  return serialNumberParam;
+// Scenario: The user is not able to cancel the already canceled voucher
+Given('The user wants to cancel the already canceled voucher', () => {
+  voucherSerialNumber = '2134';
+  voucherCancelationBodyBody = {
+    voucherserialnumber: 'voucherSerialNumber',
+    Gov_Stack_BB: 'Gov_Stack_BB'
+  };
+  return (voucherCancelationBodyBody,voucherSerialNumber);
 });
 
 When(
-  'The user triggers an action with a valid payload to cancel a voucher that has already been canceled',
+  'The user triggers an action with a valid payload to cancel the voucher that has already been canceled',
   () => {
     requestFunction();
   }
