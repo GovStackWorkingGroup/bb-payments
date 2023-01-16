@@ -416,7 +416,7 @@
       "uuid": "236f74d1-94d9-4a39-9d0c-17fb74e68302",
       "documentation": "Request for voucher redemption by sending the voucher number, the merchant name and merchant payment details.",
       "method": "post",
-      "endpoint": "vouchers/voucher_redeemption",
+      "endpoint": "vouchers/voucher_redemption",
       "responses": [
         {
           "uuid": "525fc27b-5ec1-41b2-b2ad-163b5352228e",

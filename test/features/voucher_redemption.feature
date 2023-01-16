@@ -1,7 +1,7 @@
 Feature: The VoucherRedemption API is used by a non Payment Building Blocks in the GovStack Framework to redeem a voucher.
   Request for voucher redemption by sending the voucher number, the merchant name and merchant payment details.
   
-  Request endpoint: POST /vouchers/voucher_redeemption
+  Request endpoint: POST /vouchers/voucher_redemption
 
   Background:
     Given The user wants to redeem the voucher

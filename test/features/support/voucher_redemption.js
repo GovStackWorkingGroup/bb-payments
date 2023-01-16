@@ -10,7 +10,7 @@ let validMerchantBankDetails;
 let validMerchantVoucherGroup;
 let override;
 
-const baseUrl = `${localhost}vouchers/voucher_redeemption`;
+const baseUrl = `${localhost}vouchers/voucher_redemption`;
 
 Before(() => {
   specVoucherRedemption = pactum.spec();
