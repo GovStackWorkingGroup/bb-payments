@@ -485,7 +485,7 @@
         }
       }
     },
-    "/vouchers/voucher_redeemption": {
+    "/vouchers/voucher_redemption": {
       "post": {
         "tags": ["VoucherRedemption"],
         "description": "Request for voucher redemption by sending the voucher number, the merchant name and merchant payment details",
