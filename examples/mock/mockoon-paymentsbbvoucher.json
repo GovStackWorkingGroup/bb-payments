@@ -433,7 +433,7 @@
             {
               "target": "body",
               "modifier": "voucher_number",
-              "value": "^((?!(0))[0-9]{0,19})",
+              "value": "^((?!(0))[0-9]{0,19})$",
               "invert": false,
               "operator": "regex"
             },

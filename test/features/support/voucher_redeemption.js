@@ -2,7 +2,7 @@ const pactum = require('pactum');
 const { Given, When, Then, Before, After } = require('@cucumber/cucumber');
 const { localhost } = require('./helpers/helpers');
 
-let specVoucherReedemption;
+let specVoucherRedemption;
 let validVoucherNumber;
 let validGovstackBB;
 let validMerchantName;
@@ -13,7 +13,7 @@ let override;
 const baseUrl = `${localhost}vouchers/voucher_redeemption`;
 
 Before(() => {
-  specVoucherReedemption = pactum.spec();
+  specVoucherRedemption = pactum.spec();
 });
 
 // Background
@@ -36,7 +36,7 @@ Given('The user wants to redeem the voucher', () => {
 
 // Scenario: The user successfully redeemed the voucher
 When('The user triggers an action to redeem the voucher', () => {
-  specVoucherReedemption.post(baseUrl).withBody({
+  specVoucherRedemption.post(baseUrl).withBody({
     voucher_number: validVoucherNumber,
     Gov_Stack_BB: validGovstackBB,
     merchant_name: validMerchantName,
@@ -47,9 +47,9 @@ When('The user triggers an action to redeem the voucher', () => {
 });
 
 Then('The user successfully redeemed the voucher', async () => {
-  await specVoucherReedemption.toss();
-  specVoucherReedemption.response().should.have.status(200);
-  specVoucherReedemption.response().should.have.jsonLike({
+  await specVoucherRedemption.toss();
+  specVoucherRedemption.response().should.have.status(200);
+  specVoucherRedemption.response().should.have.jsonLike({
     result_status: 'Voucher is successfully redeemed',
   });
 });
@@ -58,7 +58,7 @@ Then('The user successfully redeemed the voucher', async () => {
 When(
   'The user triggers an action to redeem the voucher with a no existing GovStack Building Block variable',
   () => {
-    specVoucherReedemption.post(baseUrl).withBody({
+    specVoucherRedemption.post(baseUrl).withBody({
       voucher_number: validVoucherNumber,
       Gov_Stack_BB: 'Some',
       merchant_name: validMerchantName,
@@ -72,9 +72,9 @@ When(
 Then(
   'The result of an operation returns an error, because the GovStack Building Block does not exist',
   async () => {
-    await specVoucherReedemption.toss();
-    specVoucherReedemption.response().should.have.status(460);
-    specVoucherReedemption.response().should.have.jsonLike({
+    await specVoucherRedemption.toss();
+    specVoucherRedemption.response().should.have.status(460);
+    specVoucherRedemption.response().should.have.jsonLike({
       message: 'GovStack Building Block does not exist',
     });
   }
@@ -84,7 +84,7 @@ Then(
 When(
   'The user triggers an action to redeem the voucher with an invalid voucher number',
   () => {
-    specVoucherReedemption.post(baseUrl).withBody({
+    specVoucherRedemption.post(baseUrl).withBody({
       voucher_number: null,
       Gov_Stack_BB: validGovstackBB,
       merchant_name: validMerchantName,
@@ -98,9 +98,9 @@ When(
 Then(
   'The result of an operation returns an error, because of an invalid voucher number',
   async () => {
-    await specVoucherReedemption.toss();
-    specVoucherReedemption.response().should.have.status(461);
-    specVoucherReedemption.response().should.have.jsonLike({
+    await specVoucherRedemption.toss();
+    specVoucherRedemption.response().should.have.status(461);
+    specVoucherRedemption.response().should.have.jsonLike({
       message: 'Invalid voucher number',
     });
   }
@@ -110,16 +110,16 @@ Then(
 When(
   'The user triggers an action to redeem the voucher with an invalid request',
   () => {
-    specVoucherReedemption.post(baseUrl).withBody();
+    specVoucherRedemption.post(baseUrl).withBody();
   }
 );
 
 Then(
   'The result of an operation returns an error, because of an invalid request',
   async () => {
-    await specVoucherReedemption.toss();
-    specVoucherReedemption.response().should.have.status(400);
-    specVoucherReedemption.response().should.have.jsonLike({
+    await specVoucherRedemption.toss();
+    specVoucherRedemption.response().should.have.status(400);
+    specVoucherRedemption.response().should.have.jsonLike({
       message: 'Invalid request',
     });
   }
@@ -129,7 +129,7 @@ Then(
 When(
   'The user triggers an action to redeem the voucher with an insufficient funds in funding a\\/c',
   () => {
-    specVoucherReedemption.post(baseUrl).withBody({
+    specVoucherRedemption.post(baseUrl).withBody({
       voucher_number: validVoucherNumber,
       Gov_Stack_BB: validGovstackBB,
       merchant_name: validMerchantName,
@@ -143,9 +143,9 @@ When(
 Then(
   'The result of an operation returns an error, because of an insufficient funds in funding a\\/c',
   async () => {
-    await specVoucherReedemption.toss();
-    specVoucherReedemption.response().should.have.status(462);
-    specVoucherReedemption.response().should.have.jsonLike({
+    await specVoucherRedemption.toss();
+    specVoucherRedemption.response().should.have.status(462);
+    specVoucherRedemption.response().should.have.jsonLike({
       message: 'Insufficient funds in funding a/c',
     });
   }
@@ -155,7 +155,7 @@ Then(
 When(
   'The user triggers an action to redeem the voucher with cannot credit the merchant',
   () => {
-    specVoucherReedemption.post(baseUrl).withBody({
+    specVoucherRedemption.post(baseUrl).withBody({
       voucher_number: validVoucherNumber,
       Gov_Stack_BB: validGovstackBB,
       merchant_name: 'Some Name',
@@ -169,14 +169,14 @@ When(
 Then(
   'The result of an operation returns an error, because of cannot credit the merchant',
   async () => {
-    await specVoucherReedemption.toss();
-    specVoucherReedemption.response().should.have.status(463);
-    specVoucherReedemption.response().should.have.jsonLike({
+    await specVoucherRedemption.toss();
+    specVoucherRedemption.response().should.have.status(463);
+    specVoucherRedemption.response().should.have.jsonLike({
       message: 'Cannot credit merchant',
     });
   }
 );
 
 After(() => {
-  specVoucherReedemption.end();
+  specVoucherRedemption.end();
 });
