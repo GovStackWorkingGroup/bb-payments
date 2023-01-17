@@ -34,7 +34,7 @@ Given('The user wants to redeem the voucher', () => {
   );
 });
 
-// Scenario: The user successfully redeemed the voucher
+// Scenario: The user successfully redeems the voucher
 When('The user triggers an action to redeem the voucher', () => {
   specVoucherRedemption.post(baseUrl).withBody({
     voucher_number: validVoucherNumber,
@@ -46,7 +46,7 @@ When('The user triggers an action to redeem the voucher', () => {
   });
 });
 
-Then('The user successfully redeemed the voucher', async () => {
+Then('The user successfully redeems the voucher', async () => {
   await specVoucherRedemption.toss();
   specVoucherRedemption.response().should.have.status(200);
   specVoucherRedemption.response().should.have.jsonLike({
@@ -54,9 +54,9 @@ Then('The user successfully redeemed the voucher', async () => {
   });
 });
 
-// Scenario: The user is not able to redeemed the voucher, because of the GovStack Building Block does not exist
+// Scenario: The user is not able to redeem the voucher, because of the GovStack Building Block does not exist
 When(
-  'The user triggers an action to redeem the voucher with a no existing GovStack Building Block variable',
+  'The user triggers an action to redeem the voucher without an existing GovStack Building Block variable',
   () => {
     specVoucherRedemption.post(baseUrl).withBody({
       voucher_number: validVoucherNumber,
@@ -70,7 +70,7 @@ When(
 );
 
 Then(
-  'The result of an operation returns an error, because the GovStack Building Block does not exist',
+  'The result of an operation returns an error because the GovStack Building Block does not exist',
   async () => {
     await specVoucherRedemption.toss();
     specVoucherRedemption.response().should.have.status(460);
@@ -80,7 +80,7 @@ Then(
   }
 );
 
-// Scenario: The user is not able to redeemed the voucher, because of an invalid voucher number
+// Scenario: The user is not able to redeem the voucher, because of an invalid voucher number
 When(
   'The user triggers an action to redeem the voucher with an invalid voucher number',
   () => {
@@ -96,7 +96,7 @@ When(
 );
 
 Then(
-  'The result of an operation returns an error, because of an invalid voucher number',
+  'The result of an operation returns an error because of an invalid voucher number',
   async () => {
     await specVoucherRedemption.toss();
     specVoucherRedemption.response().should.have.status(461);
@@ -106,7 +106,7 @@ Then(
   }
 );
 
-// Scenario: The user is not able to redeemed the voucher, because of an invalid request
+// Scenario: The user is not able to redeem the voucher because of an invalid request
 When(
   'The user triggers an action to redeem the voucher with an invalid request',
   () => {
@@ -115,7 +115,7 @@ When(
 );
 
 Then(
-  'The result of an operation returns an error, because of an invalid request',
+  'The result of an operation returns an error because of an invalid request',
   async () => {
     await specVoucherRedemption.toss();
     specVoucherRedemption.response().should.have.status(400);
@@ -125,9 +125,9 @@ Then(
   }
 );
 
-// Scenario: The user is not able to redeemed the voucher, because of an insufficient funds in funding a/c
+// Scenario: The user is not able to redeem the voucher because of insufficient funds in funding a/c
 When(
-  'The user triggers an action to redeem the voucher with an insufficient funds in funding a\\/c',
+  'The user triggers an action to redeem the voucher with insufficient funds in funding a\\/c',
   () => {
     specVoucherRedemption.post(baseUrl).withBody({
       voucher_number: validVoucherNumber,
@@ -141,7 +141,7 @@ When(
 );
 
 Then(
-  'The result of an operation returns an error, because of an insufficient funds in funding a\\/c',
+  'The result of an operation returns an error, because of insufficient funds in funding a\\/c',
   async () => {
     await specVoucherRedemption.toss();
     specVoucherRedemption.response().should.have.status(462);
@@ -151,9 +151,9 @@ Then(
   }
 );
 
-// Scenario: The user is not able to redeemed the voucher, because of cannot credit the merchant
+// Scenario: The user is not able to redeem the voucher because the merchant cannot be credited
 When(
-  'The user triggers an action to redeem the voucher with cannot credit the merchant',
+  'The user triggers an action to redeem the voucher with the merchant that cannot be credited',
   () => {
     specVoucherRedemption.post(baseUrl).withBody({
       voucher_number: validVoucherNumber,
@@ -167,7 +167,7 @@ When(
 );
 
 Then(
-  'The result of an operation returns an error, because of cannot credit the merchant',
+  'The result of an operation returns an error because the merchant cannot be credited',
   async () => {
     await specVoucherRedemption.toss();
     specVoucherRedemption.response().should.have.status(463);
