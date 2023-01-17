@@ -156,7 +156,7 @@ When(
 );
 
 Then(
-  'The result of an operation returns an error, because of the not existing Gov Stack Building Block',
+  'The result of an operation returns an error, because the Gov Stack Building Block does not exist',
   async () => {
     await specVoucherStatus.toss();
     specVoucherStatus.response().should.have.status(460);

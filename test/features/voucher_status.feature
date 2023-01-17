@@ -32,4 +32,4 @@ Feature: The VoucherStatus API is used to check the status of a voucher.
   Scenario: The user is not able to check the status of the voucher, because the Gov Stack Building Block does not exist
     Given The user wants to check the status of the voucher with the not existing Gov Stack Building Block
     When The user triggers an action to check the status of the voucher with the not existing Gov Stack Building Block
-    Then The result of an operation returns an error, because of the not existing Gov Stack Building Block
+    Then The result of an operation returns an error, because the Gov Stack Building Block does not exist
