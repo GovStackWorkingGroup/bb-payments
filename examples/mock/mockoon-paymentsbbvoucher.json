@@ -414,7 +414,7 @@
     },
     {
       "uuid": "11e0eb75-3513-4c7c-9a33-bdc4c9405d42",
-      "documentation": "Check the status of the Voucher. The API will respond with Not Pre-Activated Pre-Activated Activated Suspended Blocked Purged Not Existing",
+      "documentation": "Check the status of the Voucher. The API will respond with Not Pre-Activated, Pre-Activated, Activated, Suspended, Blocked, Purged or Not Existing",
       "method": "get",
       "endpoint": "vouchers/voucherstatuscheck/:voucherserialnumber",
       "responses": [
