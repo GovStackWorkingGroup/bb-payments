@@ -7,7 +7,6 @@ Feature: The VoucherRedemption API is used by a non Payment Building Blocks in t
     Given The user wants to redeem the voucher
 
   Scenario: The user successfully redeemed the voucher
-    # Given The user wants to redeem the voucher
     When The user triggers an action to redeem the voucher
     Then The user successfully redeemed the voucher
 
