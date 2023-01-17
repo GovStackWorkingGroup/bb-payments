@@ -34,7 +34,7 @@ Then('The user successfully checks the status of a voucher', async () => {
   });
 });
 
-// Scenario: The user is not able to check the status of the voucher because of the invalid voucher number
+// Scenario: The user is not able to check the status of the voucher, because of the invalid voucher number
 Given(
   'The user wants to check the status of the voucher with the invalid voucher number',
   () => {
@@ -51,7 +51,7 @@ When(
 );
 
 Then(
-  'The result of an operation returns an error because of the invalid voucher number',
+  'The result of an operation returns an error, because of the invalid voucher number',
   async () => {
     await specVoucherStatus.toss();
     specVoucherStatus.response().should.have.status(456);
@@ -61,7 +61,7 @@ Then(
   }
 );
 
-// Scenario: The user is not able to check the status of the voucher because of the already used voucher number
+// Scenario: The user is not able to check the status of the voucher, because of the already used voucher number
 Given(
   'The user wants to check the status of the voucher with the already used voucher number',
   () => {
@@ -78,7 +78,7 @@ When(
 );
 
 Then(
-  'The result of an operation returns an error because of the already used voucher number',
+  'The result of an operation returns an error, because of the already used voucher number',
   async () => {
     await specVoucherStatus.toss();
     specVoucherStatus.response().should.have.status(458);
@@ -88,24 +88,21 @@ Then(
   }
 );
 
-// Scenario: The user is not able to check the status of the voucher that has expired
-Given(
-  'The user wants to check the status of the voucher that has expired',
-  () => {
-    voucherSerialNumber = 'expired';
-    return voucherSerialNumber;
-  }
-);
+// Scenario: The user is not able to check the status of the expired voucher
+Given('The user wants to check the status of the expired voucher', () => {
+  voucherSerialNumber = 'expired';
+  return voucherSerialNumber;
+});
 
 When(
-  'The user triggers an action to check the status of the voucher that has expired',
+  'The user triggers an action to check the status of the expired voucher',
   () => {
     requestFunction();
   }
 );
 
 Then(
-  'The result of an operation returns an error because of the expired voucher',
+  'The result of an operation returns an error, because of the expired voucher',
   async () => {
     await specVoucherStatus.toss();
     specVoucherStatus.response().should.have.status(459);
@@ -115,7 +112,7 @@ Then(
   }
 );
 
-// Scenario: The user is not able to check the status of the voucher because of the empty payload
+// Scenario: The user is not able to check the status of the voucher, because of the empty payload
 Given(
   'The user wants to check the status of the voucher with the empty payload',
   () => {
@@ -132,7 +129,7 @@ When(
 );
 
 Then(
-  'The result of an operation returns an error because of the empty payload',
+  'The result of an operation returns an error, because of the empty payload',
   async () => {
     await specVoucherStatus.toss();
     specVoucherStatus.response().should.have.status(400);
@@ -142,7 +139,7 @@ Then(
   }
 );
 
-// Scenario: The user is not able to check the status of the voucher because of the Gov Stack Building Block does not exist
+// Scenario: The user is not able to check the status of the voucher, because the Gov Stack Building Block does not exist
 Given(
   'The user wants to check the status of the voucher with the not existing Gov Stack Building Block',
   () => {
@@ -159,7 +156,7 @@ When(
 );
 
 Then(
-  'The result of an operation returns an error because of the not existing Gov Stack Building Block',
+  'The result of an operation returns an error, because of the not existing Gov Stack Building Block',
   async () => {
     await specVoucherStatus.toss();
     specVoucherStatus.response().should.have.status(460);
