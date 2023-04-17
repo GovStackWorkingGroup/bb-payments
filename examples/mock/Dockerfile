@@ -13,5 +13,3 @@ USER mockoon
 EXPOSE 3003
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-# Usage: docker run -p <host_port>:<container_port> mockoon-test
