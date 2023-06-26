@@ -928,7 +928,7 @@
       "uuid": "539da980-8549-47a2-91d2-6b80599f27f3",
       "documentation": "Request for voucher activation by sending the voucher serial number",
       "method": "patch",
-      "endpoint": "vouchers/voucher_activation/",
+      "endpoint": "vouchers/voucher_activation",
       "responses": [
         {
           "uuid": "81855a8c-7115-4f66-b0c9-d241c2a75876",
@@ -950,21 +950,7 @@
             {
               "target": "body",
               "modifier": "voucher_serial_number",
-              "value": "",
-              "invert": true,
-              "operator": "null"
-            },
-            {
-              "target": "body",
-              "modifier": "voucher_serial_number",
-              "value": "",
-              "invert": true,
-              "operator": "equals"
-            },
-            {
-              "target": "body",
-              "modifier": "voucher_serial_number",
-              "value": "^((?!(0))[0-9]{0,19})$",
+              "value": "^[1-9]\\d{0,18}$",
               "invert": false,
               "operator": "regex"
             },
@@ -978,7 +964,7 @@
             {
               "target": "body",
               "modifier": "Gov_Stack_BB",
-              "value": "",
+              "value": "not_exist",
               "invert": true,
               "operator": "equals"
             }
@@ -1002,7 +988,14 @@
           "rules": [
             {
               "target": "body",
-              "modifier": "",
+              "modifier": "voucher_serial_number",
+              "value": "",
+              "invert": false,
+              "operator": "null"
+            },
+            {
+              "target": "body",
+              "modifier": "Gov_Stack_BB",
               "value": "",
               "invert": false,
               "operator": "null"
@@ -1028,26 +1021,19 @@
             {
               "target": "body",
               "modifier": "voucher_serial_number",
-              "value": "",
-              "invert": false,
-              "operator": "null"
-            },
-            {
-              "target": "body",
-              "modifier": "voucher_serial_number",
-              "value": "",
-              "invert": false,
-              "operator": "equals"
-            },
-            {
-              "target": "body",
-              "modifier": "voucher_serial_number",
-              "value": "^((?!(0))[0-9]{0,19})$",
+              "value": "^[1-9]\\d{0,18}$",
               "invert": true,
               "operator": "regex"
+            },
+            {
+              "target": "body",
+              "modifier": "Gov_Stack_BB",
+              "value": "not_exist",
+              "invert": true,
+              "operator": "equals"
             }
           ],
-          "rulesOperator": "OR",
+          "rulesOperator": "AND",
           "disableTemplating": false,
           "fallbackTo404": false,
           "default": false
@@ -1067,14 +1053,7 @@
             {
               "target": "body",
               "modifier": "Gov_Stack_BB",
-              "value": "",
-              "invert": false,
-              "operator": "null"
-            },
-            {
-              "target": "body",
-              "modifier": "Gov_Stack_BB",
-              "value": "",
+              "value": "not_exist",
               "invert": false,
               "operator": "equals"
             }

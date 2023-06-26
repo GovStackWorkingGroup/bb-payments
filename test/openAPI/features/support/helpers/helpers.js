@@ -84,4 +84,14 @@ module.exports = {
     properties: { message: { type: 'string' } },
     required: ['message'],
   },
+  voucherActivationEndpoint: 'vouchers/voucher_activation',
+  voucherActivationResponseSchema: {
+    properties: { result_status: { type: 'string' } },
+    required: ['result_status'],
+  },
+  voucherResponseErrorSchema: {
+    type: 'object',
+    properties: { message: { type: 'string' } },
+    required: ['message'],
+  },
 };

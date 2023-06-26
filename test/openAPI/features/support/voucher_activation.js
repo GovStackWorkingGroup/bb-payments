@@ -1,101 +1,133 @@
-const pactum = require('pactum');
+const chai = require('chai');
+const { spec } = require('pactum');
 const { Given, When, Then, Before, After } = require('@cucumber/cucumber');
-const { localhost } = require('./helpers/helpers');
+const {
+  localhost,
+  defaultExpectedResponseTime,
+  voucherActivationEndpoint,
+  voucherActivationResponseSchema,
+  voucherResponseErrorSchema,
+} = require('./helpers/helpers');
+
+chai.use(require('chai-json-schema'));
 
 let specVoucherActivation;
 
-const baseUrl = `${localhost}vouchers/voucher_activation`;
+const baseUrl = localhost + voucherActivationEndpoint;
+const endpointTag = { tags: `@endpoint=/${voucherActivationEndpoint}` };
 
-Before(() => {
-  specVoucherActivation = pactum.spec();
+Before(endpointTag, () => {
+  specVoucherActivation = spec();
 });
 
-// Background: The user wants to activate pre-activated voucher
-Given('The user wants to activate pre-activated voucher', () => {
-  return 'The user wants to activate pre-activated voucher';
-});
-
-// Scenario: The user successfully activates a pre-activated voucher
-When(
-  'The user triggers an action with a valid payload to activate a pre-activated voucher',
-  () => {
-    specVoucherActivation.patch(baseUrl).withBody({
-      voucher_serial_number: 5432,
-      Gov_Stack_BB: 'example Gov_Stack_BB',
-    });
-  }
+// Scenario: Successfully activates a pre-activated voucher smoke type test
+Given(
+  'Non Payment Building Block wants to activate a pre-activated voucher',
+  () => 'Non Payment Building Block wants to activate a pre-activated voucher'
 );
 
-Then('The user successfully activates a pre-activated voucher', async () => {
-  await specVoucherActivation.toss();
-  specVoucherActivation.response().should.have.status(200);
-  specVoucherActivation
-    .response()
-    .should.have.jsonLike({ result_status: 'Successfully activated voucher' });
-});
-
-// Scenario: The user is not able to activate a pre-activated voucher because of an empty payload
 When(
-  'The user triggers an action with an empty payload to activate a pre-activated voucher',
-  () => {
-    specVoucherActivation.patch(baseUrl).withBody();
-  }
+  /^Sends PATCH \/vouchers\/voucher_activation request with valid payload where voucher_serial_number = (\d+)$/,
+  voucher_serial_number =>
+    specVoucherActivation.patch(baseUrl).withJson({
+      voucher_serial_number: voucher_serial_number,
+      Gov_Stack_BB: 'bb-digital-registries',
+    })
 );
 
 Then(
-  'The result of the operation returns an error because of empty payload',
-  async () => {
-    await specVoucherActivation.toss();
-    specVoucherActivation.response().should.have.status(400);
-    specVoucherActivation
-      .response()
-      .should.have.body({ message: 'Invalid request' });
-  }
-);
-
-// Scenario: The user is not able to activate a pre-activated voucher because of an invalid voucher serial number
-When(
-  'The user triggers an action with an invalid serial number to activate a pre-activated voucher',
-  () => {
-    specVoucherActivation.patch(baseUrl).withBody({
-      voucher_serial_number: 0,
-      Gov_Stack_BB: 'example Gov_Stack_BB',
-    });
-  }
+  /^Receives a response from the \/vouchers\/voucher_activation endpoint$/,
+  async () => await specVoucherActivation.toss()
 );
 
 Then(
-  'The result of the operation returns an error because of an invalid serial number',
-  async () => {
-    await specVoucherActivation.toss();
-    specVoucherActivation.response().should.have.status(456);
+  /^The \/vouchers\/voucher_activation endpoint response should be returned in a timely manner 15000ms$/,
+  () =>
     specVoucherActivation
       .response()
-      .should.have.body({ message: 'Invalid voucher serial number' });
-  }
+      .to.have.responseTimeLessThan(defaultExpectedResponseTime)
+);
+
+Then(
+  /^The \/vouchers\/voucher_activation endpoint response should have status (\d+)$/,
+  status => specVoucherActivation.response().to.have.status(status)
+);
+
+Then(
+  /^The \/vouchers\/voucher_activation endpoint response should match json schema$/,
+  () =>
+    chai
+      .expect(specVoucherActivation._response.json)
+      .to.be.jsonSchema(voucherActivationResponseSchema)
 );
 
 // Scenario: The user is not able to activate a pre-activated voucher because of Gov Stack Building Block does not exist
+// Others Given, When, Then are written in the aforementioned example
+When(/^Provides optional X-Callback-URL header$/, () => {
+  specVoucherActivation.withHeaders(
+    'X-Callback-URL',
+    'https://myserver.com/send/callback/here'
+  );
+});
+
+// Scenario: Successfully activates a pre-activated voucher with the optional X-Channel header
+// Others Given, When, Then are written in the aforementioned example
+When(/^Provides optional X-Channel header$/, () => {
+  specVoucherActivation.withHeaders('X-Channel', 'Web');
+});
+
+// Scenario: Successfully activates a pre-activated voucher with the optional X-Date header
+// Others Given, When, Then are written in the aforementioned example
+When(/^Provides optional X-Date header$/, () => {
+  specVoucherActivation.withHeaders('X-Date', `${new Date().toISOString()}`);
+});
+
+// Scenario: Successfully activates a pre-activated voucher with the optional X-CorrelationID header
+// Others Given, When, Then are written in the aforementioned example
+When(/^Provides optional X-CorrelationID header$/, () => {
+  specVoucherActivation.withHeaders(
+    'X-CorrelationID',
+    '40e9da5c-10fd-11ee-be56-0242ac120002'
+  );
+});
+
+// Scenario: Unable to activate a pre-activated voucher because of an empty payload
+// Others Given, Then are written in the aforementioned example
 When(
-  'The user triggers an action with an invalid Gov Stack Building Block to activate a pre-activated voucher',
-  () => {
-    specVoucherActivation
-      .patch(baseUrl)
-      .withBody({ voucher_serial_number: 4321 });
-  }
+  /^Sends PATCH \/vouchers\/voucher_activation request without payload$/,
+  () => specVoucherActivation.patch(baseUrl).withJson({})
 );
 
 Then(
-  'The result of the operation returns an error because of Gov Stack Building Block does not exist',
-  async () => {
-    await specVoucherActivation.toss();
-    specVoucherActivation.response().should.have.status(460);
-    specVoucherActivation
-      .response()
-      .should.have.body({ message: 'Gov Stack Building Block does not exist' });
-  }
+  /^The \/vouchers\/voucher_activation endpoint response should match json error schema$/,
+  () =>
+    chai
+      .expect(specVoucherActivation._response.json)
+      .to.be.jsonSchema(voucherResponseErrorSchema)
 );
 
-After(() => {
+// Scenario: Unable to activate a pre-activated voucher because of an invalid voucher_serial_number
+// Others Given, Then are written in the aforementioned example
+When(
+  /^Sends PATCH \/vouchers\/voucher_activation request with an invalid voucher_serial_number$/,
+  () =>
+    specVoucherActivation.patch(baseUrl).withJson({
+      voucher_serial_number: 'invalid_voucher_serial_number',
+      Gov_Stack_BB: 'bb-digital-registries',
+    })
+);
+
+// Scenario: Unable to activate a pre-activated voucher because given Gov_Stack_BB does not exist
+// Others Given, Then are written in the aforementioned example
+When(
+  /^Sends PATCH \/vouchers\/voucher_activation request with an invalid Gov_Stack_BB and valid voucher_serial_number = (\d+)$/,
+  voucher_serial_number =>
+    specVoucherActivation.patch(baseUrl).withJson({
+      voucher_serial_number: voucher_serial_number,
+      Gov_Stack_BB: 'not_exist',
+    })
+);
+
+After(endpointTag, () => {
   specVoucherActivation.end();
 });
