@@ -14,6 +14,7 @@ module.exports = {
   prepaymentValidationResponseEndpoint: 'prepayment-validation-response',
   registerBeneficiaryEndpoint: 'register-beneficiary',
   updateBeneficiaryDetailsEndpoint: 'update-beneficiary-details',
+  voucherRedemptionEndpoint: 'vouchers/voucher_redemption',
   g2pResponseSchema: {
     type: 'object',
     properties: {
@@ -86,6 +87,12 @@ module.exports = {
   },
   voucherActivationEndpoint: 'vouchers/voucher_activation',
   voucherActivationResponseSchema: {
+    type: 'object',
+    properties: { result_status: { type: 'string' } },
+    required: ['result_status'],
+  },
+  voucherRedemptionResponseSchema: {
+    type: 'object',
     properties: { result_status: { type: 'string' } },
     required: ['result_status'],
   },

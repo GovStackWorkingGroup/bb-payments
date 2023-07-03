@@ -226,6 +226,13 @@
       "voucher_amount": "1000"
     },
     {
+      "voucher_number": "6003",
+      "voucher_serial_number": 60031111,
+      "Gov_Stack_BB": "bb-digital-registries",
+      "voucher_status": "Activated",
+      "voucher_amount": "1000"
+    },
+    {
       "voucher_number": "600011",
       "voucher_serial_number": 60001,
       "Gov_Stack_BB": "bb-digital-registries",
@@ -256,6 +263,13 @@
     {
       "voucher_number": "600055",
       "voucher_serial_number": 60005,
+      "Gov_Stack_BB": "bb-digital-registries",
+      "voucher_status": "Activated",
+      "voucher_amount": "1000"
+    },
+    {
+      "voucher_number": "6004",
+      "voucher_serial_number": 60041111,
       "Gov_Stack_BB": "bb-digital-registries",
       "voucher_status": "Activated",
       "voucher_amount": "1000"
