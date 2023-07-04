@@ -8,7 +8,7 @@ Feature: The VoucherActivation API is used to activate a pre-activated voucher
   @smoke @positive
   Scenario: Successfully activates a pre-activated voucher smoke type test
     Given Non Payment Building Block wants to activate a pre-activated voucher
-    When Sends PATCH /vouchers/voucher_activation request with valid payload where voucher_serial_number = 5555
+    When Sends PATCH /vouchers/voucher_activation request with valid payload where voucher_serial_number = 5550
     Then Receives a response from the /vouchers/voucher_activation endpoint
     And The /vouchers/voucher_activation endpoint response should be returned in a timely manner 15000ms
     And The /vouchers/voucher_activation endpoint response should have status 200
@@ -17,7 +17,7 @@ Feature: The VoucherActivation API is used to activate a pre-activated voucher
   @positive
   Scenario: Successfully activates a pre-activated voucher with the optional X-Callback-URL header
     Given Non Payment Building Block wants to activate a pre-activated voucher
-    When Sends PATCH /vouchers/voucher_activation request with valid payload where voucher_serial_number = 5556
+    When Sends PATCH /vouchers/voucher_activation request with valid payload where voucher_serial_number = 5551
     And Provides optional X-Callback-URL header
     Then Receives a response from the /vouchers/voucher_activation endpoint
     And The /vouchers/voucher_activation endpoint response should be returned in a timely manner 15000ms
@@ -27,7 +27,7 @@ Feature: The VoucherActivation API is used to activate a pre-activated voucher
   @positive
   Scenario: Successfully activates a pre-activated voucher with the optional X-Channel header
     Given Non Payment Building Block wants to activate a pre-activated voucher
-    When Sends PATCH /vouchers/voucher_activation request with valid payload where voucher_serial_number = 5557
+    When Sends PATCH /vouchers/voucher_activation request with valid payload where voucher_serial_number = 5552
     And Provides optional X-Channel header
     Then Receives a response from the /vouchers/voucher_activation endpoint
     And The /vouchers/voucher_activation endpoint response should be returned in a timely manner 15000ms
@@ -37,7 +37,7 @@ Feature: The VoucherActivation API is used to activate a pre-activated voucher
   @positive
   Scenario: Successfully activates a pre-activated voucher with the optional X-Date header
     Given Non Payment Building Block wants to activate a pre-activated voucher
-    When Sends PATCH /vouchers/voucher_activation request with valid payload where voucher_serial_number = 5558
+    When Sends PATCH /vouchers/voucher_activation request with valid payload where voucher_serial_number = 5553
     And Provides optional X-Date header
     Then Receives a response from the /vouchers/voucher_activation endpoint
     And The /vouchers/voucher_activation endpoint response should be returned in a timely manner 15000ms
@@ -47,7 +47,7 @@ Feature: The VoucherActivation API is used to activate a pre-activated voucher
   @positive
   Scenario: Successfully activates a pre-activated voucher with the optional X-CorrelationID header
     Given Non Payment Building Block wants to activate a pre-activated voucher
-    When Sends PATCH /vouchers/voucher_activation request with valid payload where voucher_serial_number = 5559
+    When Sends PATCH /vouchers/voucher_activation request with valid payload where voucher_serial_number = 5554
     And Provides optional X-CorrelationID header
     Then Receives a response from the /vouchers/voucher_activation endpoint
     And The /vouchers/voucher_activation endpoint response should be returned in a timely manner 15000ms
