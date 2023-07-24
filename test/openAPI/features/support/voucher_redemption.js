@@ -1,182 +1,143 @@
-const pactum = require('pactum');
+const chai = require('chai');
+const { spec } = require('pactum');
 const { Given, When, Then, Before, After } = require('@cucumber/cucumber');
-const { localhost } = require('./helpers/helpers');
+const {
+  localhost,
+  voucherRedemptionEndpoint,
+  voucherRedemptionResponseSchema,
+  voucherResponseErrorSchema,
+} = require('./helpers/helpers');
 
-let specVoucherRedemption;
-let validVoucherNumber;
-let validGovstackBB;
-let validMerchantName;
-let validMerchantBankDetails;
-let validMerchantVoucherGroup;
-let override;
+chai.use(require('chai-json-schema'));
 
-const baseUrl = `${localhost}vouchers/voucher_redemption`;
+const baseUrl = localhost + voucherRedemptionEndpoint;
+const endpointTag = { tags: `@endpoint=/${voucherRedemptionEndpoint}` };
 
-Before(() => {
-  specVoucherRedemption = pactum.spec();
+Before(endpointTag, () => {
+  specVoucherRedemption = spec();
 });
 
-// Background
-Given('The user wants to redeem the voucher', () => {
-  validVoucherNumber = 96767543;
-  validGovstackBB = 'Gov_Stack_BB';
-  validMerchantName = 'Leonard Snow';
-  validMerchantBankDetails = 'Spotlight Corporation';
-  validMerchantVoucherGroup = 'Payment Voucher';
-  override = true;
-  return (
-    validVoucherNumber,
-    validGovstackBB,
-    validMerchantName,
-    validMerchantBankDetails,
-    validMerchantVoucherGroup,
-    override
-  );
-});
+// Scenario: A non-Payment Building Block successfully redeems a voucher smoke type test
+Given(
+  /^A non-Payment Building Block wants to redeem a voucher$/,
+  () => 'A non-Payment Building Block wants to redeem a voucher'
+);
 
-// Scenario: The user successfully redeems the voucher
-When('The user triggers an action to redeem the voucher', () => {
-  specVoucherRedemption.post(baseUrl).withBody({
-    voucher_number: validVoucherNumber,
-    Gov_Stack_BB: validGovstackBB,
-    merchant_name: validMerchantName,
-    merchant_bank_details: validMerchantBankDetails,
-    merchant_voucher_group: validMerchantVoucherGroup,
-    override: override,
+When(/^Sends POST request with valid payload to redeem a voucher$/, () => {
+  specVoucherRedemption.post(baseUrl).withJson({
+    voucher_number: '6003',
+    Gov_Stack_BB: 'bb-digital-registries',
+    merchant_name: 'Melissa Stephenson',
+    merchant_bank_details: 'Citizen Service Banks',
+    merchant_voucher_group: 'Payment Voucher',
+    override: true,
   });
 });
 
-Then('The user successfully redeems the voucher', async () => {
-  await specVoucherRedemption.toss();
-  specVoucherRedemption.response().should.have.status(200);
-  specVoucherRedemption.response().should.have.jsonLike({
-    result_status: 'Voucher is successfully redeemed',
-  });
+Then(
+  /^Receives a response from the \/vouchers\/voucher_redemption endpoint$/,
+  async () => {
+    await specVoucherRedemption.toss();
+  }
+);
+
+Then(
+  /^The \/vouchers\/voucher_redemption endpoint response should be returned in a timely manner (\d+) ms$/,
+  responseTime =>
+    specVoucherRedemption.response().to.have.responseTimeLessThan(responseTime)
+);
+
+Then(
+  /^The \/vouchers\/voucher_redemption endpoint response should have status (\d+)$/,
+  status => specVoucherRedemption.response().to.have.status(status)
+);
+
+Then(
+  /^The \/vouchers\/voucher_redemption endpoint response should match json schema$/,
+  () =>
+    chai
+      .expect(specVoucherRedemption._response.json)
+      .to.be.jsonSchema(voucherRedemptionResponseSchema)
+);
+
+// Scenario: A non-Payment Building Block is unable to redeem a voucher because of the invalid request
+// Others Given and Then are written in the aforementioned example
+When(/^Sends POST request without payload to redeem a voucher$/, () => {
+  specVoucherRedemption.post(baseUrl);
 });
 
-// Scenario: The user is not able to redeem the voucher, because of the GovStack Building Block does not exist
-When(
-  'The user triggers an action to redeem the voucher without an existing GovStack Building Block variable',
-  () => {
-    specVoucherRedemption.post(baseUrl).withBody({
-      voucher_number: validVoucherNumber,
-      Gov_Stack_BB: 'Some',
-      merchant_name: validMerchantName,
-      merchant_bank_details: validMerchantBankDetails,
-      merchant_voucher_group: validMerchantVoucherGroup,
-      override: override,
-    });
-  }
-);
-
 Then(
-  'The result of an operation returns an error because the GovStack Building Block does not exist',
-  async () => {
-    await specVoucherRedemption.toss();
-    specVoucherRedemption.response().should.have.status(460);
-    specVoucherRedemption.response().should.have.jsonLike({
-      message: 'GovStack Building Block does not exist',
-    });
-  }
+  /^The \/vouchers\/voucher_redemption endpoint response should match json error schema$/,
+  () =>
+    chai
+      .expect(specVoucherRedemption._response.json)
+      .to.be.jsonSchema(voucherResponseErrorSchema)
 );
 
-// Scenario: The user is not able to redeem the voucher, because of an invalid voucher number
+// Scenario: A non-Payment Building Block is unable to redeem a voucher because the GovStack Building Block does not exist
+// Others Given and Then are written in the aforementioned example
 When(
-  'The user triggers an action to redeem the voucher with an invalid voucher number',
+  /^Sends POST request with invalid Gov_Stack_BB in the payload to redeem a voucher$/,
   () => {
-    specVoucherRedemption.post(baseUrl).withBody({
-      voucher_number: null,
-      Gov_Stack_BB: validGovstackBB,
-      merchant_name: validMerchantName,
-      merchant_bank_details: validMerchantBankDetails,
-      merchant_voucher_group: validMerchantVoucherGroup,
-      override: override,
+    specVoucherRedemption.post(baseUrl).withJson({
+      voucher_number: '6004',
+      Gov_Stack_BB: 'invalid_bb',
+      merchant_name: 'Melissa Stephenson',
+      merchant_bank_details: 'Citizen Service Banks',
+      merchant_voucher_group: 'Payment Voucher',
+      override: true,
     });
   }
 );
 
-Then(
-  'The result of an operation returns an error because of an invalid voucher number',
-  async () => {
-    await specVoucherRedemption.toss();
-    specVoucherRedemption.response().should.have.status(461);
-    specVoucherRedemption.response().should.have.jsonLike({
-      message: 'Invalid voucher number',
-    });
-  }
-);
-
-// Scenario: The user is not able to redeem the voucher because of an invalid request
+// Scenario: A non-Payment Building Block is unable to redeem a voucher because of the invalid voucher number
+// Others Given and Then are written in the aforementioned example
 When(
-  'The user triggers an action to redeem the voucher with an invalid request',
+  /^Sends POST request with invalid voucher_number in the payload to redeem a voucher$/,
   () => {
-    specVoucherRedemption.post(baseUrl).withBody();
-  }
-);
-
-Then(
-  'The result of an operation returns an error because of an invalid request',
-  async () => {
-    await specVoucherRedemption.toss();
-    specVoucherRedemption.response().should.have.status(400);
-    specVoucherRedemption.response().should.have.jsonLike({
-      message: 'Invalid request',
+    specVoucherRedemption.post(baseUrl).withJson({
+      voucher_number: 'notAnumber',
+      Gov_Stack_BB: 'bb-digital-registries',
+      merchant_name: 'Melissa Stephenson',
+      merchant_bank_details: 'Citizen Service Banks',
+      merchant_voucher_group: 'Payment Voucher',
+      override: true,
     });
   }
 );
 
-// Scenario: The user is not able to redeem the voucher because of insufficient funds in funding a/c
+// Scenario: A non-Payment Building Block is unable to redeem a voucher because of insufficient funds in funding a/c
+// Others Given and Then are written in the aforementioned example
 When(
-  'The user triggers an action to redeem the voucher with insufficient funds in funding a\\/c',
+  /^Sends POST request to redeem a voucher with insufficient funds in funding a\/c$/,
   () => {
-    specVoucherRedemption.post(baseUrl).withBody({
-      voucher_number: validVoucherNumber,
-      Gov_Stack_BB: validGovstackBB,
+    specVoucherRedemption.post(baseUrl).withJson({
+      voucher_number: '6004',
+      Gov_Stack_BB: 'bb-digital-registries',
       merchant_name: 'Ronan Oliver',
       merchant_bank_details: 'Vigor Bank Group',
       merchant_voucher_group: 'insufficient funds',
-      override: override,
+      override: true,
     });
   }
 );
 
-Then(
-  'The result of an operation returns an error, because of insufficient funds in funding a\\/c',
-  async () => {
-    await specVoucherRedemption.toss();
-    specVoucherRedemption.response().should.have.status(462);
-    specVoucherRedemption.response().should.have.jsonLike({
-      message: 'Insufficient funds in funding a/c',
-    });
-  }
-);
-
-// Scenario: The user is not able to redeem the voucher because the merchant cannot be credited
+// Scenario: A non-Payment Building Block is unable to redeem a voucher because the merchant cannot be credited
+// Others Given and Then are written in the aforementioned example
 When(
-  'The user triggers an action to redeem the voucher with the merchant that cannot be credited',
+  /^Sends POST request to redeem a voucher with merchant that cannot be credited$/,
   () => {
-    specVoucherRedemption.post(baseUrl).withBody({
-      voucher_number: validVoucherNumber,
-      Gov_Stack_BB: validGovstackBB,
+    specVoucherRedemption.post(baseUrl).withJson({
+      voucher_number: '6004',
+      Gov_Stack_BB: 'bb-digital-registries',
       merchant_name: 'Annie Krueger',
       merchant_bank_details: 'Omega Holding Company',
       merchant_voucher_group: 'insufficient funds',
-      override: override,
+      override: true,
     });
   }
 );
 
-Then(
-  'The result of an operation returns an error because the merchant cannot be credited',
-  async () => {
-    await specVoucherRedemption.toss();
-    specVoucherRedemption.response().should.have.status(463);
-    specVoucherRedemption.response().should.have.jsonLike({
-      message: 'Cannot credit merchant',
-    });
-  }
-);
-
-After(() => {
+After(endpointTag, () => {
   specVoucherRedemption.end();
 });

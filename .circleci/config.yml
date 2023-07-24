@@ -20,7 +20,7 @@ jobs:
       - helm/install-helm-client:
           version: "v3.8.2"
       # - run: "sed -i '12s/.*/version: 0.0.0/' helm/g2p-sandbox-fynarfin-SIT/Chart.yaml"
-      # - run: cat helm/govstack-chart/Chart.yaml
+      - run: cat helm/govstack-chart/Chart.yaml
       - run: helm dep up helm/govstack-chart
       - run: helm package helm/govstack-chart
       - run: helm repo index .
@@ -63,6 +63,18 @@ jobs:
 
 
 workflows:
+
+  # test_everything:
+  #   jobs:
+  #     - test-harness/create-config:
+  #         post-steps: # Persist to workspace has to be defined in main workflow
+  #           - persist_to_workspace:
+  #               root: workspace
+  #               paths:
+  #                 - generated.yml
+  #     - test-harness/execute-tests:
+  #         requires:
+  #           - test-harness/create-config
   deploy:
     jobs:
       - build:
@@ -91,7 +103,6 @@ workflows:
   #         requires:
   #           - test-harness/create-config            
   
-
 # workflows:
 #   test_everything:
 #     jobs:
