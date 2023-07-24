@@ -20,11 +20,7 @@ jobs:
       - helm/install-helm-client:
           version: "v3.8.2"
       # - run: "sed -i '12s/.*/version: 0.0.0/' helm/g2p-sandbox-fynarfin-SIT/Chart.yaml"
-<<<<<<< HEAD
-      # - run: cat helm/govstack-chart/Chart.yaml
-=======
       - run: cat helm/govstack-chart/Chart.yaml
->>>>>>> 0887533 (Create GovStack specific chart)
       - run: helm dep up helm/govstack-chart
       - run: helm package helm/govstack-chart
       - run: helm repo index .
@@ -67,8 +63,7 @@ jobs:
 
 
 workflows:
-<<<<<<< HEAD
-=======
+
   # test_everything:
   #   jobs:
   #     - test-harness/create-config:
@@ -80,7 +75,6 @@ workflows:
   #     - test-harness/execute-tests:
   #         requires:
   #           - test-harness/create-config
->>>>>>> 0887533 (Create GovStack specific chart)
   deploy:
     jobs:
       - build:
@@ -97,7 +91,6 @@ workflows:
             - Helm
             - slack
             - Secrets 
-<<<<<<< HEAD
   # test_everything:
   #   jobs:
   #     - test-harness/create-config:
@@ -110,7 +103,6 @@ workflows:
   #         requires:
   #           - test-harness/create-config            
   
-
 # workflows:
 #   test_everything:
 #     jobs:
@@ -123,5 +115,3 @@ workflows:
 #       - test-harness/execute-tests:
 #           requires:
 #             - test-harness/create-config
-=======
->>>>>>> 0887533 (Create GovStack specific chart)
