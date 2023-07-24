@@ -79,7 +79,7 @@ workflows:
     jobs:
       - build:
           context: 
-            - AWS
+            - aws
             - Helm
             - slack
       - upgrade-g2psandbox-helm-chart:
@@ -87,7 +87,7 @@ workflows:
           requires:
             - build
           context:
-            - AWS
+            - aws
             - Helm
             - slack
             - Secrets 
