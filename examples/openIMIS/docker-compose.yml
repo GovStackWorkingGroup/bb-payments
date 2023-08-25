@@ -1,0 +1,57 @@
+version: "2.4"
+
+services:
+  db:
+    container_name: ${PROJECT_NAME:-openimis}-db
+    image: ghcr.io/openimis/openimis-pgsql:${DB_TAG:-latest}
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+    healthcheck:
+      test: pg_isready -U ${DB_USER} -d ${DB_NAME}
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 100s
+    networks:
+      openimis-net:
+    ports:
+      - 5433:5432
+
+  backend:
+    container_name: ${PROJECT_NAME:-openimis}-api
+    image: ghcr.io/openimis/openimis-be:govstack-api-test
+    command: start
+    mem_limit: 2g
+    volumes:
+      - ./import_data.py:/import_data.py
+      - ./createTestCustomParameters.py:/createTestCustomParameters.py
+      - ../../test/openAPI/test-data.json:/test-data.json
+      - ./check_service_availability.sh:/check_service_availability.sh
+    environment: &backend-env
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SITE_ROOT=api
+      - DJANGO_LOG_LEVEL=DEBUG
+      - SITE_URL=${NEW_OPENIMIS_HOST}
+      - login_openIMIS=Admin
+      - password_openIMIS=admin123
+      - IM_CLIENT=eGovStack/GOV/90000009/digitalregistries
+    depends_on:  
+      db:
+        condition: service_healthy
+    networks:
+      openimis-net:
+    ports:
+      - 3333:8000
+
+networks:
+  openimis-net:
+volumes:
+  database:
+  photos:
