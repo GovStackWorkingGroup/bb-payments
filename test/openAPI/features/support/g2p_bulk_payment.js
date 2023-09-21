@@ -73,11 +73,11 @@ Then(/^The \/bulk\-payment response should have status (\d+)$/, status => {
 });
 
 Then(
-  /^The \/bulk\-payment response should have content\-type: application\/json header$/,
-  () =>
+  /^The \/bulk\-payment response should have "([^"]*)": "([^"]*)" header$/,
+  (key, value) =>
     specBulkPayment
       .response()
-      .should.have.header(contentTypeHeader.key, contentTypeHeader.value)
+      .should.have.headerContains(key, value)
 );
 
 Then(/^The \/bulk\-payment response should match json schema$/, () =>

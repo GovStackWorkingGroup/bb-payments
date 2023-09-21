@@ -11,7 +11,7 @@ which is triggered when the Registration BB is registering beneficiaries into th
         Then The response from the /register-beneficiary is received
         And The /register-beneficiary response should be returned in a timely manner 15000ms
         And The /register-beneficiary response should have status 200
-        And The /register-beneficiary response should have content-type: application/json header
+        And The /register-beneficiary response should have "content-type": "application/json" header
         And The /register-beneficiary response should match json schema
 
     @unit @positive
@@ -21,10 +21,11 @@ which is triggered when the Registration BB is registering beneficiaries into th
         Then The response from the /register-beneficiary is received
         And The /register-beneficiary response should be returned in a timely manner 15000ms
         And The /register-beneficiary response should have status 200
-        And The /register-beneficiary response should have content-type: application/json header
+        And The /register-beneficiary response should have "content-type": "application/json" header
         And The /register-beneficiary response should match json schema
         And The /register-beneficiary response ResponseCode field should be "00"
         And The /register-beneficiary response RequestID field should be "90566839-ad0"
+        And The /register-beneficiary response should have a "ResponseDescription" property
 
     @unit @negative
     Scenario: Unable to register a beneficiary because of missing required SourceBBID in the payload
@@ -33,10 +34,11 @@ which is triggered when the Registration BB is registering beneficiaries into th
         Then The response from the /register-beneficiary is received
         And The /register-beneficiary response should be returned in a timely manner 15000ms
         And The /register-beneficiary response should have status 400
-        And The /register-beneficiary response should have content-type: application/json header
+        And The /register-beneficiary response should have "content-type": "application/json" header
         And The /register-beneficiary response should match json schema
         And The /register-beneficiary response ResponseCode field should be "01"
         And The /register-beneficiary response RequestID field should be "4a0425ef-008"
+        And The /register-beneficiary response should have a "ResponseDescription" property
 
     @unit @negative
     Scenario: Unable to register a beneficiary because of missing required PayeeFunctionalID in the payload
@@ -45,10 +47,11 @@ which is triggered when the Registration BB is registering beneficiaries into th
         Then The response from the /register-beneficiary is received
         And The /register-beneficiary response should be returned in a timely manner 15000ms
         And The /register-beneficiary response should have status 400
-        And The /register-beneficiary response should have content-type: application/json header
+        And The /register-beneficiary response should have "content-type": "application/json" header
         And The /register-beneficiary response should match json schema
         And The /register-beneficiary response ResponseCode field should be "01"
         And The /register-beneficiary response RequestID field should be "4a0425ef-008"
+        And The /register-beneficiary response should have a "ResponseDescription" property
 
     @unit @negative
     Scenario: Unable to register a beneficiary because of invalid SourceBBID value in the payload
@@ -57,10 +60,11 @@ which is triggered when the Registration BB is registering beneficiaries into th
         Then The response from the /register-beneficiary is received
         And The /register-beneficiary response should be returned in a timely manner 15000ms
         And The /register-beneficiary response should have status 400
-        And The /register-beneficiary response should have content-type: application/json header
+        And The /register-beneficiary response should have "content-type": "application/json" header
         And The /register-beneficiary response should match json schema
         And The /register-beneficiary response ResponseCode field should be "01"
         And The /register-beneficiary response RequestID field should be "4a0425ef-008"
+        And The /register-beneficiary response should have a "ResponseDescription" property
 
     @unit @negative
     Scenario: Unable to register a beneficiary because of invalid PayeeFunctionalID value in the payload
@@ -69,7 +73,8 @@ which is triggered when the Registration BB is registering beneficiaries into th
         Then The response from the /register-beneficiary is received
         And The /register-beneficiary response should be returned in a timely manner 15000ms
         And The /register-beneficiary response should have status 400
-        And The /register-beneficiary response should have content-type: application/json header
+        And The /register-beneficiary response should have "content-type": "application/json" header
         And The /register-beneficiary response should match json schema
         And The /register-beneficiary response ResponseCode field should be "01"
         And The /register-beneficiary response RequestID field should be "4a0425ef-008"
+        And The /register-beneficiary response should have a "ResponseDescription" property

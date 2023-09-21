@@ -59,11 +59,11 @@ Then(
 );
 
 Then(
-  /^The \/update\-beneficiary\-details response should have content\-type: application\/json header$/,
-  () =>
+  /^The \/update\-beneficiary\-details response should have "([^"]*)": "([^"]*)" header$/,
+  (key, value) =>
     specUpdateBeneficiaryDetails
       .response()
-      .should.have.header(contentTypeHeader.key, contentTypeHeader.value)
+      .should.have.headerContains(key, value)
 );
 
 Then(
@@ -72,6 +72,13 @@ Then(
     chai
       .expect(specUpdateBeneficiaryDetails._response.json)
       .to.be.jsonSchema(g2pResponseSchema)
+);
+
+Then(
+  /^The \/update\-beneficiary\-details response should have a "([^"]*)" property$/,
+  propertyName => {
+    chai.expect(specUpdateBeneficiaryDetails._response.json).to.have.property(propertyName);
+  }
 );
 
 // Scenario: Succesfully updated beneficiary details using not obligatory fields in the request payload

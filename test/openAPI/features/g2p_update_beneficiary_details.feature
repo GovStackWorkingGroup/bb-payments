@@ -11,7 +11,7 @@ in turn calls its API for registering beneficiaries into the ID Mapper of the Pa
         Then The response from the /update-beneficiary-details is received
         And The /update-beneficiary-details response should be returned in a timely manner 15000ms
         And The /update-beneficiary-details response should have status 200
-        And The /update-beneficiary-details response should have content-type: application/json header
+        And The /update-beneficiary-details response should have "content-type": "application/json" header
         And The /update-beneficiary-details response should match json schema
 
     @unit @positive
@@ -21,10 +21,11 @@ in turn calls its API for registering beneficiaries into the ID Mapper of the Pa
         Then The response from the /update-beneficiary-details is received
         And The /update-beneficiary-details response should be returned in a timely manner 15000ms
         And The /update-beneficiary-details response should have status 200
-        And The /update-beneficiary-details response should have content-type: application/json header
+        And The /update-beneficiary-details response should have "content-type": "application/json" header
         And The /update-beneficiary-details response should match json schema
         And The /update-beneficiary-details response ResponseCode field should be "00"
         And The /update-beneficiary-details response RequestID field should be "29517635-b46"
+        And The /update-beneficiary-details response should have a "ResponseDescription" property
 
     @unit @negative
     Scenario: Unable to update beneficiary details because of missing required SourceBBID in the payload
@@ -33,10 +34,11 @@ in turn calls its API for registering beneficiaries into the ID Mapper of the Pa
         Then The response from the /update-beneficiary-details is received
         And The /update-beneficiary-details response should be returned in a timely manner 15000ms
         And The /update-beneficiary-details response should have status 400
-        And The /update-beneficiary-details response should have content-type: application/json header
+        And The /update-beneficiary-details response should have "content-type": "application/json" header
         And The /update-beneficiary-details response should match json schema
         And The /update-beneficiary-details response ResponseCode field should be "01"
         And The /update-beneficiary-details response RequestID field should be "e2d40d31-802"
+        And The /update-beneficiary-details response should have a "ResponseDescription" property
 
     @unit @negative
     Scenario: Unable to update beneficiary details because of missing required PayeeFunctionalID in the payload
@@ -45,10 +47,11 @@ in turn calls its API for registering beneficiaries into the ID Mapper of the Pa
         Then The response from the /update-beneficiary-details is received
         And The /update-beneficiary-details response should be returned in a timely manner 15000ms
         And The /update-beneficiary-details response should have status 400
-        And The /update-beneficiary-details response should have content-type: application/json header
+        And The /update-beneficiary-details response should have "content-type": "application/json" header
         And The /update-beneficiary-details response should match json schema
         And The /update-beneficiary-details response ResponseCode field should be "01"
         And The /update-beneficiary-details response RequestID field should be "e2d40d31-802"
+        And The /update-beneficiary-details response should have a "ResponseDescription" property
 
     @unit @negative
     Scenario: Unable to update beneficiary details because of invalid SourceBBID value in the payload
@@ -57,10 +60,11 @@ in turn calls its API for registering beneficiaries into the ID Mapper of the Pa
         Then The response from the /update-beneficiary-details is received
         And The /update-beneficiary-details response should be returned in a timely manner 15000ms
         And The /update-beneficiary-details response should have status 400
-        And The /update-beneficiary-details response should have content-type: application/json header
+        And The /update-beneficiary-details response should have "content-type": "application/json" header
         And The /update-beneficiary-details response should match json schema
         And The /update-beneficiary-details response ResponseCode field should be "01"
         And The /update-beneficiary-details response RequestID field should be "e2d40d31-802"
+        And The /update-beneficiary-details response should have a "ResponseDescription" property
 
     @unit @negative
     Scenario: Unable to update beneficiary details because of invalid PayeeFunctionalID value in the payload
@@ -69,7 +73,8 @@ in turn calls its API for registering beneficiaries into the ID Mapper of the Pa
         Then The response from the /update-beneficiary-details is received
         And The /update-beneficiary-details response should be returned in a timely manner 15000ms
         And The /update-beneficiary-details response should have status 400
-        And The /update-beneficiary-details response should have content-type: application/json header
+        And The /update-beneficiary-details response should have "content-type": "application/json" header
         And The /update-beneficiary-details response should match json schema
         And The /update-beneficiary-details response ResponseCode field should be "01"
         And The /update-beneficiary-details response RequestID field should be "e2d40d31-802"
+        And The /update-beneficiary-details response should have a "ResponseDescription" property

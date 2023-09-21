@@ -11,7 +11,7 @@ It will be called by the Source BB to handover a batch of credit instructions to
         Then The response from the /bulk-payment is received
         And The /bulk-payment response should be returned in a timely manner 15000ms
         And The /bulk-payment response should have status 200
-        And The /bulk-payment response should have content-type: application/json header
+        And The /bulk-payment response should have "content-type": "application/json" header
         And The /bulk-payment response should match json schema
 
     @unit @positive
@@ -21,7 +21,7 @@ It will be called by the Source BB to handover a batch of credit instructions to
         Then The response from the /bulk-payment is received
         And The /bulk-payment response should be returned in a timely manner 15000ms
         And The /bulk-payment response should have status 200
-        And The /bulk-payment response should have content-type: application/json header
+        And The /bulk-payment response should have "content-type": "application/json" header
         And The /bulk-payment response should match json schema
         And The /bulk-payment response ResponseCode field should be "00"
         And The /bulk-payment response RequestID field should be "RequestID222"

@@ -36,7 +36,7 @@ Given(
 );
 
 When(
-  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as BatchID, {string} as InstructionID, {string} as PayeeFunctionalID, {string} as Amount, {string} as Currency, {string} as Narration is sent',
+  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as BatchID, {string} as InstructionID, {string} as PayeeFunctionalID, {int} as Amount, {string} as Currency, {string} as Narration is sent',
   (
     RequestID,
     SourceBBID,
@@ -84,11 +84,11 @@ Then('The \\/prepayment-validation response should have status 200', () =>
 );
 
 Then(
-  'The \\/prepayment-validation response should have content-type: application\\/json header',
-  () =>
+  'The \\/prepayment-validation response should have {string}: {string} header',
+  (key, value) =>
     specPrePaymentValidation
       .response()
-      .to.have.headerContains(contentTypeHeader.key, contentTypeHeader.value)
+      .should.have.headerContains(key, value)
 );
 
 Then('The \\/prepayment-validation response should match json schema', () =>
@@ -128,11 +128,11 @@ Then(
 );
 
 Then(
-  'The \\/prepayment-validation-response response should have content-type: application\\/json header',
-  () =>
+  'The \\/prepayment-validation-response response should have {string}: {string} header',
+  (key, value) =>
     specPrePaymentValidationResponse
       .response()
-      .to.have.headerContains(contentTypeHeader.key, contentTypeHeader.value)
+      .should.have.headerContains(key, value)
 );
 
 Then(
@@ -178,7 +178,7 @@ Then(
 // Scenario: Unable to retrieve eligible Functional IDs from the account mapper for credit transfers because of missing required SourceBBID in the payload
 // Others Given, Then are written in the aforementioned example
 When(
-  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as BatchID, {string} as InstructionID, {string} as PayeeFunctionalID, {string} as Amount, {string} as Currency, {string} as Narration is sent',
+  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as BatchID, {string} as InstructionID, {string} as PayeeFunctionalID, {int} as Amount, {string} as Currency, {string} as Narration is sent',
   (
     RequestID,
     BatchID,
@@ -213,7 +213,7 @@ Then('The \\/prepayment-validation response should have status 400', () =>
 // Scenario: Unable to retrieve eligible Functional IDs from the account mapper for credit transfers because of missing required BatchID in the payload
 // Others Given, Then are written in the aforementioned example
 When(
-  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as InstructionID, {string} as PayeeFunctionalID, {string} as Amount, {string} as Currency, {string} as Narration is sent',
+  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as InstructionID, {string} as PayeeFunctionalID, {int} as Amount, {string} as Currency, {string} as Narration is sent',
   (
     RequestID,
     SourceBBID,
@@ -244,7 +244,7 @@ When(
 // Scenario: Unable to retrieve eligible Functional IDs from the account mapper for credit transfers because of missing required InstructionID in the payload
 // Others Given, Then are written in the aforementioned example
 When(
-  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as BatchID, {string} as PayeeFunctionalID, {string} as Amount, {string} as Currency, {string} as Narration is sent',
+  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as BatchID, {string} as PayeeFunctionalID, {int} as Amount, {string} as Currency, {string} as Narration is sent',
   (
     RequestID,
     SourceBBID,
@@ -275,7 +275,7 @@ When(
 // Scenario: Unable to retrieve eligible Functional IDs from the account mapper for credit transfers because of missing required PayeeFunctionalID in the payload
 // Others Given, Then are written in the aforementioned example
 When(
-  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as BatchID, {string} as InstructionID, {string} as Amount, {string} as Currency, {string} as Narration is sent',
+  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as BatchID, {string} as InstructionID, {int} as Amount, {string} as Currency, {string} as Narration is sent',
   (
     RequestID,
     SourceBBID,
@@ -337,7 +337,7 @@ When(
 // Scenario: Unable to retrieve eligible Functional IDs from the account mapper for credit transfers because of missing required Currency in the payload
 // Others Given, Then are written in the aforementioned example
 When(
-  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as BatchID, {string} as InstructionID, {string} as PayeeFunctionalID, {string} as Amount, {string} as Narration is sent',
+  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as BatchID, {string} as InstructionID, {string} as PayeeFunctionalID, {int} as Amount, {string} as Narration is sent',
   (
     RequestID,
     SourceBBID,
@@ -368,7 +368,7 @@ When(
 // Scenario: Unable to retrieve eligible Functional IDs from the account mapper for credit transfers because of missing required Narration in the payload
 // Others Given, Then are written in the aforementioned example
 When(
-  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as BatchID, {string} as InstructionID, {string} as PayeeFunctionalID, {string} as Amount, {string} as Currency is sent',
+  'POST \\/prepayment-validation request with required body with given {string} as RequestID, {string} as SourceBBID, {string} as BatchID, {string} as InstructionID, {string} as PayeeFunctionalID, {int} as Amount, {string} as Currency is sent',
   (
     RequestID,
     SourceBBID,

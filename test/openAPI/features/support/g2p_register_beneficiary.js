@@ -57,11 +57,11 @@ Then(
 );
 
 Then(
-  /^The \/register\-beneficiary response should have content\-type: application\/json header$/,
-  () =>
+  /^The \/register\-beneficiary response should have "([^"]*)": "([^"]*)" header$/,
+  (key, value) =>
     specRegisterBeneficiary
       .response()
-      .should.have.header(contentTypeHeader.key, contentTypeHeader.value)
+      .should.have.headerContains(key, value)
 );
 
 Then(/^The \/register\-beneficiary response should match json schema$/, () =>
@@ -115,6 +115,13 @@ Then(
         specRegisterBeneficiary.response().to.have.response.json.RequestID
       )
       .to.be.equals(requestID)
+);
+
+Then(
+  /^The \/register\-beneficiary response should have a "([^"]*)" property$/,
+  propertyName => {
+    chai.expect(specRegisterBeneficiary._response.json).to.have.property(propertyName);
+  }
 );
 
 // Scenario: Unable to register a beneficiary because of missing required SourceBBID in the payload

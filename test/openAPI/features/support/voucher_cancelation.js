@@ -71,6 +71,21 @@ Then(/^The voucher cancelation response should match json schema$/, () => {
     .to.be.jsonSchema(voucherCancelationResponseSchema);
 });
 
+Then(
+  /^The voucher cancelation response should have "([^"]*)": "([^"]*)" header$/,
+  (key, value) =>
+    specVoucherCancelation
+      .response()
+      .should.have.headerContains(key, value)
+);
+
+
+Then(
+  /^The voucher cancelation response should have a "([^"]*)" property$/,
+  propertyName =>
+    chai.expect(specVoucherCancelation._response.json).to.have.property(propertyName)
+);
+
 // Scenario: A non Payment Building Block is unable to cancel a voucher that has already been canceled
 // Others Given, When, Then are written in the aforementioned example
 When(/^A PATCH request to cancel the same voucher is sent second time$/, () => {
@@ -108,6 +123,19 @@ Then(/^The response from re-cancellation should match json schema$/, () => {
     .expect(specVoucherReCancelation._response.json)
     .to.be.jsonSchema(voucherCancelationResponseSchema);
 });
+
+Then(/^The voucher re-cancellation response should have "([^"]*)": "([^"]*)" header$/,
+  (key, value) => {
+    specVoucherReCancelation
+      .response()
+      .should.have.headerContains(key, value);
+  });
+
+Then(
+  /^The voucher re-cancellation response should have a "([^"]*)" property$/,
+  propertyName =>
+    chai.expect(specVoucherReCancelation._response.json).to.have.property(propertyName)
+);
 
 // Scenario: A non Payment Building Block is unable to cancel a voucher due to providing invalid voucher serial number in the payload
 // Given and Then are written in the aforementioned example

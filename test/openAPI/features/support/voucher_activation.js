@@ -27,11 +27,11 @@ Given(
 );
 
 When(
-  /^Sends PATCH \/vouchers\/voucher_activation request with valid payload where voucher_serial_number = (\d+)$/,
-  voucher_serial_number =>
+  /^Sends PATCH \/vouchers\/voucher_activation request with valid payload where voucher_serial_number = (\d+) and "([^"]*)" as Gov_Stack_BB$/,
+  (voucher_serial_number, Gov_Stack_BB) =>
     specVoucherActivation.patch(baseUrl).withJson({
       voucher_serial_number: voucher_serial_number,
-      Gov_Stack_BB: 'bb-digital-registries',
+      Gov_Stack_BB: Gov_Stack_BB,
     })
 );
 
@@ -59,6 +59,14 @@ Then(
     chai
       .expect(specVoucherActivation._response.json)
       .to.be.jsonSchema(voucherActivationResponseSchema)
+);
+
+Then(
+  /^The \/vouchers\/voucher_activation response should have "([^"]*)": "([^"]*)" header$/,
+  (key, value) =>
+    specVoucherActivation
+      .response()
+      .should.have.headerContains(key, value)
 );
 
 // Scenario: The user is not able to activate a pre-activated voucher because of Gov Stack Building Block does not exist
@@ -106,14 +114,20 @@ Then(
       .to.be.jsonSchema(voucherResponseErrorSchema)
 );
 
+Then(
+  /^The \/vouchers\/voucher_activation response should have a "([^"]*)" property$/,
+  propertyName =>
+    chai.expect(specVoucherActivation._response.json).to.have.property(propertyName)
+);
+
 // Scenario: Unable to activate a pre-activated voucher because of an invalid voucher_serial_number
 // Others Given, Then are written in the aforementioned example
 When(
-  /^Sends PATCH \/vouchers\/voucher_activation request with an invalid voucher_serial_number$/,
-  () =>
+  /^Sends PATCH \/vouchers\/voucher_activation request with an invalid voucher_serial_number and "([^"]*)" as Gov_Stack_BB$/,
+  (Gov_Stack_BB) =>
     specVoucherActivation.patch(baseUrl).withJson({
       voucher_serial_number: 'invalid_voucher_serial_number',
-      Gov_Stack_BB: 'bb-digital-registries',
+      Gov_Stack_BB: Gov_Stack_BB,
     })
 );
 

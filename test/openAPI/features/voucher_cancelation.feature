@@ -11,6 +11,7 @@ Feature: The VoucherCancelation API is used to cancel a voucher
     And The voucher cancelation response should be returned in a timely manner 15000 ms
     And The voucher cancelation response should have status 200
     And The voucher cancelation response should match json schema
+    And The voucher cancelation response should have "content-type": "application/json" header
 
   @negative
   Scenario: A non Payment Building Block is unable to cancel a voucher that has already been canceled
@@ -23,6 +24,8 @@ Feature: The VoucherCancelation API is used to cancel a voucher
     And The response from re-cancellation should be returned in a timely manner 15000 ms
     And The response from re-cancellation should have status 464
     And The response from re-cancellation should match json schema
+    And The voucher re-cancellation response should have "content-type": "application/json" header
+    And The voucher re-cancellation response should have a "message" property
 
   @negative
   Scenario: A non Payment Building Block is unable to cancel a voucher due to providing invalid voucher serial number in the payload
@@ -32,6 +35,8 @@ Feature: The VoucherCancelation API is used to cancel a voucher
     And The voucher cancelation response should be returned in a timely manner 15000 ms
     And The voucher cancelation response should have status 463
     And The voucher cancelation response should match json schema
+    And The voucher cancelation response should have "content-type": "application/json" header
+    And The voucher cancelation response should have a "message" property
 
   @negative
   Scenario: A non Payment Building Block is unable to cancel a voucher due to providing invalid Gov Stack Building Block in the payload
@@ -41,6 +46,8 @@ Feature: The VoucherCancelation API is used to cancel a voucher
     And The voucher cancelation response should be returned in a timely manner 15000 ms
     And The voucher cancelation response should have status 463
     And The voucher cancelation response should match json schema
+    And The voucher cancelation response should have "content-type": "application/json" header
+    And The voucher cancelation response should have a "message" property
 
   @negative
   Scenario: A non Payment Building Block is unable to cancel a voucher due to missing required voucher serial number in the payload
@@ -50,6 +57,8 @@ Feature: The VoucherCancelation API is used to cancel a voucher
     And The voucher cancelation response should be returned in a timely manner 15000 ms
     And The voucher cancelation response should have status 400
     And The voucher cancelation response should match json schema
+    And The voucher cancelation response should have "content-type": "application/json" header
+    And The voucher cancelation response should have a "message" property
 
   @negative
   Scenario: A non Payment Building Block is unable to cancel a voucher due to missing required Gov Stack Building Block in the payload
@@ -59,6 +68,8 @@ Feature: The VoucherCancelation API is used to cancel a voucher
     And The voucher cancelation response should be returned in a timely manner 15000 ms
     And The voucher cancelation response should have status 400
     And The voucher cancelation response should match json schema
+    And The voucher cancelation response should have "content-type": "application/json" header
+    And The voucher cancelation response should have a "message" property
 
   @negative
   Scenario: A non Payment Building Block is unable to cancel a voucher due to missing payload in the request
@@ -68,3 +79,5 @@ Feature: The VoucherCancelation API is used to cancel a voucher
     And The voucher cancelation response should be returned in a timely manner 15000 ms
     And The voucher cancelation response should have status 400
     And The voucher cancelation response should match json schema
+    And The voucher cancelation response should have "content-type": "application/json" header
+    And The voucher cancelation response should have a "message" property
