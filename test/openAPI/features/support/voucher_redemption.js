@@ -23,14 +23,16 @@ Given(
   () => 'A non-Payment Building Block wants to redeem a voucher'
 );
 
-When(/^Sends POST request with valid payload to redeem a voucher$/, () => {
+When(
+  /^Sends POST request to redeem a voucher with (\d+) as voucher_number, "([^"]*)" as Gov_Stack_BB, "([^"]*)" as merchant_name, "([^"]*)" as merchant_bank_details, "([^"]*)" as merchant_voucher_group, (true|false) as override$/,
+  (voucher_number, Gov_Stack_BB, merchant_name, merchant_bank_details, merchant_voucher_group, override) => {
   specVoucherRedemption.post(baseUrl).withJson({
-    voucher_number: '6003',
-    Gov_Stack_BB: 'bb-digital-registries',
-    merchant_name: 'Melissa Stephenson',
-    merchant_bank_details: 'Citizen Service Banks',
-    merchant_voucher_group: 'Payment Voucher',
-    override: true,
+    voucher_number: voucher_number,
+    Gov_Stack_BB: Gov_Stack_BB,
+    merchant_name: merchant_name,
+    merchant_bank_details: merchant_bank_details,
+    merchant_voucher_group: merchant_voucher_group,
+    override: override,
   });
 });
 
@@ -74,18 +76,32 @@ Then(
       .to.be.jsonSchema(voucherResponseErrorSchema)
 );
 
+Then(
+  /^The \/vouchers\/voucher_redemption response should have "([^"]*)": "([^"]*)" header$/,
+  (key, value) =>
+    specVoucherRedemption
+      .response()
+      .should.have.headerContains(key, value)
+);
+
+Then(
+  /^The \/vouchers\/voucher_redemption response should have a "([^"]*)" property$/,
+  propertyName =>
+    chai.expect(specVoucherRedemption._response.json).to.have.property(propertyName)
+);
+
 // Scenario: A non-Payment Building Block is unable to redeem a voucher because the GovStack Building Block does not exist
 // Others Given and Then are written in the aforementioned example
 When(
-  /^Sends POST request with invalid Gov_Stack_BB in the payload to redeem a voucher$/,
-  () => {
+  /^Sends POST request with invalid Gov_Stack_BB, (\d+) as voucher_number, "([^"]*)" as merchant_name, "([^"]*)" as merchant_bank_details, "([^"]*)" as merchant_voucher_group, (true|false) as override in the payload to redeem a voucher$/,
+  (voucher_number, merchant_name, merchant_bank_details, merchant_voucher_group, override) => {
     specVoucherRedemption.post(baseUrl).withJson({
-      voucher_number: '6004',
+      voucher_number: voucher_number,
       Gov_Stack_BB: 'invalid_bb',
-      merchant_name: 'Melissa Stephenson',
-      merchant_bank_details: 'Citizen Service Banks',
-      merchant_voucher_group: 'Payment Voucher',
-      override: true,
+      merchant_name: merchant_name,
+      merchant_bank_details: merchant_bank_details,
+      merchant_voucher_group: merchant_voucher_group,
+      override: override,
     });
   }
 );
@@ -93,15 +109,15 @@ When(
 // Scenario: A non-Payment Building Block is unable to redeem a voucher because of the invalid voucher number
 // Others Given and Then are written in the aforementioned example
 When(
-  /^Sends POST request with invalid voucher_number in the payload to redeem a voucher$/,
-  () => {
+  /^Sends POST request with invalid voucher_number, "([^"]*)" as Gov_Stack_BB, "([^"]*)" as merchant_name, "([^"]*)" as merchant_bank_details, "([^"]*)" as merchant_voucher_group, (true|false) as override in the payload to redeem a voucher$/,
+  (Gov_Stack_BB, merchant_name, merchant_bank_details, merchant_voucher_group, override) => {
     specVoucherRedemption.post(baseUrl).withJson({
       voucher_number: 'notAnumber',
-      Gov_Stack_BB: 'bb-digital-registries',
-      merchant_name: 'Melissa Stephenson',
-      merchant_bank_details: 'Citizen Service Banks',
-      merchant_voucher_group: 'Payment Voucher',
-      override: true,
+      Gov_Stack_BB: Gov_Stack_BB,
+      merchant_name: merchant_name,
+      merchant_bank_details: merchant_bank_details,
+      merchant_voucher_group: merchant_voucher_group,
+      override: override,
     });
   }
 );
@@ -109,13 +125,13 @@ When(
 // Scenario: A non-Payment Building Block is unable to redeem a voucher because of insufficient funds in funding a/c
 // Others Given and Then are written in the aforementioned example
 When(
-  /^Sends POST request to redeem a voucher with insufficient funds in funding a\/c$/,
-  () => {
+  /^Sends POST request to redeem a voucher with insufficient funds in funding a\/c, (\d+) as voucher_number, "([^"]*)" as Gov_Stack_BB, "([^"]*)" as merchant_name, "([^"]*)" as merchant_bank_details, (true|false) as override$/,
+  (voucher_number, Gov_Stack_BB, merchant_name, merchant_bank_details, override) => {
     specVoucherRedemption.post(baseUrl).withJson({
-      voucher_number: '6004',
-      Gov_Stack_BB: 'bb-digital-registries',
-      merchant_name: 'Ronan Oliver',
-      merchant_bank_details: 'Vigor Bank Group',
+      voucher_number: voucher_number,
+      Gov_Stack_BB: Gov_Stack_BB,
+      merchant_name: merchant_name,
+      merchant_bank_details: merchant_bank_details,
       merchant_voucher_group: 'insufficient funds',
       override: true,
     });
@@ -125,15 +141,15 @@ When(
 // Scenario: A non-Payment Building Block is unable to redeem a voucher because the merchant cannot be credited
 // Others Given and Then are written in the aforementioned example
 When(
-  /^Sends POST request to redeem a voucher with merchant that cannot be credited$/,
-  () => {
+  /^Sends POST request to redeem a voucher with merchant that cannot be credited, (\d+) as voucher_number, "([^"]*)" as Gov_Stack_BB, (true|false) as override$/,
+  (voucher_number, Gov_Stack_BB, override) => {
     specVoucherRedemption.post(baseUrl).withJson({
-      voucher_number: '6004',
-      Gov_Stack_BB: 'bb-digital-registries',
+      voucher_number: voucher_number,
+      Gov_Stack_BB: Gov_Stack_BB,
       merchant_name: 'Annie Krueger',
       merchant_bank_details: 'Omega Holding Company',
       merchant_voucher_group: 'insufficient funds',
-      override: true,
+      override: override,
     });
   }
 );

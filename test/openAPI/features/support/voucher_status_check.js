@@ -54,11 +54,11 @@ Then(/^The \/voucherstatuscheck response should have status (\d+)$/, status =>
 );
 
 Then(
-  /^The \/voucherstatuscheck response should have content-type: application\/json header$/,
-  () =>
+  /^The \/voucherstatuscheck response should have "([^"]*)": "([^"]*)" header$/,
+  (key, value) =>
     specVoucherStatusCheck
       .response()
-      .should.have.header(contentTypeHeader.key, contentTypeHeader.value)
+      .should.have.headerContains(key, value)
 );
 
 Then(/^The \/voucherstatuscheck response should match json schema$/, () =>
@@ -112,6 +112,12 @@ Then(/^The \/voucherstatuscheck response should match json error schema$/, () =>
   chai
     .expect(specVoucherStatusCheck._response.json)
     .to.be.jsonSchema(voucherResponseErrorSchema)
+);
+
+Then(
+  /^The \/voucherstatuscheck response should have a "([^"]*)" property$/,
+  propertyName =>
+    chai.expect(specVoucherStatusCheck._response.json).to.have.property(propertyName)
 );
 
 // Scenario: Unable to check the status of a voucher because of the invalid voucher number

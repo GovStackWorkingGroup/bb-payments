@@ -9,7 +9,7 @@ Feature: The VoucherStatus API is used to check the status of a voucher
     Then Receives a response from the /voucherstatuscheck endpoint
     And The /voucherstatuscheck response should be returned in a timely manner 15000ms
     And The /voucherstatuscheck response should have status 200
-    And The /voucherstatuscheck response should have content-type: application/json header
+    And The /voucherstatuscheck response should have "content-type": "application/json" header
     And The /voucherstatuscheck response should match json schema
 
   @positive
@@ -20,7 +20,7 @@ Feature: The VoucherStatus API is used to check the status of a voucher
     Then Receives a response from the /voucherstatuscheck endpoint
     And The /voucherstatuscheck response should be returned in a timely manner 15000ms
     And The /voucherstatuscheck response should have status 200
-    And The /voucherstatuscheck response should have content-type: application/json header
+    And The /voucherstatuscheck response should have "content-type": "application/json" header
     And The /voucherstatuscheck response should match json schema
 
   @positive
@@ -31,7 +31,7 @@ Feature: The VoucherStatus API is used to check the status of a voucher
     Then Receives a response from the /voucherstatuscheck endpoint
     And The /voucherstatuscheck response should be returned in a timely manner 15000ms
     And The /voucherstatuscheck response should have status 200
-    And The /voucherstatuscheck response should have content-type: application/json header
+    And The /voucherstatuscheck response should have "content-type": "application/json" header
     And The /voucherstatuscheck response should match json schema
 
   @positive
@@ -42,7 +42,7 @@ Feature: The VoucherStatus API is used to check the status of a voucher
     Then Receives a response from the /voucherstatuscheck endpoint
     And The /voucherstatuscheck response should be returned in a timely manner 15000ms
     And The /voucherstatuscheck response should have status 200
-    And The /voucherstatuscheck response should have content-type: application/json header
+    And The /voucherstatuscheck response should have "content-type": "application/json" header
     And The /voucherstatuscheck response should match json schema
 
   @positive
@@ -53,7 +53,7 @@ Feature: The VoucherStatus API is used to check the status of a voucher
     Then Receives a response from the /voucherstatuscheck endpoint
     And The /voucherstatuscheck response should be returned in a timely manner 15000ms
     And The /voucherstatuscheck response should have status 200
-    And The /voucherstatuscheck response should have content-type: application/json header
+    And The /voucherstatuscheck response should have "content-type": "application/json" header
     And The /voucherstatuscheck response should match json schema
 
   @negative
@@ -63,8 +63,9 @@ Feature: The VoucherStatus API is used to check the status of a voucher
     Then Receives a response from the /voucherstatuscheck endpoint
     And The /voucherstatuscheck response should be returned in a timely manner 15000ms
     And The /voucherstatuscheck response should have status 400
-    And The /voucherstatuscheck response should have content-type: application/json header
+    And The /voucherstatuscheck response should have "content-type": "application/json" header
     And The /voucherstatuscheck response should match json error schema
+    And The /voucherstatuscheck response should have a "message" property
 
   @negative
   Scenario: Unable to check the status of a voucher because of the invalid voucher number
@@ -73,8 +74,9 @@ Feature: The VoucherStatus API is used to check the status of a voucher
     Then Receives a response from the /voucherstatuscheck endpoint
     And The /voucherstatuscheck response should be returned in a timely manner 15000ms
     And The /voucherstatuscheck response should have status 456
-    And The /voucherstatuscheck response should have content-type: application/json header
+    And The /voucherstatuscheck response should have "content-type": "application/json" header
     And The /voucherstatuscheck response should match json error schema
+    And The /voucherstatuscheck response should have a "message" property
 
   @negative
   Scenario: Unable to check the status of a voucher because the voucher number was already used
@@ -83,8 +85,9 @@ Feature: The VoucherStatus API is used to check the status of a voucher
     Then Receives a response from the /voucherstatuscheck endpoint
     And The /voucherstatuscheck response should be returned in a timely manner 15000ms
     And The /voucherstatuscheck response should have status 458
-    And The /voucherstatuscheck response should have content-type: application/json header
+    And The /voucherstatuscheck response should have "content-type": "application/json" header
     And The /voucherstatuscheck response should match json error schema
+    And The /voucherstatuscheck response should have a "message" property
 
   @negative
   Scenario: Unable to check the status of a voucher, because the voucher has expired
@@ -93,5 +96,6 @@ Feature: The VoucherStatus API is used to check the status of a voucher
     Then Receives a response from the /voucherstatuscheck endpoint
     And The /voucherstatuscheck response should be returned in a timely manner 15000ms
     And The /voucherstatuscheck response should have status 459
-    And The /voucherstatuscheck response should have content-type: application/json header
+    And The /voucherstatuscheck response should have "content-type": "application/json" header
     And The /voucherstatuscheck response should match json error schema
+    And The /voucherstatuscheck response should have a "message" property

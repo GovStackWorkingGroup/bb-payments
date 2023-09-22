@@ -27,13 +27,13 @@ Given(
 );
 
 When(
-  /^Send POST \/vouchers\/voucher_preactivation request with given body$/,
-  () => {
+  /^Send POST \/vouchers\/voucher_preactivation with required body with given "([^"]*)" as voucher_amount, "([^"]*)" as voucher_currency, "([^"]*)" as voucher_group, "([^"]*)" as Gov_Stack_BB$/,
+  (voucher_amount, voucher_currency, voucher_group, Gov_Stack_BB) => {
     specVoucherPreactivation.post(baseUrl).withJson({
-      voucher_amount: '15.21',
-      voucher_currency: 'AED',
-      voucher_group: 'string',
-      Gov_Stack_BB: 'Gov_Stack_BB',
+      voucher_amount: voucher_amount,
+      voucher_currency: voucher_currency,
+      voucher_group: voucher_group,
+      Gov_Stack_BB: Gov_Stack_BB,
       voucher_comment: 'string',
     });
   }
@@ -63,6 +63,14 @@ Then(
     chai
       .expect(specVoucherPreactivation._response.json)
       .to.be.jsonSchema(voucherPreactivationResponseSchema)
+);
+
+Then(
+  /^The \/vouchers\/voucher_preactivation response should have "([^"]*)": "([^"]*)" header$/,
+  (key, value) =>
+    specVoucherPreactivation
+      .response()
+      .should.have.headerContains(key, value)
 );
 
 // Scenario: The user successfully receives a pre-activated voucher by providing the optional X-Callback-URL header
@@ -98,13 +106,13 @@ When(/^Send with optional X-CorrelationID header$/, () =>
 // Scenario: The user is not able to receives a pre-activated voucher because of an invalid voucher amount
 // Others Given, When, Then are written in the aforementioned example
 When(
-  /^Send POST \/vouchers\/voucher_preactivation request with an invalid voucher amount$/,
-  () =>
+  /^Send POST \/vouchers\/voucher_preactivation request with an invalid voucher amount and "([^"]*)" as voucher_currency, "([^"]*)" as voucher_group, "([^"]*)" as Gov_Stack_BB$/,
+  (voucher_currency, voucher_group, Gov_Stack_BB) =>
     specVoucherPreactivation.post(baseUrl).withJson({
       voucher_amount: null,
-      voucher_currency: 'AED',
-      voucher_group: 'string',
-      Gov_Stack_BB: 'Gov_Stack_BB',
+      voucher_currency: voucher_currency,
+      voucher_group: voucher_group,
+      Gov_Stack_BB: Gov_Stack_BB,
       voucher_comment: 'string',
     })
 );
@@ -117,31 +125,37 @@ Then(
       .to.be.jsonSchema(voucherPreactivationResponseErrorSchema)
 );
 
+Then(
+  /^The \/vouchers\/voucher_preactivation response should have a "([^"]*)" property$/,
+  propertyName =>
+    chai.expect(specVoucherPreactivation._response.json).to.have.property(propertyName)
+);
+
 // Scenario: The user is not able to receives a pre-activated voucher because of an invalid voucher currency
 // Others Given, When, Then are written in the aforementioned example
 When(
-  /^Send POST \/vouchers\/voucher_preactivation request with an invalid voucher currency$/,
-  () =>
+  /^Send POST \/vouchers\/voucher_preactivation request with an invalid voucher currency and "([^"]*)" as voucher_amount, "([^"]*)" as voucher_group, "([^"]*)" as Gov_Stack_BB$/,
+  (voucher_amount, voucher_group, Gov_Stack_BB) =>
     specVoucherPreactivation.post(baseUrl).withJson({
-      voucher_amount: '15.21',
+      voucher_amount: voucher_amount,
       voucher_currency: '000',
-      voucher_group: 'string',
-      Gov_Stack_BB: 'Gov_Stack_BB',
+      voucher_group: voucher_group,
+      Gov_Stack_BB: Gov_Stack_BB,
       voucher_comment: 'string',
     })
 );
 
-// Scenario: The user is not able to receives a pre - activated voucher because of an invalid voucher group
+// Scenario: The user is not able to receives a pre - activated voucher because of an invalid voucher_group
 // Others Given, When, Then are written in the aforementioned example
 
 When(
-  /^Send POST \/vouchers\/voucher_preactivation request with an invalid voucher group$/,
-  () =>
+  /^Send POST \/vouchers\/voucher_preactivation request with an invalid voucher_group and "([^"]*)" as voucher_amount, "([^"]*)" as voucher_currency, "([^"]*)" as Gov_Stack_BB$/,
+  (voucher_amount, voucher_currency, Gov_Stack_BB) =>
     specVoucherPreactivation.post(baseUrl).withJson({
-      voucher_amount: '15.21',
-      voucher_currency: 'AED',
+      voucher_amount: voucher_amount,
+      voucher_currency: voucher_currency,
       voucher_group: null,
-      Gov_Stack_BB: 'Gov_Stack_BB',
+      Gov_Stack_BB: Gov_Stack_BB,
       voucher_comment: 'string',
     })
 );
@@ -149,12 +163,12 @@ When(
 // Scenario: The user is not able to receives a pre - activated voucher because of Gov Stack Building Block does not exist
 // Others Given, When, Then are written in the aforementioned example
 When(
-  /^Send POST \/vouchers\/voucher_preactivation request with an invalid Gov_Stack_BB$/,
-  () =>
+  /^Send POST \/vouchers\/voucher_preactivation request with an invalid Gov_Stack_BB and "([^"]*)" as voucher_amount, "([^"]*)" as voucher_currency, "([^"]*)" as voucher_group$/,
+  (voucher_amount, voucher_currency, voucher_group) =>
     specVoucherPreactivation.post(baseUrl).withJson({
-      voucher_amount: '15.21',
-      voucher_currency: 'AED',
-      voucher_group: 'string',
+      voucher_amount: voucher_amount,
+      voucher_currency: voucher_currency,
+      voucher_group: voucher_group,
       Gov_Stack_BB: 'not_exist',
       voucher_comment: 'string',
     })
