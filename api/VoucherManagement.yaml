@@ -7,10 +7,6 @@ info:
   contact:
     email: oscar.correia@maarifaeducation.com
   version: 1.0.3
-servers:
-- url: https://virtserver.swaggerhub.com/VMS-API2/VMS-API2-GS_P_VMS_API-1.0.2/1.0.3
-  description: SwaggerHub API Auto Mocking
-- url: https://virtserver.swaggerhub.com/GovStack/PaymentBuildingBlock/v1.0.1
 security:
 - app_id: []
 tags:
@@ -29,7 +25,7 @@ tags:
 - name: VoucherCancellation
   description: "The **VocuherCancellation** API is used by a non Payment Building Blocks in the GovStack Framework to cancel a voucher. The calling Building Block will capture the voucher number and send it to the Payments Building Block to canel the voucher. The Payments Building Block will respond with a status of Cancelled, Already Cancelled or Not existing. The VoucherCancellation will override the Blocked status and render the voucher permanently unusable. \n"
 paths:
-  /vouchers/voucher_preactivation:
+  /vouchers/voucherPreactivation:
     post:
       tags:
       - VoucherPreactivation
@@ -126,7 +122,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/voucher_preactivation_request'
+              $ref: '#/components/schemas/VoucherPreactivationRequest'
         required: true
       responses:
         "200":
@@ -134,62 +130,62 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/preactivation_response'
+                $ref: '#/components/schemas/PreactivationResponse'
         "400":
           description: Invalid resquest
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/invalid_preactivation_request'
+                $ref: '#/components/schemas/InvalidPreactivationRequest'
         "452":
           description: Invalid amount
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/invalid_amount'
+                $ref: '#/components/schemas/InvalidAmount'
         "453":
           description: Invalid currency
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/invalid_currency'
+                $ref: '#/components/schemas/InvalidCurrency'
         "454":
           description: Invalid voucher group
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/invalid_voucher_group'
+                $ref: '#/components/schemas/InvalidVoucherGroup'
         "455":
           description: Voucher group exhausted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/voucher_group_exhausted'
+                $ref: '#/components/schemas/VoucherGroupExhausted'
         "460":
           description: Gov Stack Building Block does not exist
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GovStack_BB_does_not_exist'
+                $ref: '#/components/schemas/GovStackBBDoesNotExist'
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/internal_server_error'
+                $ref: '#/components/schemas/InternalServerError'
         "503":
           description: Service Unavailable
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/service_unavailable'
+                $ref: '#/components/schemas/ServiceUnavailable'
         "599":
           description: Network connection timeout error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/network_timeout_error'
-  /vouchers/voucher_activation:
+                $ref: '#/components/schemas/NetworkTimeoutError'
+  /vouchers/voucherActivation:
     patch:
       tags:
       - VoucherActivation
@@ -286,7 +282,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Voucher_activate_request'
+              $ref: '#/components/schemas/VoucherActivateRequest'
         required: true
       responses:
         "200":
@@ -294,44 +290,44 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/activation_response'
+                $ref: '#/components/schemas/ActivationResponse'
         "400":
           description: Invalid resquest
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/invalid_activation_request'
+                $ref: '#/components/schemas/InvalidActivationRequest'
         "456":
           description: Invalid voucher serial number
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/invalid_voucher_serial_number'
+                $ref: '#/components/schemas/InvalidVoucherSerialNumber'
         "460":
           description: Gov Stack Building Block does not exist
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GovStack_BB_does_not_exist'
+                $ref: '#/components/schemas/GovStackBBDoesNotExist'
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/internal_server_error'
+                $ref: '#/components/schemas/InternalServerError'
         "503":
           description: Service Unavailable
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/service_unavailable'
+                $ref: '#/components/schemas/ServiceUnavailable'
         "599":
           description: Network connection timeout error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/network_timeout_error'
-  /vouchers/voucher_redeemption:
+                $ref: '#/components/schemas/NetworkTimeoutError'
+  /vouchers/voucherRedeemption:
     post:
       tags:
       - VoucherRedemption
@@ -428,7 +424,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Voucher_redeem_request'
+              $ref: '#/components/schemas/VoucherRedeemRequest'
         required: true
       responses:
         "200":
@@ -436,56 +432,56 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/redemption_response'
+                $ref: '#/components/schemas/RedemptionResponse'
         "400":
           description: Invalid resquest
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/invalid_redemption_request'
+                $ref: '#/components/schemas/InvalidRedemptionRequest'
         "460":
           description: Gov Stack Building Block does not exist
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GovStack_BB_does_not_exist'
+                $ref: '#/components/schemas/GovStackBBDoesNotExist'
         "461":
           description: Invalid voucher number
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/invalid_voucher_number'
+                $ref: '#/components/schemas/InvalidVoucherNumber'
         "462":
           description: Insufficient funds in funding a/c
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/insufficient_funds'
+                $ref: '#/components/schemas/InsufficientFunds'
         "463":
           description: Cannot credit merchant
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cannot_credit_merchant'
+                $ref: '#/components/schemas/CannotCreditMerchant'
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/internal_server_error'
+                $ref: '#/components/schemas/InternalServerError'
         "503":
           description: Service Unavailable
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/service_unavailable'
+                $ref: '#/components/schemas/ServiceUnavailable'
         "599":
           description: Network connection timeout error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/network_timeout_error'
-  /vouchers/voucherstatuscheck/{voucherserialnumber}:
+                $ref: '#/components/schemas/NetworkTimeoutError'
+  /vouchers/voucherStatusCheck/{voucherSerialNumber}:
     get:
       tags:
       - VoucherStatusCheck
@@ -592,13 +588,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/voucher_status'
+                $ref: '#/components/schemas/VoucherStatus'
         "400":
           description: Invalid request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/invalid_validation_request'
+                $ref: '#/components/schemas/InvalidValidationRequest'
         "456":
           description: Invalid voucher number
           content:
@@ -1171,38 +1167,38 @@ components:
       properties:
         message:
           type: string
-    voucher_expired:
+    voucherExpired:
       required:
       - message
       type: object
       properties:
         message:
           type: string
-    invalid_voucher:
+    invalidVoucher:
       required:
       - message
       type: object
       properties:
         message:
           type: string
-    already_cancelled:
+    alreadyCancelled:
       required:
       - message
       type: object
       properties:
         message:
           type: string
-    voucher_cancel_request:
+    voucherCancelRequest:
       required:
-      - Gov_Stack_BB
-      - voucherserialnumber
+      - govStackBB
+      - voucherSerialNumber
       type: object
       properties:
-        voucherserialnumber:
+        voucherSerialNumber:
           type: string
-        Gov_Stack_BB:
+        govStackBB:
           type: string
-    voucher_cancelled:
+    voucherCancelled:
       required:
       - message
       type: object
@@ -1210,8 +1206,8 @@ components:
         message:
           type: string
   parameters:
-    voucherserialnumber:
-      name: voucherserialnumber
+    voucherSerialnumber:
+      name: voucherSerialnumber
       in: path
       description: Voucher serial number to check status of
       required: true
@@ -1316,7 +1312,7 @@ components:
         format: uri
         example: https://myserver.com/send/callback/here
   securitySchemes:
-    app_id:
+    appId:
       type: apiKey
       description: API key to authorize request
       name: appid

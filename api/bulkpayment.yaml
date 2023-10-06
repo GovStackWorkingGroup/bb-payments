@@ -3,7 +3,7 @@ info:
   title: Bulk Payment API
   version: 1.0.0
 paths:
-  /bulk-payment:
+  /bulkPayment:
     post:
       summary: Bulk payment processing
       requestBody:
@@ -13,39 +13,39 @@ paths:
             schema:
               type: object
               properties:
-                RequestID:
+                requestID:
                   type: string
                   minLength: 12
                   maxLength: 12
-                SourceBBID:
+                sourceBBID:
                   type: string
                   minLength: 12
                   maxLength: 12
-                BatchID:
+                batchID:
                   type: string
                   minLength: 12
                   maxLength: 12
-                CreditInstructions:
+                creditInstructions:
                   type: array
                   items:
                     type: object
                     properties:
-                      InstructionID:
+                      instructionID:
                         type: string
                         minLength: 16
                         maxLength: 16
-                      PayeeFunctionalID:
+                      payeeFunctionalId:
                         type: string
                         minLength: 20
                         maxLength: 20
-                      Amount:
+                      amount:
                         type: number
                         format: float
-                      Currency:
+                      currency:
                         type: string
                         minLength: 3
                         maxLength: 3
-                      Narration:
+                      narration:
                         type: string
                         minLength: 1
                         maxLength: 50
@@ -58,16 +58,107 @@ paths:
               schema:
                 type: object
                 properties:
-                  ResponseCode:
+                  responseCode:
                     type: string
                     minLength: 2
                     maxLength: 2
-                  ResponseDescription:
+                  responseDescription:
                     type: string
                     maxLength: 200
-                  RequestID:
+                  requestID:
                     type: string
                     minLength: 12
                     maxLength: 12
         '400':
           description: Bad request
+  /credit-instructions:
+    post:
+      summary: "Submit credit instructions"
+      description: "Submit credit instructions to the Payments BB from the Source BB"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreditInstructionRequest"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreditInstructionResponse"
+              examples:
+                success:
+                  value:
+                    ResponseCode: "00"
+                    ResponseDescription: "Request successfully received by Pay-BB"
+                    RequestID: "849324499155"
+                failure:
+                  value:
+                    ResponseCode: "01"
+                    ResponseDescription: "Request not acknowledged by Pay-BB"
+                    RequestID: "849324499155"
+        400:
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreditInstructionResponse"
+components:
+  schemas:
+    CreditInstructionRequest:
+      type: "object"
+      properties:
+        RequestID:
+          type: "string"
+          minLength: 12
+          maxLength: 12
+        SourceBBID:
+          type: "string"
+          minLength: 12
+          maxLength: 12
+        BatchID:
+          type: "string"
+          minLength: 12
+          maxLength: 12
+        CreditInstructions:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/CreditInstruction"
+    CreditInstruction:
+      type: "object"
+      properties:
+        InstructionID:
+          type: "string"
+          minLength: 16
+          maxLength: 16
+        PayeeFunctionalID:
+          type: "string"
+          minLength: 20
+          maxLength: 20
+        Amount:
+          type: "number"
+          format: "float"
+        Currency:
+          type: "string"
+          minLength: 3
+          maxLength: 3
+        Narration:
+          type: "string"
+          minLength: 1
+          maxLength: 50
+    CreditInstructionResponse:
+      type: "object"
+      properties:
+        ResponseCode:
+          type: "string"
+          minLength: 2
+          maxLength: 2
+          enum: ["00", "01"]
+        ResponseDescription:
+          type: "string"
+          maxLength: 200
+        RequestID:
+          type: "string"
+          minLength: 12
+          maxLength: 12

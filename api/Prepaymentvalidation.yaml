@@ -5,9 +5,9 @@ info:
 servers:
   - url: 
 paths:
-  /prepayment-validation:
+  /prepaymentValidation:
     post:
-      operationId: PrePayment_Validation
+      operationId: PrePaymentValidation
       description: This API is to be exposed by the Payments BB; it will be called by the Source BB to gather details on which of the Functional IDs they would have previously stored in the account mapper are in a position to receive a credit transfer.
       requestBody:
         required: true
@@ -16,34 +16,34 @@ paths:
             schema:
               type: object
               properties:
-                RequestID:
+                requestID:
                   type: string
                   description: Globally unique ID
-                SourceBBID:
+                sourceBBID:
                   type: string
                   description: To identify the origination of the request.
-                BatchID:
+                batchID:
                   type: string
                   description: BatchID for batch that is submitted by the Source BB.
-                CreditInstructions:
+                creditInstructions:
                   type: array
                   description: List of credit instructions
                   items:
                     type: object
                     properties:
-                      InstructionID:
+                      instructionID:
                         type: string
                         description: Individual ID for each instruction in the Credit Batch
-                      PayeeFunctionalID:
+                      payeeFunctionalID:
                         type: string
                         description: The functional Id of the beneficiary.
-                      Amount:
+                      amount:
                         type: number
                         description: Amount to be Credited
-                      Currency:
+                      currency:
                         type: string
                         description: Transaction Currency Code
-                      Narration:
+                      narration:
                         type: string
                         description: Description of Payment
       responses:
@@ -54,18 +54,18 @@ paths:
               schema:
                 type: object
                 properties:
-                  ResponseCode:
+                  responseCode:
                     type: string
                     description: 00 – Success 01 – Failure
-                  ResponseDescription:
+                  responseDescription:
                     type: string
                     description: ResponseDescription
-                  RequestID:
+                  requestID:
                     type: string
                     description: Echoed from Request
-  /prepayment-validation-response:
+  /prepaymentValidationResponse:
     post:
-      operationId: PrePayment_Validation_Response
+      operationId: PrePaymentValidationResponse
       description: Response to the earlier request for validation of receiving accounts prior to initiation of the Bulk Payments Batch
       requestBody:
         required: true
@@ -74,25 +74,25 @@ paths:
             schema:
               type: object
               properties:
-                RequestID:
+                requestID:
                   type: string
                   description: Globally unique ID
-                Source_BatchID:
+                source_BatchID:
                   type: string
                   description: Echo referenced GUID of original request by Source BB to validate a batch of instructions.
-                NumberFailedCases:
+                numberFailedCases:
                   type: number
                   description: The number of cases failed. 0 if none, otherwise integer value
-                FailedAccounts:
+                failedAccounts:
                   type: array
                   description: List of accounts that failed to validate credit status.
                   items:
                     type: object
                     properties:
-                      InstructionID:
+                      instructionID:
                         type: string
                         description: Individual ID for each instruction in the Credit Batch
-                      FailureReason:
+                      failureReason:
                         type: string
                         description: Description of why this particular account failed to validate
       responses:
@@ -103,12 +103,12 @@ paths:
               schema:
                 type: object
                 properties:
-                  ResponseCode:
+                  responseCode:
                     type: string
                     description: 00 – Success 01 – Failure
-                  ResponseDescription:
+                  responseDescription:
                     type: string
                     description: ResponseDescription
-                  RequestID:
+                  requestID:
                     type: string
                     description: Echoed from Request

@@ -41,11 +41,11 @@ paths:
                   reason:
                     type: string
                     maxLength: 200
-                  RequestID:
+                  requestId:
                     type: string
                     maxLength: 12
   
-  /transferRequests/{transferRequestId}:
+  /transferRequests/{transferrequestId}:
     get:
       description: "Bill Aggregator Govt Entity ↔ PBB: Inquire about the status of its RTP"
       parameters:
@@ -78,7 +78,7 @@ components:
         reason:
           type: string
           maxLength: 200
-        RequestID:
+        requestId:
           type: string
           maxLength: 12
         billId:
@@ -114,13 +114,13 @@ components:
         reason:
           type: string
           maxLength: 200
-        RequestID:
+        requestId:
           type: string
           maxLength: 12
         billId:
           type: string
           maxLength: 20
-        PaymentStatus:
+        paymentStatus:
           type: string
           maxLength: 10
           
