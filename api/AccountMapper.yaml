@@ -3,9 +3,6 @@ info:
   version: "1.0.0"
   title: "Beneficiary Onboarding API"
   description: "This is the API that is called by the Information Mediator BB when the Registration BB in turn calls its API for registering beneficiaries into the ID Mapper of the Payments BB."
-servers:
-  - url: "https://payments-hub.example.com"
-  - url: "https://account-mapper.example.com"
 paths:
   /registerBeneficiaries:
     post:
@@ -40,7 +37,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Register"
-  /update-beneficiary-details:
+  /updateBeneficiaryDetails:
     post:
       summary: Update beneficiary details
       requestBody:
@@ -74,46 +71,7 @@ paths:
                       FinancialAddress:
                         type: string
                         maxLength: 30
-      responses:
-        200:
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ResponseCode:
-                    type: string
-                    minLength: 2
-                    maxLength: 2
-                  ResponseDescription:
-                    type: string
-                    maxLength: 200
-                  RequestID:
-                    type: string
-                    minLength: 12
-                    maxLength: 12
-        400:
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ResponseCode:
-                    type: string
-                    minLength: 2
-                    maxLength: 2
-                  ResponseDescription:
-                    type: string
-                    maxLength: 200
-                  RequestID:
-                    type: string
-                    minLength: 12
-                    maxLength: 12
-components:
-  schemas:
-    UpdateBeneficiaryDetails:
+  /updateBeneficiaryDetails:
       description: Update Beneficiary Details
       request:
         method: POST
@@ -159,26 +117,43 @@ components:
                   required: false
                   description: >
                     Destination Account Number, ideally an IBAN if available otherwise wallet destination accounts could be phone numbers as well, other Financial Addresses such as Aliases etc.
-      response:
-        parameters:
-          - name: responseCode
-            type: string
-            minLength: 2
-            maxLength: 2
-            required: true
-            description: 00 - Success, 01 - Failure
-          - name: responseDescription
-            type: string
-            minLength: 1
-            maxLength: 200
-            required: true
-            description: Response description
-          - name: requestId
-            type: string
-            minLength: 12
-            maxLength: 12
-            required: true
-            description: Echoed from Request
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ResponseCode:
+                    type: string
+                    minLength: 2
+                    maxLength: 2
+                  ResponseDescription:
+                    type: string
+                    maxLength: 200
+                  RequestID:
+                    type: string
+                    minLength: 12
+                    maxLength: 12
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ResponseCode:
+                    type: string
+                    minLength: 2
+                    maxLength: 2
+                  ResponseDescription:
+                    type: string
+                    maxLength: 200
+                  RequestID:
+                    type: string
+                    minLength: 12
+                    maxLength: 12
       examples:
         - request:
             body:
@@ -203,7 +178,8 @@ components:
               code: "01"
               description: "Request not acknowledged by Pay-BB"
               requestId: "915251236706"
-
+components:
+  schemas:
     UpdateBeneficiaryDetailsResponse:
       description: Update Beneficiary Details Response
       request:
@@ -276,11 +252,11 @@ components:
       examples:
         - request:
             body:
-              success_case:
+              successCase:
                 requestId: "291535126670"
                 registerRequestId: "915251236706"
                 numberFailedCases: 0
-              failure_case:
+              failureCase:
                 requestId: "291535126670"
                 registerRequestId: "915251236706"
                 numberFailedCases: 2
