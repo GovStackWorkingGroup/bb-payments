@@ -87,7 +87,7 @@ ph-ee-g2psandbox:
 
     connector_bulk:
       enabled: true
-      image: docker.io/openmf/ph-ee-bulk-processor:v1.3.1
+      image: docker.io/openmf/ph-ee-bulk-processor:v1.8.1
       LOGGING_LEVEL_ROOT: "DEBUG"
       tenants: "rhino,gorilla"
       aws:
