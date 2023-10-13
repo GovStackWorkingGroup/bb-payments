@@ -130,7 +130,7 @@ jobs:
           name: download and execute the bpmn upload
           command: | 
             # curl -o deployBpmn.sh https://raw.githubusercontent.com/openMF/ph-ee-env-labs/master/orchestration/deployBpmn.sh
-            # chmod +x deployBpmn.sh
+            chmod +x deployBpmn.sh
             sh deployBpmn.sh
 
   helm-test:
