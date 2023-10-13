@@ -117,11 +117,20 @@ jobs:
           name: Update kubeconfig
           command: |
             aws eks update-kubeconfig --name ${EKS_CLUSTER} 
+      - kubernetes/install-kubectl
+      - run:
+          name: Port Forward zeebe-gateway
+          command: |
+            kubectl port-forward service/ph-ee-zeebe-ops 5000:80 &
+      - run:
+          name: Wait for Port Forward
+          command: |
+            until nc -z localhost 5000; do sleep 1; done
       - run: 
           name: download and execute the bpmn upload
           command: | 
-            curl -o deployBpmn.sh https://raw.githubusercontent.com/openMF/ph-ee-env-labs/master/orchestration/deployBpmn.sh
-            chmod +x deployBpmn.sh
+            # curl -o deployBpmn.sh https://raw.githubusercontent.com/openMF/ph-ee-env-labs/master/orchestration/deployBpmn.sh
+            # chmod +x deployBpmn.sh
             sh deployBpmn.sh
 
   helm-test:
