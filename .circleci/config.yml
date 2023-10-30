@@ -14,17 +14,23 @@ jobs:
       - image: cimg/python:3.10
     steps:
       - checkout
-      - aws-cli/setup:
-          role_arn: "${AWS_CIRCLECI_ROLE_ARN}"
-          region: AWS_REGION
-          profile_name: "playground"
-          role_session_name: deploy-test
-          session_duration: '1800'
+      # - aws-cli/setup:
+      #     role_arn: "${AWS_CIRCLECI_ROLE_ARN}"
+      #     region: AWS_REGION
+      #     profile_name: "playground"
+      #     role_session_name: deploy-test
+      #     session_duration: '1800'
       - helm/install-helm-client:
           version: "v3.8.2"
       - run:
           name: Update kubeconfig
           command: |
+            aws sts assume-role --role-arn $AWS_CIRCLECI_ROLE_ARN --role-session-name deploy --profile my-assumed-role
+
+            aws configure set aws_access_key_id YOUR_ACCESS_KEY
+            aws configure set aws_secret_access_key YOUR_SECRET_KEY
+            aws configure set region us-west-2
+
             aws eks update-kubeconfig --name ${EKS_CLUSTER}     
    
       # Deploy Helm chart to EKS
