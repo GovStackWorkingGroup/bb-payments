@@ -23,7 +23,7 @@ ph-ee-g2psandbox:
 
     ph_ee_connector_ams_mifos:
       enabled: true
-      image: docker.io/openmf/ph-ee-connector-ams-mifos:v1.4.0
+      image: docker.io/openmf/ph-ee-connector-ams-mifos:v1.3.0
       ingress:
         enabled: false
 
@@ -37,7 +37,7 @@ ph-ee-g2psandbox:
 
     channel:
       enabled: true
-      image: docker.io/openmf/ph-ee-connector-channel:v1.8.0
+      image: docker.io/openmf/ph-ee-connector-channel:v1.9.0
       operations:
         url: "http://ph-ee-operations-app:80/api/v1"
       server:
@@ -49,20 +49,20 @@ ph-ee-g2psandbox:
 
     operations_app:
       enabled: true
-      image: docker.io/openmf/ph-ee-operations-app:v1.7.0
+      image: docker.io/openmf/ph-ee-operations-app:v1.10.0
       tenants: "rhino,gorilla"
       ingress:
         enabled: false
 
     operations_web:
       enabled: true
-      image: docker.io/openmf/ph-ee-operations-web:v1.4.0
+      image: docker.io/openmf/ph-ee-operations-web:v1.10.0
       ingress:
         enabled: false
 
     ph_ee_connector_gsma:
       enabled: true
-      image: docker.io/openmf/ph-ee-connector-gsma:v1.1.0
+      image: docker.io/openmf/ph-ee-connector-gsma:v1.2.0
       ingress:
         enabled: false
 
@@ -87,7 +87,7 @@ ph-ee-g2psandbox:
 
     connector_bulk:
       enabled: true
-      image: docker.io/openmf/ph-ee-bulk-processor:v1.8.1
+      image: docker.io/openmf/ph-ee-bulk-processor:v1.9.0
       LOGGING_LEVEL_ROOT: "DEBUG"
       tenants: "rhino,gorilla"
       aws:
@@ -124,11 +124,11 @@ ph-ee-g2psandbox:
 
     importer_rdbms:
       enabled: true
-      image: docker.io/openmf/ph-ee-importer-rdbms:v1.6.0
+      image: docker.io/openmf/ph-ee-importer-rdbms:v1.7.0
 
     mockpayment:
       enabled: true
-      image: docker.io/openmf/ph-ee-connector-mock-payment-schema:v1.3.0
+      image: docker.io/openmf/ph-ee-connector-mock-payment-schema:v1.4.0
       limits:
         memory: "1024M"
         cpu: "500m"
@@ -157,7 +157,7 @@ ph-ee-g2psandbox:
     integration_test:
       enabled: true
       replicas: 1
-      image: docker.io/openmf/ph-ee-integration-test:v1.3.0-rc.1
+      image: docker.io/openmf/ph-ee-integration-test:v1.4.0-rc.1
       gradle:
         command: ./gradlew test -Dcucumber.filter.tags="@gov"
 
