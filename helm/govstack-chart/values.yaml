@@ -162,8 +162,7 @@ ph-ee-g2psandbox:
         command: ./gradlew test -Dcucumber.filter.tags="@gov"
 
   account_mapper:
-    account_mapper:
-      enabled: true
-      LOGGING_LEVEL_ROOT: INFO
-      ingress:
-        enabled: false
+    enabled: true
+    LOGGING_LEVEL_ROOT: INFO
+    ingress:
+      enabled: false
