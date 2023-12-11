@@ -31,3 +31,39 @@ GRANT ALL ON *.* TO 'root'@'%';
 ```
 
 5. restart ph-ee-operations-app pod
+
+## Apply secrets
+### Kibana
+```
+export ENV_NAMESPACE=paymenthub
+cd helm/es-secret/
+make secrets || echo "elastic-certificates" already exists
+```
+### Elastic Search
+```
+// Clone repo or directory from the link above
+
+export ENV_NAMESPACE=paymenthub
+cd helm/es-secret/
+make secrets || echo "elastic-certificates" already exists
+```
+### bulk-processor secret 
+* ID and KEY are in file keys.txt in S3 bucket
+```
+export ENV_NAMESPACE=paymenthub
+export S3_ACCESS_KEY_ID=[[should be obtained from previously created bucked and acces keys]]
+export S3_SECRET_ACCESS_KEY=[[should be obtained from previously created bucked and acces keys]]
+
+kubectl delete secret bulk-processor-secret -n $ENV_NAMESPACE || echo "delete the secret if exist"
+kubectl create secret generic bulk-processor-secret \
+--from-literal=aws-access-key="$S3_ACCESS_KEY_ID" \
+--from-literal=aws-secret-key="$S3_SECRET_ACCESS_KEY" -n $ENV_NAMESPACE
+```
+
+## Upload BPMN-s
+1. Sync repository: [Repo](https://github.com/openMF/ph-ee-env-labs/tree/master)
+2. move orchestration directory in the project root dir.
+3. Exec: 
+```
+./helm/bpmn-upload/deployBpmn.sh
+```
