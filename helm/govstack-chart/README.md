@@ -67,3 +67,8 @@ kubectl create secret generic bulk-processor-secret \
 ```
 ./helm/bpmn-upload/deployBpmn.sh
 ```
+
+## Test
+```
+helm test g2p-sandbox --namespace paymenthub
+```
