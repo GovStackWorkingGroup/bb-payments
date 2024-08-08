@@ -1,14 +1,11 @@
 openapi: 3.0.0
 info:
-  title: PrePayment Validation API
+  title: PrePayment Validation and Bulk Payment APIs
   version: 1.0.0
-servers:
-  - url: 
 paths:
   /prepayment-validation:
     post:
-      operationId: PrePayment_Validation
-      description: This API is to be exposed by the Payments BB; it will be called by the Source BB to gather details on which of the Functional IDs they would have previously stored in the account mapper are in a position to receive a credit transfer.
+      summary: Pre-payment validation
       requestBody:
         required: true
         content:
@@ -18,37 +15,43 @@ paths:
               properties:
                 RequestID:
                   type: string
-                  description: Globally unique ID
+                  minLength: 12
+                  maxLength: 12
                 SourceBBID:
                   type: string
-                  description: To identify the origination of the request.
+                  minLength: 12
+                  maxLength: 12
                 BatchID:
                   type: string
-                  description: BatchID for batch that is submitted by the Source BB.
+                  minLength: 12
+                  maxLength: 12
                 CreditInstructions:
                   type: array
-                  description: List of credit instructions
                   items:
                     type: object
                     properties:
                       InstructionID:
                         type: string
-                        description: Individual ID for each instruction in the Credit Batch
+                        minLength: 16
+                        maxLength: 16
                       PayeeFunctionalID:
                         type: string
-                        description: The functional Id of the beneficiary.
+                        minLength: 20
+                        maxLength: 20
                       Amount:
                         type: number
-                        description: Amount to be Credited
+                        format: float
                       Currency:
                         type: string
-                        description: Transaction Currency Code
+                        minLength: 3
+                        maxLength: 3
                       Narration:
                         type: string
-                        description: Description of Payment
+                        minLength: 0
+                        maxLength: 50
       responses:
         '200':
-          description: Success
+          description: Successful response
           content:
             application/json:
               schema:
@@ -56,59 +59,12 @@ paths:
                 properties:
                   ResponseCode:
                     type: string
-                    description: 00 – Success 01 – Failure
+                    minLength: 2
+                    maxLength: 2
                   ResponseDescription:
                     type: string
-                    description: ResponseDescription
+                    maxLength: 200
                   RequestID:
                     type: string
-                    description: Echoed from Request
-  /prepayment-validation-response:
-    post:
-      operationId: PrePayment_Validation_Response
-      description: Response to the earlier request for validation of receiving accounts prior to initiation of the Bulk Payments Batch
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                RequestID:
-                  type: string
-                  description: Globally unique ID
-                Source_BatchID:
-                  type: string
-                  description: Echo referenced GUID of original request by Source BB to validate a batch of instructions.
-                NumberFailedCases:
-                  type: number
-                  description: The number of cases failed. 0 if none, otherwise integer value
-                FailedAccounts:
-                  type: array
-                  description: List of accounts that failed to validate credit status.
-                  items:
-                    type: object
-                    properties:
-                      InstructionID:
-                        type: string
-                        description: Individual ID for each instruction in the Credit Batch
-                      FailureReason:
-                        type: string
-                        description: Description of why this particular account failed to validate
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ResponseCode:
-                    type: string
-                    description: 00 – Success 01 – Failure
-                  ResponseDescription:
-                    type: string
-                    description: ResponseDescription
-                  RequestID:
-                    type: string
-                    description: Echoed from Request
+                    minLength: 12
+                    maxLength: 12
