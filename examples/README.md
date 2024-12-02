@@ -38,3 +38,6 @@ your own secrets, then start up via docker compose.
 3. `curl -k -X POST https://localhost/processes/14/start`
 4. `curl -k https://localhost/instances`
 5. `curl -k https://localhost/instances/12`
+
+## deployment and config script for govstack BB-payment sandbox
+1. 

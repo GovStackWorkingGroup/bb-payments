@@ -1,11 +1,264 @@
 version: 2.1
 setup: true
-
 orbs:
-  test-harness: govstack-working-group/testutils@1.0.6
+  test-harness: govstack-working-group/testutils@1.0.4
+  aws-eks: circleci/aws-eks@2.2.0 
+  slack: circleci/slack@4.12.5
+  helm: circleci/helm@2.0.1
+  kubernetes: circleci/kubernetes@1.3
+  aws-cli: circleci/aws-cli@4.0.0
+
+jobs:
+  deploy-g2psandbox-govstack-chart:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - aws-cli/setup:
+          role_arn: "${AWS_CIRCLECI_ROLE_ARN}"
+          region: AWS_REGION
+          profile_name: "playground"
+          role_session_name: deploy-test
+          session_duration: '1800'
+      - helm/install-helm-client:
+          version: "v3.8.2"
+      - run:
+          name: Update kubeconfig
+          command: |
+            aws eks update-kubeconfig --name ${EKS_CLUSTER}     
+   
+      # Deploy Helm chart to EKS
+      - run:
+          name: Deploy Helm chart to EKS
+          command: |
+            # Install Helm chart
+            helm dep up helm/govstack-chart
+            helm upgrade --install -f helm/govstack-chart/values.yaml g2p-sandbox helm/govstack-chart --create-namespace  --namespace paymenthub
+            # helm upgrade --install g2p-sandbox ./helm/govstack-chart
+  deploy-fineract-helm-chart:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - aws-cli/setup:
+          role_arn: "${AWS_CIRCLECI_ROLE_ARN}"
+          region: AWS_REGION
+          profile_name: "playground"
+          role_session_name: deploy-test
+          session_duration: '1800'
+      - helm/install-helm-client:
+          version: "v3.8.2"
+      - run:
+          name: Update kubeconfig
+          command: |
+            aws eks update-kubeconfig --name ${EKS_CLUSTER} 
+      - helm/upgrade-helm-chart:
+          add-repo: "https://fynarfin.io/images/fineract/"
+          chart: "https://fynarfin.io/images/fineract/fin-engine-1.1.0-SNAPSHOT.tgz"
+          release-name: fineract
+          namespace: fineract
+          recreate-pods: true
+          wait: true
+          timeout: "300s"
+
+  # create-secret:
+  #   docker:
+  #     - image: cimg/base:2022.06 
+  #   steps: 
+  #     - checkout
+  #     # - setup_remote_docker:
+  #     #       version: 20.10.14
+  #     - aws-cli/setup:
+  #         role_arn: "${AWS_CIRCLECI_ROLE_ARN}"
+  #         region: AWS_REGION
+  #         profile_name: "playground"
+  #         role_session_name: deploy-test
+  #         session_duration: '1800'
+  #     - run:
+  #         name: Update kubeconfig
+  #         command: |
+  #           aws eks update-kubeconfig --name ${EKS_CLUSTER} 
+  #     - kubernetes/install-kubectl
+  #     # - aws-eks/update-kubeconfig-with-authenticator:
+  #     #     cluster-name: "GStack-sb-eks-plg"
+  #     #     aws-region: "$REGION"
+  #     - run: |
+  #         cd helm/kibana-secret/
+  #         make secrets || echo "kibana" already exists
+  #     - run: |
+  #         cd helm/es-secret/
+  #         make secrets || echo "elastic-certificates" already exists
+  #     - run: |
+  #         export ENV_NAMESPACE=paymenthub
+  #         kubectl delete secret bulk-processor-secret -n $ENV_NAMESPACE || echo "delete the secret if exist"
+  #         kubectl create secret generic bulk-processor-secret \
+  #         --from-literal=aws-access-key="$S3_ACCESS_KEY_ID" \
+  #         --from-literal=aws-secret-key="$S3_SECRET_ACCESS_KEY" -n $ENV_NAMESPACE
+
+  #     # - run: |
+  #     #     kubectl delete secret bulk-processor-secret -n paymenthub || echo "delete the secret if exist"
+  #     #     kubectl create secret generic bulk-processor-secret \
+  #     #     --from-literal=aws-access-key="$S3_ACCESS_KEY_ID" \
+  #     #     --from-literal=aws-secret-key="$S3_SECRET_ACCESS_KEY" -n paymenthub
+
+  # deploying-bpmns:
+  #   docker:
+  #     - image: cimg/base:2022.06 
+  #     # - image: 'curlimages/curl:8.2.1'   
+  #   steps:
+  #     - checkout
+  #     - aws-cli/setup:
+  #         role_arn: "${AWS_CIRCLECI_ROLE_ARN}"
+  #         region: AWS_REGION
+  #         profile_name: "playground"
+  #         role_session_name: deploy-test
+  #         session_duration: '1800'
+  #     - run:
+  #         name: Update kubeconfig
+  #         command: |
+  #           aws eks update-kubeconfig --name ${EKS_CLUSTER} 
+  #     - kubernetes/install-kubectl
+  #     # - run:
+  #     #     name: Wait for Port Forward
+  #     #     command: |
+  #     #       until nc -z localhost 5000; do sleep 1; done
+  #     - run: 
+  #         name: download and execute the bpmn upload
+  #         command: | 
+  #           #insatll netcat
+  #           echo install netcat
+  #           sudo apt install -y netcat
+  #           sleep 10
+  #           check_count=0
+  #           until ((check_count==20)) || nc -vz ph-ee-zeebe-ops 80; do 
+  #               echo "Waiting for zeebe-ops service"; 
+  #               sleep 5; 
+  #               check_count=$(($check_count + 1));
+  #           done;
+  #           echo ------zeebe-ops service available-----------
+  #           sleep 10
+  #           #Deploy BPMN 
+  #           kubectl port-forward service/ph-ee-zeebe-ops 5000:80 -n $NAMESPACE &
+  #           echo "sleeping to get portforwading ready"
+  #           git clone https://github.com/openMF/ph-ee-env-labs.git
+  #           cd ph-ee-env-labs/orchestration/
+  #           sed -i "/HOST=/c\HOST=http://localhost:5000/zeebe/upload" deployBpmn.sh
+  #           cat deployBpmn.sh
+  #           chmod +x deployBpmn.sh 
+  #           cd ..
+  #           timeout 180s sh orchestration/deployBpmn.sh && sleep 5 || echo 'deploy Bpmn done'
+  #           echo ---------------------------successful--------------------------
+  #           # # curl -o deployBpmn.sh https://raw.githubusercontent.com/openMF/ph-ee-env-labs/master/orchestration/deployBpmn.sh
+  #           # cd helm/bpmn-upload
+  #           # chmod +x deployBpmn.sh
+  #           # sh deployBpmn.sh
+
+  helm-test:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - aws-cli/setup:
+          role_arn: "${AWS_CIRCLECI_ROLE_ARN}"
+          region: AWS_REGION
+          profile_name: "playground"
+          role_session_name: deploy-test
+          session_duration: '1800'
+      - kubernetes/install-kubectl
+      - run:
+          name: Update kubeconfig
+          command: |
+            aws eks update-kubeconfig --name ${EKS_CLUSTER}
+      - helm/install-helm-client:
+          version: "v3.8.2"
+      - run:
+          name: Run Helm Tests
+          command: |
+            helm test g2p-sandbox --filter name=g2p-sandbox-test-gov --namespace paymenthub || echo test
+                 
+      - run:
+          name: Fetch Integration Test Report
+          command: |
+            #!/bin/bash
+            mkdir -p integration_report/test-report
+
+            echo "Fetch Integration Test Report for GOV"
+            kubectl cp paymenthub/`kubectl get pods -n paymenthub | grep g2p-sandbox-test-gov |cut -d " " -f1`:/ph-ee-connector-integration-test/build integration_report/test-report
+            # Specify the path to the downloaded file 
+            downloaded_file="integration_report/test-report/cucumber.xml"
+            # Loop until the file is not empty
+            while [ ! -s $downloaded_file ]; do
+                echo "File is empty, waiting..."
+                sleep 60  # You can adjust the sleep interval as needed
+                kubectl cp paymenthub/`kubectl get pods -n paymenthub | grep g2p-sandbox-test-gov |cut -d " " -f1`:/ph-ee-connector-integration-test/build/ integration_report/test-report
+                downloaded_file="integration_report/test-report/cucumber.xml"
+            done
+            echo "File is no longer empty, processing..."
+            mv integration_report/test-report/cucumber.xml integration_report/test-report/cucumber_gov.xml
+            mv integration_report/test-report/reports/tests/test integration_report/test-report/reports/tests/test_gov
+           
+            mkdir -p integration_report_final
+            cp integration_report/test-report/cucumber_gov.xml integration_report_final/ || echo ""
+            cp integration_report/test-report/cucumber_ams.xml integration_report_final/ || echo ""
+
+            ls integration_report/test-report/
+            # kubectl cp paymenthub/`kubectl get pods -n paymenthub | grep g2p-sandbox-test-gov |cut -d " " -f1`:/ph-ee-connector-integration-test/build integration_report/test-report
+            for i in $(kubectl get pods -n paymenthub |cut -d " " -f1|tail -n +2); do
+                echo "--------------------------------------------------------------------Logs of $i Start---------------------------------------------------------------------------" >> all_pod_logs.log
+                kubectl logs -n paymenthub  $i  --all-containers=true >> all_pod_logs.log
+                echo "---------------------------------------------------------------------Logs of $i End----------------------------------------------------------------------------" >> all_pod_logs.log
+                echo " " >> all_pod_logs.log
+                echo " " >> all_pod_logs.log
+            done
+            mv all_pod_logs.log integration_report/test-report/reports/tests/
+
+      - store_test_results:
+          path: integration_report_final/
+      - store_artifacts:
+          path: integration_report/test-report/reports/tests
+      # - run:
+      #     name: Run Helm Tests
+      #     command: |
+      #       helm test g2p-sandbox --namespace paymenthub || echo test
+      # - run:
+      #     name: Fetch Integration Test Report
+      #     command: |
+      #       #!/bin/bash
+      #       mkdir -p integration_report/test-report
+      #       kubectl cp paymenthub/`kubectl get pods -n paymenthub | grep g2p-sandbox-test-connection |cut -d " " -f1`:/ph-ee-connector-integration-test/build integration_report/test-report
+
+      #       # Specify the path to the downloaded file
+      #       downloaded_file="integration_report/test-report/cucumber.xml"
+
+      #       # Loop until the file is not empty
+      #       while [ ! -s $downloaded_file ]; do
+      #           echo "File is empty, waiting..."
+      #           sleep 60  # You can adjust the sleep interval as needed
+      #           kubectl cp paymenthub/`kubectl get pods -n paymenthub | grep g2p-sandbox-test-connection |cut -d " " -f1`:/ph-ee-connector-integration-test/build/ integration_report/test-report
+      #           downloaded_file="integration_report/test-report/cucumber.xml  "
+      #       done
+      #       echo "File is no longer empty, processing..."
+      #       # kubectl cp paymenthub/`kubectl get pods -n paymenthub | grep g2p-sandbox-test-connection |cut -d " " -f1`:/ph-ee-connector-integration-test/build integration_report/test-report
+      #   # - run:
+      #   #     name: Fetch Integration Test Report
+      #   #     command: |
+      #   #       kubectl cp -n $KUBE_NAMESPACE <pod-name>:<path-to-report-file> ./integration_report  # Replace <pod-name> and <path-to-report-file> 
+      # # - run:
+      # #     name: List Contents of Integration Report Directory
+      # #     command: |
+      # #       ls -l /tmp/integration_report
+      # - store_test_results:
+      #     path: integration_report/test-report/cucumber.xml
+      # - store_artifacts:
+      #     path: integration_report/test-report/reports/tests/test
+      #     # path: integration_report/test-report/reports/tests/test
+      # # - store_test_results:
+      # #     path: integration_reports/test-report/cucumber.xml
+      # # - store_artifacts:
+      # #     path: ph-ee-integration-test/build/reports/tests/test
 
 workflows:
-  test_everything:
+  deploy:
     jobs:
       - test-harness/create-config:
           post-steps: # Persist to workspace has to be defined in main workflow
@@ -13,6 +266,43 @@ workflows:
                 root: workspace
                 paths:
                   - generated.yml
+          context: # CircleCI context containing AWS credentials
+            - AWS 
+            - playground
       - test-harness/execute-tests:
           requires:
-            - test-harness/create-config
+            - test-harness/create-config 
+          context: # CircleCI context containing AWS credentials
+            - AWS 
+            - playground
+      - deploy-g2psandbox-govstack-chart:
+          context: # CircleCI context containing AWS credentials
+            - AWS 
+            - playground
+      - deploy-fineract-helm-chart:
+          context: 
+            - AWS
+            - playground
+      # - create-secret:
+      #     requires:
+      #       - deploy-g2psandbox-govstack-chart
+      #       - deploy-fineract-helm-chart
+      #     context: 
+      #       - AWS
+      #       - playground
+      # - deploying-bpmns:
+      #     requires:
+      #       - deploy-g2psandbox-govstack-chart
+      #       - deploy-fineract-helm-chart
+      #     context: 
+      #       - AWS
+      #       - playground
+      - helm-test:
+          context: 
+            - AWS
+            - playground           
+          # requires:
+            # - create-secret
+            # - deploying-bpmns
+                    
+  
