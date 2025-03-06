@@ -1,0 +1,58 @@
+openapi: 3.0.0
+info:
+  title: Voucher Cancellation Confirmation API
+  version: 1.0.1
+  description: API to confirm the cancellation of a voucher in the Voucher Engine or Payments Hub.
+
+paths:
+  /vouchers/cancellation/confirmation:
+    post:
+      summary: Confirm voucher cancellation.
+      operationId: confirmVoucherCancellation
+      requestBody:
+        description: Voucher cancellation confirmation details.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestID:
+                  type: string
+                  maxLength: 12
+                  description: Globally unique ID.
+                registerRequestID:
+                  type: string
+                  maxLength: 12
+                  description: Echo the ID of the original Voucher_Cancellation API call.
+                numberFailedCases:
+                  type: integer
+                  description: The number of cases failed.
+                failedCases:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      serialNumber:
+                        type: string
+                        maxLength: 20
+                        description: Serial Number of the voucher.
+                      failureReason:
+                        type: string
+                        maxLength: 100
+                        description: Reason for failure.
+      responses:
+        '200':
+          description: Voucher cancellation confirmation processed successfully.
+        '202':
+          description: Voucher cancellation confirmation received and is being processed.
+      security:
+        - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

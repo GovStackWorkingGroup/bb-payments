@@ -1,0 +1,87 @@
+openapi: 3.0.0
+info:
+  title: Mark Bill as Paid API
+  version: 1.0.0
+  description: API invoked by Payments BB to Bill Aggregator/Govt Entity to mark a bill as paid.
+paths:
+  /billTransferRequests:
+    post:
+      summary: Mark a specific bill as paid.
+      parameters:
+        - name: X-CorrelationID
+          in: header
+          required: true
+          description: Globally unique requestId/ client correlation Id
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-Platform-TenantId
+          in: header
+          required: true
+          description: Tenant Id for Data scoping
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-Payer FI-ID
+          in: header
+          required: true
+          description: Payer FI ID initiating the original bill inquiry/ payment sequence
+          schema:
+            type: string
+            maxLength: 20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestID:
+                  type: string
+                  maxLength: 12
+                billId:
+                  type: string
+                  maxLength: 20
+                PaymentReferenceID:
+                  type: string
+                  maxLength: 16
+      responses:
+        '202':
+          description: Request Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                    maxLength: 2
+                  reason:
+                    type: string
+                    maxLength: 100
+                  requestID:
+                    type: string
+                    maxLength: 12
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    maxLength: 2
+                  reason:
+                    type: string
+                    maxLength: 100
+                  requestID:
+                    type: string
+                    maxLength: 12
+      security:
+        - PaymentsBBAuth: []
+components:
+  securitySchemes:
+    PaymentsBBAuth:
+      type: apiKey
+      in: header
+      name: X-CorrelationID

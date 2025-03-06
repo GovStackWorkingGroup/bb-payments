@@ -9,5 +9,8 @@
 * [6 Functional Requirements](6-functional-requirements.md)
 * [7 Data Structures](7-data-structures.md)
 * [8 Service APIs](8-service-apis.md)
+  * [8.1 Government to Person (G2P) payments](8-service-apis/8.1-government-to-person-g2p-payments.md)
+  * [8.2 Voucher Management APIs](8-service-apis/8.2-voucher-management-apis.md)
+  * [8.3 Person-to-Government APIs (P2G) Bill Payments](8-service-apis/8.3-person-to-government-apis-p2g-bill-payments.md)
 * [9 Internal Workflows](9-internal-workflows.md)
 * [10 Other Resources](10-other-resources.md)

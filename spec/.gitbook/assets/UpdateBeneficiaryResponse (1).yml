@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: Beneficiary Upload Callback API
+  version: 1.0.2
+  description: Callback API from Pay-BB to notify the Source BB about the upload status of beneficiaries to the ID Mapper.
+paths:
+  /callback:
+    post:
+      summary: Callback to notify beneficiary upload status.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - requestID
+                - registerRequestID
+                - numberFailedCases
+              properties:
+                requestID:
+                  type: string
+                  maxLength: 12
+                registerRequestID:
+                  type: string
+                  maxLength: 12
+                numberFailedCases:
+                  type: integer
+                failedCases:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - payeeFunctionalID
+                      - paymentModality
+                    properties:
+                      payeeFunctionalID:
+                        type: string
+                        maxLength: 20
+                      bankingInstitutionCode:
+                        type: string
+                        maxLength: 11
+                      paymentModality:
+                        type: string
+                        maxLength: 2
+                        enum:
+                          - '00'
+                          - '01'
+                          - '02'
+                          - '03'
+                          - '04'
+                      failureReason:
+                        type: string
+                        maxLength: 100
+      responses:
+        '200':
+          description: Callback successfully received.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - responseCode
+                  - responseDescription
+                  - requestID
+                properties:
+                  responseCode:
+                    type: string
+                    maxLength: 2
+                  responseDescription:
+                    type: string
+                    maxLength: 200
+                  requestID:
+                    type: string
+                    maxLength: 12

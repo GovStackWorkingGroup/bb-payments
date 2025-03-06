@@ -1,0 +1,95 @@
+openapi: 3.0.0
+info:
+  title: Voucher Creation API
+  version: 1.0.1
+  description: API invoked by Payment Hub for voucher creation in the Voucher Engine.
+
+paths:
+  /vouchers:
+    post:
+      summary: Create vouchers in the Voucher Engine.
+      parameters:
+        - name: X-Program-Id
+          in: header
+          required: false
+          description: In case a Government Entity has specific budget account for a Program.
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-Registering-Institution-Id
+          in: header
+          required: false
+          description: ID of the Issuing Agency, used for validation and data scoping.
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-Callback-URL
+          in: header
+          required: true
+          description: URL on which the result is published.
+          schema:
+            type: string
+            maxLength: 100
+      requestBody:
+        description: Details required for voucher creation.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestID:
+                  type: string
+                  maxLength: 12
+                  description: Globally unique ID.
+                batchID:
+                  type: string
+                  maxLength: 12
+                  description: BatchID for batch.
+                voucherInstructions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      instructionID:
+                        type: string
+                        maxLength: 16
+                        description: Individual ID for each instruction.
+                      groupCode:
+                        type: string
+                        maxLength: 3
+                      currency:
+                        type: string
+                        maxLength: 3
+                        description: Transaction Currency Code.
+                      amount:
+                        type: float
+                        description: Amount to be Credited.
+                      payeeFunctionalID:
+                        type: string
+                        maxLength: 20
+                        description: Functional Id of the beneficiary.
+                      narration:
+                        type: string
+                        maxLength: 50
+                        description: Description of Payment.
+      responses:
+        '200':
+          description: Response from the Voucher Engine.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ResponseCode:
+                    type: string
+                    maxLength: 2
+                    description: Status code of the response.
+                  ResponseDescription:
+                    type: string
+                    maxLength: 200
+                    description: Detailed response description.
+                  RequestID:
+                    type: string
+                    maxLength: 12
+                    description: Echoed from Request.

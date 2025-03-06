@@ -1,0 +1,72 @@
+openapi: 3.0.0
+info:
+  title: Voucher Cancellation API
+  version: 1.0.1
+  description: API to cancel a voucher in the Voucher Engine by Source BB.
+
+paths:
+  /vouchers:
+    post:
+      summary: Cancel a voucher.
+      parameters:
+        - name: command
+          in: query
+          required: true
+          description: Operation command.
+          schema:
+            type: string
+            enum: [cancel]
+      requestBody:
+        description: Voucher details to be cancelled.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestID:
+                  type: string
+                  maxLength: 12
+                  description: Globally unique ID.
+                batchID:
+                  type: string
+                  maxLength: 12
+                  description: Batch ID for the batch.
+                voucherInstructions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      serialNumber:
+                        type: string
+                        description: Serial Number of the voucher.
+      responses:
+        '200':
+          description: Voucher cancellation processed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                    maxLength: 2
+                    description: Response code indicating success or failure.
+                  responseDescription:
+                    type: string
+                    maxLength: 200
+                    description: Description of the response.
+                  requestID:
+                    type: string
+                    maxLength: 12
+                    description: Echoed Request ID.
+      security:
+        - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

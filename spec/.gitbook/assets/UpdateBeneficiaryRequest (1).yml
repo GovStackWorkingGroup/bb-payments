@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: Beneficiary Update API
+  version: 1.0.1
+  description: API to update either the Payment Modality or Financial Address for a registered beneficiary.
+paths:
+  /identityAccountMapper/beneficiary:
+    put:
+      summary: Update the beneficiary payment modality or financial address.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - requestID
+                - sourceBBID
+                - beneficiaries
+              properties:
+                requestID:
+                  type: string
+                  maxLength: 12
+                sourceBBID:
+                  type: string
+                  maxLength: 12
+                beneficiaries:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - payeeIdentity
+                    properties:
+                      payeeIdentity:
+                        type: string
+                        maxLength: 20
+                      bankingInstitutionCode:
+                        type: string
+                        maxLength: 11
+                      paymentModality:
+                        type: string
+                        maxLength: 2
+                        enum:
+                          - '00'
+                          - '01'
+                          - '02'
+                          - '03'
+                          - '04'
+                      financialAddress:
+                        type: string
+                        maxLength: 30
+                      status:
+                        type: string
+                        enum: ['0', '1']
+      responses:
+        '200':
+          description: Beneficiary update successfully received.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - responseCode
+                  - responseDescription
+                  - requestID
+                properties:
+                  responseCode:
+                    type: string
+                    maxLength: 2
+                  responseDescription:
+                    type: string
+                    maxLength: 200
+                  requestID:
+                    type: string
+                    maxLength: 12

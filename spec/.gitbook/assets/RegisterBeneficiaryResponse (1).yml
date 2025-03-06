@@ -1,0 +1,58 @@
+openapi: 3.0.0
+info:
+  title: Beneficiary Onboarding Notification API
+  version: 1.0.1
+  description: Callback API from Pay-BB to notify Source BB via the IM BB about the beneficiary onboarding status.
+paths:
+  /callback:  # Placeholder endpoint, actual URL is dynamically determined by X-Callback-URL header.
+    post:
+      summary: Notify the onboarding status of beneficiaries.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - requestID
+                - registerRequestID
+                - numberFailedCases
+              properties:
+                requestID:
+                  type: string
+                  maxLength: 12
+                registerRequestID:
+                  type: string
+                  maxLength: 12
+                numberFailedCases:
+                  type: integer
+                failedCases:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - payeeIdentity
+                      - paymentModality
+                    properties:
+                      payeeIdentity:
+                        type: string
+                        maxLength: 20
+                      bankingInstitutionCode:
+                        type: string
+                        maxLength: 11
+                      paymentModality:
+                        type: string
+                        maxLength: 2
+                        enum:
+                          - '00'
+                          - '01'
+                          - '02'
+                          - '03'
+                          - '04'
+                      failureReason:
+                        type: string
+                        maxLength: 100
+      responses:
+        '200':
+          description: Callback successfully received.
+        '202':
+          description: Callback acknowledged but not processed yet.

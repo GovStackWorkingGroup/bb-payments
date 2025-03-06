@@ -1,0 +1,99 @@
+openapi: 3.0.0
+info:
+  title: Bill Inquiry API for Payer FI
+  version: 1.0.0
+  description: The Payer FI calls this API from PBB for "Bill Inquiry".
+paths:
+  /bills/{billId}:
+    get:
+      summary: Retrieve bill information.
+      parameters:
+        - name: X-CorrelationID
+          in: header
+          required: true
+          description: Globally unique requestId/ client correlation Id
+          schema:
+            type: string
+            maxLength: 20
+        - name: Platform-TenantId
+          in: header
+          required: true
+          description: Tenant Id for Data scoping
+          schema:
+            type: string
+            maxLength: 20
+        - name: PayerFI-Id
+          in: header
+          required: true
+          description: Payer FI ID initiating the original bill inquiry/ payment sequence
+          schema:
+            type: string
+            maxLength: 20
+        - name: billId
+          in: path
+          required: true
+          description: ID of the specific Bill invoice
+          schema:
+            type: string
+            maxLength: 20
+        - name: fields
+          in: query
+          required: true
+          description: Specific fields for inquiry
+          schema:
+            type: string
+            enum: [ "inquiry" ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  maxLength: 12
+                billId:
+                  type: string
+                  maxLength: 20
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                    maxLength: 2
+                  reason:
+                    type: string
+                    maxLength: 200
+                  requestId:
+                    type: string
+                    maxLength: 12
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                    maxLength: 2
+                  reason:
+                    type: string
+                    maxLength: 200
+                  requestId:
+                    type: string
+                    maxLength: 12
+      security:
+        - PayerFIAuth: []
+components:
+  securitySchemes:
+    PayerFIAuth:
+      type: apiKey
+      in: header
+      name: X-CorrelationID

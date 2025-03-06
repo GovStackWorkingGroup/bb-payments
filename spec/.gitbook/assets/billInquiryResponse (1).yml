@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  title: Bill Inquiry Response API for Payer FI
+  version: 1.0.0
+  description: PBB invokes this API in response to the Bill Inquiry Request from Payer FI.
+paths:
+  /bills/{billId}:
+    post:  # Assuming the response is sent via POST method; modify if it's GET
+      summary: Send bill inquiry response.
+      parameters:
+        - name: X-CorrelationID
+          in: header
+          required: true
+          description: Globally unique requestId/ client correlation Id
+          schema:
+            type: string
+            maxLength: 20
+        - name: Platform-TenantId
+          in: header
+          required: true
+          description: Tenant Id for Data scoping
+          schema:
+            type: string
+            maxLength: 20
+        - name: PayerFI-Id
+          in: header
+          required: true
+          description: Payer FI ID initiating the original bill inquiry/ payment sequence
+          schema:
+            type: string
+            maxLength: 20
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  maxLength: 12
+                code:
+                  type: integer
+                  format: int2
+                  enum: [00, 01]  # 00 - Success, 01 - Failure
+                reason:
+                  type: string
+                billId:
+                  type: string
+                  maxLength: 20
+                billDetails:
+                  type: object
+                  properties:
+                    billerId:
+                      type: string
+                      maxLength: 10
+                    billerName:
+                      type: string
+                      maxLength: 10
+                    billStatus:
+                      type: string
+                      maxLength: 10
+                    dueDate:
+                      type: integer  # Assuming Epoch timestamp
+                    amountonDueDate:
+                      type: integer
+                    amountAfterDueDate:
+                      type: integer
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                    maxLength: 2
+                  reason:
+                    type: string
+                    maxLength: 200
+                  requestID:
+                    type: string
+                    maxLength: 12
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                    maxLength: 2
+                  reason:
+                    type: string
+                    maxLength: 200
+                  requestID:
+                    type: string
+                    maxLength: 12
+      security:
+        - PayerFIAuth: []
+components:
+  securitySchemes:
+    PayerFIAuth:
+      type: apiKey
+      in: header
+      name: X-CorrelationID

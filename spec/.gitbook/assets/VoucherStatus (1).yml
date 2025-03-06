@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  title: Voucher Status API
+  version: 1.0.1
+  description: Synchronous API to view the status of particular vouchers.
+
+paths:
+  /vouchers/{serialNumber}:
+    get:
+      summary: Retrieve voucher status.
+      operationId: getVoucherStatus
+      parameters:
+        - name: serialNumber
+          in: path
+          description: Unique Reference Number assigned to the voucher.
+          required: true
+          schema:
+            type: string
+            maxLength: 20
+        - name: fields
+          in: query
+          description: Query parameter to retrieve status.
+          required: true
+          schema:
+            type: string
+            enum: [status]
+      responses:
+        '200':
+          description: Voucher status details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: Voucher status (from 01 to 06, and 9 for error).
+                  serialNumber:
+                    type: string
+                    maxLength: 20
+                    description: Serial number of the voucher.
+                  value:
+                    type: number
+                    format: float
+                    description: Amount of the voucher.
+        '400':
+          description: Bad request (invalid voucher serial number).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: Error status code.
+                  message:
+                    type: string
+                    description: Error message.
+                  serialNumber:
+                    type: string
+                    maxLength: 20
+                    description: Serial number of the voucher.
+                  value:
+                    type: number
+                    format: float
+                    description: Amount of the voucher, typically 0.0 for errors.
+      security:
+        - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+headers:
+  X-Registering-Institution-Id:
+    description: ID used for data scoping like Tenants. Unique ID of the Issuing Agency, preconfigured in the Voucher Engine.
+    required: true
+    schema:
+      type: string
+      maxLength: 20

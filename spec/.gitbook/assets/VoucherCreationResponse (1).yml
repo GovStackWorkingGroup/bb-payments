@@ -1,0 +1,60 @@
+openapi: 3.0.0
+info:
+  title: Voucher Details Return API
+  version: 1.0.1
+  description: API invoked by Voucher Engine to return voucher details to Source BB.
+
+paths:
+  /voucher-details-return:
+    post:
+      summary: Return created vouchers' details from Voucher Engine.
+      requestBody:
+        description: Details of the created vouchers.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestID:
+                  type: string
+                  maxLength: 12
+                  description: Globally unique ID.
+                batchID:
+                  type: string
+                  maxLength: 12
+                  description: BatchID for batch.
+                voucherInstructions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      instructionID:
+                        type: string
+                        maxLength: 16
+                        description: Individual ID for each instruction.
+                      serialNumber:
+                        type: string
+                        maxLength: 10
+                        description: Voucher Serial Number.
+                      voucherNumber:
+                        type: string
+                        maxLength: 44
+                        description: Encrypted Voucher Number.
+                      currency:
+                        type: string
+                        maxLength: 3
+                        description: Transaction Currency Code.
+                      amount:
+                        type: float
+                        description: Amount to be Credited.
+                      narration:
+                        type: string
+                        maxLength: 50
+                        description: Description of Payment.
+      responses:
+        '200':
+          description: Voucher details successfully received by Source BB.
+        '202':
+          description: Voucher details acceptance is acknowledged and will be processed by Source BB.
+

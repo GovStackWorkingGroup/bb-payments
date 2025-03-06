@@ -1,0 +1,78 @@
+openapi: 3.0.0
+info:
+  title: RTP Update API
+  version: 1.0.0
+  description: API called by Payments BB to update Biller on the response of the RTP.
+paths:
+  /rtpUpdate:
+    post:
+      summary: Update the Biller on the RTP response.
+      parameters:
+        - name: X-CorrelationID
+          in: header
+          required: true
+          description: Globally unique requestId/ client correlation Id
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-Platform-TenantId
+          in: header
+          required: true
+          description: Tenant Id for Data scoping
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-billerId
+          in: header
+          required: true
+          description: ID of the institution initiating the RTP
+          schema:
+            type: string
+            maxLength: 20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  maxLength: 12
+                rtpId:
+                  type: integer
+                  maxLength: 12
+                billId:
+                  type: string
+                  maxLength: 30
+                rtpStatus:
+                  type: string
+                  enum: ["00", "01"]
+                rejectReason:
+                  type: string
+                  maxLength: 10
+                  enum: ["R", "E", "W"]
+      responses:
+        '200':
+          description: RTP Update Acknowledged
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                    maxLength: 2
+                  responseDescription:
+                    type: string
+                    maxLength: 200
+                  requestID:
+                    type: string
+                    maxLength: 12
+      security:
+        - PaymentsBBAuth: []
+components:
+  securitySchemes:
+    PaymentsBBAuth:
+      type: apiKey
+      in: header
+      name: X-CorrelationID

@@ -1,0 +1,63 @@
+openapi: 3.0.0
+info:
+  title: Voucher Status Update API
+  version: 1.0.1
+  description: API invoked by Source BB to update the status of vouchers in the Voucher Engine.
+
+paths:
+  /vouchers:
+    put:
+      summary: Update the status of vouchers.
+      parameters:
+        - in: query
+          name: command
+          schema:
+            type: string
+          required: true
+          description: For this use case, the value of the command is activate.
+      requestBody:
+        description: Details of the vouchers to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                RequestID:
+                  type: string
+                  maxLength: 12
+                  description: Globally unique ID.
+                BatchID:
+                  type: string
+                  maxLength: 12
+                  description: BatchID for batch.
+                VoucherInstructions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      serialNumber:
+                        type: string
+                        maxLength: 6
+                        description: Voucher Serial Number for activation.
+      responses:
+        '200':
+          description: Voucher status successfully updated by Voucher Engine.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ResponseCode:
+                    type: string
+                    maxLength: 2
+                    description: Response code (00 for success, 01 for failure).
+                  ResponseDescription:
+                    type: string
+                    maxLength: 200
+                    description: Description of the response.
+                  RequestID:
+                    type: string
+                    maxLength: 12
+                    description: Echoed from Request.
+

@@ -1,0 +1,97 @@
+openapi: 3.0.0
+info:
+  title: PBB RTP Status Response API
+  version: 1.0.0
+  description: API invoked by PBB in response to Biller/ Aggregator’s RTP request’s status.
+paths:
+  /transferRequests/{transferRequestId}:
+    post:
+      summary: RTP Status Response.
+      parameters:
+        - name: transferRequestId
+          in: path
+          required: true
+          description: Transfer request ID
+          schema:
+            type: string
+        - name: X-CorrelationID
+          in: header
+          required: true
+          description: Globally unique requestId/ client correlation Id
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-Platform-TenantId
+          in: header
+          required: true
+          description: Tenant Id for Data scoping
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-billerId
+          in: header
+          required: true
+          description: ID of the institution requesting the transaction Update
+          schema:
+            type: string
+            maxLength: 20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rtpId:
+                  type: integer
+                RequestId:
+                  type: string
+                  maxLength: 12
+                requestStatus:
+                  type: string
+                  enum: [COM, PND, EXP, CAN, RJC]
+                PaymentReferenceID:
+                  type: string
+                  maxLength: 20
+                lastUpdateDate:
+                  type: integer
+      responses:
+        '202':
+          description: Request accepted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ResponseCode:
+                    type: string
+                    maxLength: 2
+                  reason:
+                    type: string
+                    maxLength: 200
+                  requestID:
+                    type: string
+                    maxLength: 12
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    maxLength: 2
+                  reason:
+                    type: string
+                    maxLength: 200
+                  requestID:
+                    type: string
+                    maxLength: 12
+      security:
+        - PaymentsBBAuth: []
+components:
+  securitySchemes:
+    PaymentsBBAuth:
+      type: apiKey
+      in: header
+      name: X-CorrelationID

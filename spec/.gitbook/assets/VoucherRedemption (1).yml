@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+  title: Voucher Redemption API
+  version: 1.0.1
+  description: Synchronous API for voucher redemption at Merchant/Agent locations.
+
+paths:
+  /vouchers:
+    post:
+      summary: Redeem a voucher.
+      operationId: redeemVoucher
+      parameters:
+        - name: command
+          in: query
+          description: Command for the action.
+          required: true
+          schema:
+            type: string
+            enum: [cancel]
+      requestBody:
+        description: Voucher redemption details.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestID:
+                  type: string
+                  maxLength: 12
+                  description: Globally unique ID.
+                voucherSerialNumber:
+                  type: string
+                  description: Voucher Serial Number.
+                agentID:
+                  type: string
+                  maxLength: 10
+                  description: Agent or Merchant ID.
+                voucherSecretNumber:
+                  type: string
+                  maxLength: 6
+                  description: Voucher secret number for redemption.
+      responses:
+        '200':
+          description: Voucher redemption details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: Redemption status (0 for failure, 1 for success).
+                  message:
+                    type: string
+                    maxLength: 20
+                    description: Narration from the Voucher Engine.
+                  serialNumber:
+                    type: string
+                    maxLength: 20
+                    description: Serial number of the redeemed voucher.
+                  value:
+                    type: number
+                    format: float
+                    description: Amount of the redeemed voucher.
+                  timestamp:
+                    type: string
+                    format: date-time
+                    description: Redemption timestamp.
+                  transactionId:
+                    type: string
+                    maxLength: 12
+                    description: Unique transaction ID.
+      security:
+        - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+headers:
+  X-Registering-Institution-Id:
+    description: ID used for data scoping like Tenants. Unique ID of the Issuing Agency, preconfigured in the Voucher Engine.
+    required: true
+    schema:
+      type: string
+      maxLength: 20

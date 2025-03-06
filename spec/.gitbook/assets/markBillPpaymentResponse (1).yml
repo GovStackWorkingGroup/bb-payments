@@ -1,0 +1,91 @@
+openapi: 3.0.0
+info:
+  title: Bill Payment Notification Status Update API
+  version: 1.0.0
+  description: API invoked by Biller/Aggregator to notify Payments BB of the bill payment status.
+paths:
+  /billTransferRequests:
+    post:
+      summary: Update Payments BB with the status of a Bill Payment Notification.
+      parameters:
+        - name: X-CorrelationID
+          in: header
+          required: true
+          description: Globally unique requestId/ client correlation Id
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-Platform-TenantId
+          in: header
+          required: true
+          description: Tenant Id for Data scoping
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-Payer FI-ID
+          in: header
+          required: true
+          description: Payer FI ID initiating the original bill inquiry/ payment sequence
+          schema:
+            type: string
+            maxLength: 20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  maxLength: 12
+                billId:
+                  type: string
+                  maxLength: 20
+                status:
+                  type: string
+                  enum: [ACK, RJC]
+                rejectReason:
+                  type: string
+                  maxLength: 3
+                  enum: [Def, Dup, Und]
+      responses:
+        '202':
+          description: Request Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                    maxLength: 2
+                  reason:
+                    type: string
+                    maxLength: 100
+                  requestID:
+                    type: string
+                    maxLength: 12
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    maxLength: 2
+                  reason:
+                    type: string
+                    maxLength: 100
+                  requestID:
+                    type: string
+                    maxLength: 12
+      security:
+        - BillerAuth: []
+components:
+  securitySchemes:
+    BillerAuth:
+      type: apiKey
+      in: header
+      name: X-CorrelationID

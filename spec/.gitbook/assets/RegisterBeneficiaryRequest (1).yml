@@ -1,0 +1,88 @@
+openapi: 3.0.0
+info:
+  title: Beneficiary Onboarding API
+  version: 1.0.0
+  description: API for registering beneficiaries into the ID Mapper of the Payments BB.
+paths:
+  /identityAccountMapper/beneficiary:
+    post:
+      summary: Register beneficiaries into the ID Mapper.
+      parameters:
+        - name: X-Callback-URL
+          in: header
+          required: true
+          description: URL on which the result is published
+          schema:
+            type: string
+            maxLength: 100
+        - name: X-Registering-Institution-ID
+          in: header
+          required: true
+          description: Unique ID to identify the Source Ministry/Organization that registered the beneficiary.
+          schema:
+            type: string
+            maxLength: 12
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                RequestID:
+                  type: string
+                  maxLength: 12
+                Beneficiaries:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      payeeIdentity:
+                        type: string
+                        maxLength: 20
+                      PaymentModality:
+                        type: string
+                        maxLength: 2
+                      FinancialAddress:
+                        type: string
+                        maxLength: 30
+      responses:
+        '200':
+          description: Successfully received request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                    maxLength: 2
+                  responseDescription:
+                    type: string
+                    maxLength: 200
+                  requestID:
+                    type: string
+                    maxLength: 12
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ResponseCode:
+                    type: string
+                    maxLength: 2
+                  ResponseDescription:
+                    type: string
+                    maxLength: 200
+                  RequestID:
+                    type: string
+                    maxLength: 12
+      security:
+        - BeneficiaryOnboardingAuth: []
+components:
+  securitySchemes:
+    BeneficiaryOnboardingAuth:
+      type: apiKey
+      in: header
+      name: X-Callback-URL

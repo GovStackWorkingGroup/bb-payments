@@ -1,0 +1,123 @@
+openapi: 3.0.0
+info:
+  title: Batch Transaction Handover API
+  version: 1.0.2
+  description: API for Source BB or Payments BB to handover a batch of credit instructions.
+paths:
+  /batchtransactions:
+    post:
+      summary: Handover Batch of Credit Instructions.
+      parameters:
+        - name: type
+          in: query
+          required: true
+          description: Type of batch transaction. Expected value is "raw".
+          schema:
+            type: string
+            enum: [raw]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required:
+                  - requestId
+                  - creditParty
+                  - debitParty
+                  - paymentMode
+                  - amount
+                  - currency
+                properties:
+                  requestId:
+                    type: string
+                    maxLength: 16
+                  creditParty:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - key
+                        - value
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                  debitParty:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - key
+                        - value
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                  paymentMode:
+                    type: string
+                    maxLength: 20
+                  amount:
+                    type: number
+                    format: float
+                  currency:
+                    type: string
+                    maxLength: 3
+                  descriptionText:
+                    type: string
+                    maxLength: 50
+      responses:
+        '202':
+          description: Accepted. Batch handed over successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - batchId
+                properties:
+                  batchId:
+                    type: string
+                    maxLength: 50
+        '400':
+          description: Bad Request. Invalid input or missing parameters.
+
+      parameters:
+        - name: X-CorrelationID
+          in: header
+          required: true
+          description: Globally unique request Id/ client correlation Id
+          schema:
+            type: string
+            maxLength: 20
+        - name: Platform-TenantId
+          in: header
+          required: true
+          description: Tenant Id for Data scoping
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-Program-Id
+          in: header
+          required: false
+          description: In case a Government Entity has specific budget account for a Program
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-Registering-Institution-Id
+          in: header
+          required: false
+          description: This Id is used for data scoping like Tenants
+          schema:
+            type: string
+            maxLength: 20
+        - name: X-Callback-URL
+          in: header
+          required: true
+          description: URL on which the result is published
+          schema:
+            type: string
+            maxLength: 100

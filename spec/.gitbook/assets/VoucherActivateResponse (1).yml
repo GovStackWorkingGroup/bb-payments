@@ -1,0 +1,57 @@
+openapi: 3.0.0
+info:
+  title: Voucher Activation Confirmation Response API
+  version: 1.0.1
+  description: API invoked by Voucher Engine to confirm the status of batch activation to the calling BB.
+
+paths:
+  /callback-url:  # Note: this should be replaced with the specific callback endpoint if known.
+    post:
+      summary: Confirm the status of batch activation.
+      requestBody:
+        description: Activation status details.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                requestID:
+                  type: string
+                  maxLength: 12
+                  description: Globally unique ID.
+                registerRequestID:
+                  type: string
+                  maxLength: 12
+                  description: Echo the ID of the original Voucher_Activate API call.
+                numberFailedCases:
+                  type: integer
+                  description: Number of failed activation cases.
+                failedCases:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      serialNumber:
+                        type: string
+                        maxLength: 20
+                        description: Serial Number of the voucher.
+                      failureReason:
+                        type: string
+                        maxLength: 100
+                        description: Reason why the voucher failed to activate.
+      responses:
+        '200':
+          description: Activation confirmation successfully received by Source BB.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [success, failed]
+                    description: Status of the confirmation reception.
+
+        '202':
+          description: Activation confirmation acknowledged and is under process by Source BB.
