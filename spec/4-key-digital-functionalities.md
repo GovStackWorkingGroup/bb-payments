@@ -26,7 +26,7 @@ The account lookup directory service or mapper simplifies payment routing and is
 
 ### 4.4 Payment Request Initiation
 
-The Payment Building Block must allow systems to initiate a payment request. This request could come from two sources: external or internal. An external source could be another GovStack Building Block (e.g. the Registration Building Block or Social Benefits Registry Building Block or Payroll).&#x20;
+The Payment Building Block must allow systems to initiate a payment request. This request could come from two sources: external or internal. An external source could be another GovStack Building Block (e.g. the Registration Building Block or Social Benefits Registry Building Block or Payroll).
 
 ### 4.5 Payment Gateway
 
@@ -42,15 +42,15 @@ The Payment Building block must support different events related to triggering s
 
 ### 4.8 Reconciliation
 
-The Payments Building block must implement functionality that provides both internal and external reconciliation services.&#x20;
+The Payments Building block must implement functionality that provides both internal and external reconciliation services.
 
 ### 4.9 Batch Processing
 
-The Payments Building Block should provide batch processing services&#x20;
+The Payments Building Block should provide batch processing services
 
 ### 4.10 Scheduling Services
 
-The Payments Building Block should provide scheduling services to perform tasks on a regular or repeated basis
+The Payments Building Block should allow for scheduling services to perform tasks on a regular or repeated basis. This may be achieved through the Schedular BB or through internal timer functions.
 
 ### 4.11 Event Logging
 
@@ -71,3 +71,7 @@ The Payments Building Block must provide a security layer which protects the sys
 ### 4.15 Bulk payment service
 
 The Payments Building Block must provide bulk payment services. This bulk payment service is invoked in the case of G2P bulk disbursement.
+
+### 4.16  Support for multicurrency payments
+
+The payments BB supports a multicurrency system where each accepted currency is processed independently without conversion, allowing users to transact directly in their preferred currency. The source building block where the payment request is initiated (for eg in G2P payments this would be the Registry BB and for P2G payments this would be a Biller) will specify the currency for the payment. The treasury will maintain separate accounts and financial records for each currencies.

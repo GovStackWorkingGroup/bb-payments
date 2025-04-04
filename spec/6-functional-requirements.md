@@ -78,7 +78,7 @@ This process involves the Registration Building Block (or any other Building Blo
 
 * Extract and authenticate voucher data (REQUIRED)\
   \
-  In the redemption process, the merchant will authenticate the beneficiary and use a predefined technology (Unstructured Supplementary Service Data, Mobile App, Web Browser) to extract the voucher number and call a redemption API through the relevant calling Building Block. The calling Building Block may also validate the beneficiary details if so required. The Building Block will also be able to validate the merchant and determine the voucher group to which the merchant belongs. Lastly, the calling Building Block will invoke the Payment Building Block Redeem API, through the Payments Building Block API Management gateway, to validate the voucher and if valid to redeem it&#x20;
+  In the redemption process, the merchant will authenticate the beneficiary and use a predefined technology (Unstructured Supplementary Service Data, Mobile App, Web Browser) to extract the voucher number and call a redemption API through the relevant calling Building Block. The calling Building Block may also validate the beneficiary details if so required. The Building Block will also be able to validate the merchant and determine the voucher group to which the merchant belongs. Lastly, the calling Building Block will invoke the Payment Building Block Redeem API, through the Payments Building Block API Management gateway, to validate the voucher and if valid to redeem it
 * Initiate payment in the merchant or agent wallet or bank account (REQUIRED)\
   \
   Once the voucher is validated, the Voucher Management System should invoke an API on the Payment Gateway to effect the payment in the merchant or agent wallet or bank account (depending on what was set up at merchant/agent registration). The payment gateway/switch will debit a pre-funded account/wallet and credit the merchant/agent account/wallet. The successful execution will result in the voucher being flagged as consumed/used (REQUIRED)
@@ -185,12 +185,7 @@ Batch files go through a final check to be clean of defects and inconsistencies,
 
 ## 6.10 Scheduling Services
 
-* In relation to batch logic, payments are scheduled against the availability of systems, throughput limitations, and rules set by programs (REQUIRED)
-* Regular and repeat payments are scheduled (REQUIRED)
-* Batches may be given prioritization in the queue (REQUIRED)
-* Essential control logic may be included here, specific to the individual batch sending and resending (REQUIRED)
-* Availability of funds in different budget accounts may be incorporated into this process (REQUIRED)
-* Additional workflow checks as required, including the resending of failed transactions (REQUIRED)
+The payments BB must be able to internally schedule tasks as needed using dependencies to be able to execute workflows (REQUIRED).
 
 ## 6.11 Event Logging
 
@@ -253,7 +248,7 @@ At the transport layer:
 
 * Use of a hardware security module (HSM) or equivalent to provide cryptographic keys for critical functions such as encryption, decryption, and authentication for the use of applications, identities, and databases (REQUIRED)
 
-## 6.16 Bulk payment service&#x20;
+## 6.16 Bulk payment service
 
 *   G2P bulk disbursement (RECOMMENDED)\
     \
@@ -308,9 +303,9 @@ The Billing ecosystem would consist of various actors performing core and second
 **Payments Building Block**
 
 * Main payments facilitator enabling exchange of all financial and non-financial messages related to: Biller/Aggregator Registration o Bill discovery o Bill Payment Confirmation messages
-* Biller Discovery through internally referring to the Billers Table updated by PBB Billing sub-Module&#x20;
-* Generation of transaction/ activity reports for registered Billers/ Aggregators&#x20;
-* Registration of Billers in the system&#x20;
+* Biller Discovery through internally referring to the Billers Table updated by PBB Billing sub-Module
+* Generation of transaction/ activity reports for registered Billers/ Aggregators
+* Registration of Billers in the system
 * Allocation of unique Biller IDs / Prefixes
 
 **Billers Table**

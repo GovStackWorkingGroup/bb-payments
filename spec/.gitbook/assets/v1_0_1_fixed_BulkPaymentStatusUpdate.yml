@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: Batch Payment Status Update API
+  version: 1.0.4
+  description: API to update the status of a batch or individual credit instructions. Updated for multi-currency operation.
+paths:
+  /api/v1/batch:
+    post:
+      summary: Update Status of a Batch or Individual Credit Instructions.
+      parameters:
+        - name: batchId
+          in: query
+          required: true
+          description: Echo referenced GUID of original request by Payments BB.
+          schema:
+            type: string
+            maxLength: 50
+        - name: X-CorrelationID
+          in: query
+          required: true
+          description: Globally unique request Id/ client correlation Id.
+          schema:
+            type: string
+            maxLength: 12
+        - name: X-Callback-URL
+          in: header
+          required: false
+          description: URL registered in the request, used for callbacks.
+          schema:
+            type: string
+            maxLength: 100
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - requestId
+                - batchId
+                - TotalTransactions
+                - ongoing
+                - failed
+                - completed
+                - currency #Only required in Multi-currency operation
+                - totalAmount
+                - completed_amount
+                - ongoing_amount
+                - failed_amount
+                - result_file
+                - resultGeneratedAt
+                - note
+              properties:
+                requestId:
+                  type: string
+                  maxLength: 12
+                batchId:
+                  type: string
+                  maxLength: 50
+                TotalTransactions:
+                  type: number
+                ongoing:
+                  type: number
+                failed:
+                  type: number
+                completed:
+                  type: number
+                currency: #nulticurrency support
+                  type: string
+                  maxLength: 3
+                totalAmount:
+                  type: number
+                  format: float
+                completed_amount:
+                  type: number
+                  format: float
+                ongoing_amount:
+                  type: number
+                  format: float
+                failed_amount:
+                  type: number
+                  format: float
+                result_file:
+                  type: string
+                  description: Null for JSON type request
+                resultGeneratedAt:
+                  type: string
+                  format: date-time
+                  description: Timestamp of the result generation in UTC
+                note:
+                  type: string
+                  maxLength: 200
+                  description: Narration/description
+      responses:
+        '200':
+          description: Successfully updated the status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Status updated successfully."
+        '202':
+          description: Accepted. Update request received and is being processed.
+        '400':
+          description: Bad Request. Invalid input or missing parameters.
+

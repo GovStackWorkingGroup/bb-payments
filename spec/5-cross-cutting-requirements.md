@@ -48,6 +48,8 @@ Budget availability must be checked before voucher creation is requested.
 
 Calculations of payments may depend on several attributes laid down by a specific program.
 
+In an independent multicurrency model, systems must process transactions directly in the selected currency without converting to a base or alternate currency to maintain currency integrity during the transaction process and  ensure transparency and reliability for users, reducing the need for cross-currency conversions and associated costs.
+
 ## 5.1.11 Payment Systems (REQUIRED)
 
 Payment systems in the market, either provided by a public entity, a quasi-public entity, or a purely commercial player, are required for the functioning of this Building Block.
@@ -55,6 +57,8 @@ Payment systems in the market, either provided by a public entity, a quasi-publi
 ## 5.1.12 Settlement (REQUIRED)
 
 Settlement (gross or net) must be handled externally to this Building Block.
+
+In an independent multicurrency model, the system must support settlements in the same currency as the transaction, ensuring that the funds transferred match the original transaction currency.
 
 ## 5.1.13 Security (REQUIRED)
 
@@ -67,6 +71,12 @@ The Payments Building Block should meet the mechanisms for consuming and publish
 ## 5.1.15 Architecture (REQUIRED)
 
 The Payments Building Block must meet the requirements described in the Architecture Building Block.
+
+### 5.1.16 Multicurrency Accounts (OPTIONAL)
+
+The treasury will maintain separate accounts and financial records for each currency. The source building block where the payment request is initiated will specify the currency for the payment to the Payments building block.&#x20;
+
+The system must generate reports for payments made in each currency type.&#x20;
 
 ## 5.2 Infrastructure Requirements <a href="#docs-internal-guid-c5cf6da5-7fff-ad96-4712-4d822a57777d" id="docs-internal-guid-c5cf6da5-7fff-ad96-4712-4d822a57777d"></a>
 
@@ -101,3 +111,7 @@ The Merchant Ecosystem and the Merchant Registry are both outside the scope of t
 ## 5.4 Standards
 
 The following standards are applicable to data structures in the Payments Building Block:
+
+ISO 20022; Universal financial industry message scheme
+
+ISO 4217:  Currency Codes

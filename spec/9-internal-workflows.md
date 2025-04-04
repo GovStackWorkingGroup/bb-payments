@@ -8,16 +8,19 @@ description: >-
 
 ## 9.1 G2P Bulk Payment Workflows <a href="#docs-internal-guid-dfe6b849-7fff-2b78-34c6-27cab0f78e42" id="docs-internal-guid-dfe6b849-7fff-2b78-34c6-27cab0f78e42"></a>
 
-This section discusses the various processes involved in G2P disbursement, such as beneficiary onboarding into the Account Mapper, bulk disbursements to pre-registered financial addresses, and account pre-validation prior to bulk disbursement.
+This section discusses the various processes involved in G2P disbursement, such as beneficiary onboarding into the Account Mapper, bulk disbursements to pre-registered financial addresses, and account pre-validation prior to bulk disbursement. This section includes considerations for a Multiple Independent Currency model.
 
 ### 9.1.1 Beneficiary Onboarding in Account Mapper
 
 The workflow represents the process of onboarding beneficiaries in the ID Mapper as a prerequisite step before any payment processing can occur. This use case is triggered when a new G2P beneficiary has been onboarded by a G2P program, assigned a Functional ID, and verified as eligible for the social benefit program.
 
+In the Multi-currency case the G2P program which is associated with a payment account in a currency must match the currency of the acount the individual receives the payment in. Therefore Steps 1-3 in the below workflow are indicative of steps needed in the Registration Building Block to ensure this
+
 ```mermaid
 sequenceDiagram
 
 note left of RBB: Functional ID is issued to Beneficiary, Request parameters can be json array for bulk onboarding
+note left of RBB: Ascertain currency offered, decide Program ID based on currency and use it for onboarding  
 
 RBB -->> IM:  Register_Beneficiary (Request ID,\nSource BB ID, Array of Beneficiaries)
 IM -->> PBB:  Register_Beneficiary (Request ID,\nSource BB ID, Array of Beneficiaries)
@@ -32,26 +35,31 @@ PBB -->> IM:  Register_Beneficiary_Respone(Request_ID,\nResponse Code,Array of F
 IM -->> RBB:  Register_Beneficiary_Respone(Request_ID,\nResponse Code,Array of Failed cases)
 ```
 
-1. The Requesting Building Block (RBB) sends a "Register\_Beneficiary" request to the Information Mediator (IM), containing the Request ID, Source Building Block (SBB) ID, and an array of beneficiaries with their Functional ID, Payment Modality, and Financial Address (if available).
-2. IM forwards the "Register\_Beneficiary" request to the Payments Building Block (PBB) with the same parameters.
-3. PBB validates the API parameters and checks if the Source Building Block is configured in the Payments BB as an acceptable source of the API call.
-4. If the parameters are valid, PBB sends the "Register\_Beneficiary" request to the Account Mapper (AM) with the same parameters.
-5. Account Mapper checks for duplicate Functional IDs registered by the same Source Building Block and registers the beneficiaries in the mapper if they are not already registered.
-6. Account Mapper sends a "Register\_Beneficiary\_Response" to PBB, which contains the Request ID, response code, and an array of failed cases (if any) with descriptions.
-7. PBB forwards the "Register\_Beneficiary\_Response" to IM, with the same parameters.
-8. Finally, IM sends the "Register\_Beneficiary\_Response" to RBB, providing the final response code and the list of any failed cases with descriptions.
+1. _(Step needed for Multiple Independent Currencies Approach)_ The Requesting Building Block, ascertains the currency of the Beneficiary from those offered by the Government.
+2. _(Step needed for Multiple Independent Currencies Approach)_&#x54;he Requesting Building Block decides the correct Program ID based on the offered currency and the currency to be paid to the Beneficiary (They must match)
+3. _(Step needed for Multiple Independent Currencies Approach)_&#x54;he Requesting Building Block uses this Program ID as the basis for following steps 4-11.
+4. The Requesting Building Block (RBB) sends a "Register\_Beneficiary" request to the Information Mediator (IM), containing the Request ID, Source Building Block (SBB) ID, and an array of beneficiaries with their Functional ID, Payment Modality, and Financial Address (if available).
+5. IM forwards the "Register\_Beneficiary" request to the Payments Building Block (PBB) with the same parameters.
+6. PBB validates the API parameters and checks if the Source Building Block is configured in the Payments BB as an acceptable source of the API call.
+7. If the parameters are valid, PBB sends the "Register\_Beneficiary" request to the Account Mapper (AM) with the same parameters.
+8. Account Mapper checks for duplicate Functional IDs registered by the same Source Building Block and registers the beneficiaries in the mapper if they are not already registered.
+9. Account Mapper sends a "Register\_Beneficiary\_Response" to PBB, which contains the Request ID, response code, and an array of failed cases (if any) with descriptions.
+10. PBB forwards the "Register\_Beneficiary\_Response" to IM, with the same parameters.
+11. Finally, IM sends the "Register\_Beneficiary\_Response" to RBB, providing the final response code and the list of any failed cases with descriptions.
 
 The workflow supports the addition of beneficiaries in the mapper in bulk. The source building block can use the same APIs for individual or bulk onboarding.
 
 ### 9.1.2 Pre-validation of Accounts prior to Bulk Disbursement
 
-This flow represents the prevalidation process of accounts in a bulk disbursement scenario. The process involves a Source BB (SBB), Payments BB (PBB), Payer Bank (PrBank), and Payee Bank (PyBank).
+This flow represents the prevalidation process of accounts in a bulk disbursement scenario. The process involves a Source BB (SBB), Payments BB (PBB), Payer Bank (PrBank), and Payee Bank (PyBank). To support multicurrency use cases, the currency paramenter must be passed.
+
+To support Multiple Independent Currencies Approach, It would be necessary to include currency within the information passed.
 
 ```mermaid
 sequenceDiagram
 title Prevalidation of Accounts
 
-note right of SBB: Prepare Bulk Disbursement instructions containing <br>1. FunctionalID <br>2. Amount <br>3. Description/Narration <br>4. Instruction ID
+note right of SBB: Prepare Bulk Disbursement instructions containing <br>1. FunctionalID <br>2. Amount <br>3. Currency <br>4. Description/Narration <br>4. Instruction ID
 
 SBB -> PBB:  Prepayment_Validation(Batch_ID, Payment Instructions)
 
@@ -72,7 +80,7 @@ PBB -> SBB: Prepayment_Validation_Response(BatchID, Array of Failed Instructions
 
 ```
 
-1. The process begins with the Source BB (SBB) preparing bulk disbursement instructions containing key information such as the Functional ID, amount, description/narration, and instruction ID.
+1. The process begins with the Source BB (SBB) preparing bulk disbursement instructions containing key information such as the Functional ID, amount, currency (for multicurrency), narration, and instruction ID.
 2. SBB sends these instructions as a prepayment validation request (Prepayment\_Validation) to Payments BB (PBB).
 3. Upon receiving the request, PBB performs several actions, including debulking the instructions, checking each payee's Functional ID in the mapper, and recording any failed instructions.
 4. PBB then sends payee bank-wise sub-batches for validation in a loop. For each sub-batch, PBB sends a bulk validate account request (Bulk\_ValidateAccount) to the Payer Bank (PrBank), including the batch ID, destination BIC, and payment instructions.
@@ -375,6 +383,8 @@ The following is assumed for bill payment with the Payments BB
 * The Settlement of bill amounts is carried out by the relevant payers and payee FSPs.
 * The Payments BB will generate a report/ allow a data extract that would contain the log of transactions that would be used for settlement of the transactions between the Payer FSP and the Billers/ Aggregators FSPs
 
+In order to support multicurrency payments, currency is an important consideration to ensure that bills are paid in the currency raised, as such currency would need to be indicated on bills and payments as indicated in the diagram in section 9.3.3.&#x20;
+
 The following processes are involved in government bill payments:
 
 ### **9.3.1 Biller Onboarding**
@@ -387,9 +397,9 @@ The relationship between billers/ aggregators and how they identify specific bil
 
 <figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption><p>Biller/Aggregator Onboarding</p></figcaption></figure>
 
-**Pre-req to Biller Onboarding**&#x20;
+**Pre-req to Biller Onboarding**
 
-* The structure of the unique ID is defined including, the length of the unique ID and whether the ID is simply a sequential number or if each digit of the ID identifies any unique entity/actions.&#x20;
+* The structure of the unique ID is defined including, the length of the unique ID and whether the ID is simply a sequential number or if each digit of the ID identifies any unique entity/actions.
 
 The incoming biller/ aggregator has the required infra to support continuous requests and updates.
 
@@ -404,7 +414,7 @@ The incoming biller/ aggregator has the required infra to support continuous req
 
 The Payer FI – PBB linking is a one–time prerequisite activity required before consumers can request bill payment over the Payments BB. Setting up of the front end, UI to take the requests from the consumers would fall under the responsibility of the Payer FI only and would be out of the scope of payments BB
 
-Pre-requisites  for the  Payer FSP – PBB Linking Process&#x20;
+Pre-requisites for the Payer FSP – PBB Linking Process
 
 * The Payer FSP is enabled for Interbank Funds Transfer (for settlement) – Out of Scope of PBB
 * The Payer FSP is equipped with the right infrastructure to communicate with the PBB
@@ -422,7 +432,7 @@ Once the Payer FSP is setup with PBB for Bill Payment Services then it is expect
 * Would be able to credit the respective account of the biller based on the account information shared by PBB at the time of linking.
 * Would duly notify the PBB of the final status of the Bill Payment Request (successful debit/ Failed debit)
 
-### **9**.3**.3 Bill Inquiry & Bill Payment Update via Payment BB**
+### **9**.3.3 Bill Inquiry & Bill Payment Update via Payment BB
 
 After the completion of the prerequisite setups, the Payment BB is ready to accept requests from the Payer FSPs and retrieve information from and communicate with the Billers, Aggregators, and Government Entities.
 
@@ -438,7 +448,7 @@ Main Responsibilities of Payment BB in the flow
 8. The Government Agency also sends a copy of the invoice to the designated Bill Aggregator.
 9. The Bill Aggregator then sends the invoice reference number to the Payments Building Block .
 10. The payer, upon receiving the invoice, provides the invoice reference number to their preferred Collection Financial Service Provider (Collection Financial Services Provider).
-11. The Collection Financial Services Provider (FSP) requests transaction details, including the amount to be paid, from the Payments Building Block using the invoice reference number.
+11. The Collection Financial Services Provider (FSP) requests transaction details, including the amount to be paid, currency (for multicurrency) from the Payments Building Block using the invoice reference number.
 12. The Payments Building Block, in turn, requests the transaction details from the Bill Aggregator.
 13. The Bill Aggregator provides the requested transaction details to the Payments Building Block.
 14. The Payments Building Block forwards the transaction details to the Collection FSP.
@@ -447,7 +457,7 @@ Main Responsibilities of Payment BB in the flow
 17. The Payments Building Block forwards the payment reference to the Bill Aggregator.
 18. Finally, the Bill Aggregator sends the payment reference to the Government Agency, confirming the completion of the payment.
 
-**Push Payment Flow with Bill Inquiry Flow**&#x20;
+**Push Payment Flow with Bill Inquiry Flow**
 
 ```mermaid
 sequenceDiagram
@@ -534,7 +544,7 @@ title Push Payment Flow with Bill Inquiry
 * Once confirmed, **Bill Aggregator/Government Entity** acknowledges the payment and updates the status.
 * Finally, **PaymentsBB** notifies **Payer FI** of the successful payment update
 
-### Payer FI – Customer Bill Payment Flow <a href="#_toc142074926" id="_toc142074926"></a>
+### 9.3.4 Payer FI – Customer Bill Payment Flow <a href="#toc142074926" id="toc142074926"></a>
 
 ```mermaid
 sequenceDiagram
@@ -546,7 +556,7 @@ sequenceDiagram
     Payer->>PayerFI: Pay_Bill_Req (Bill ID)
     note right of PayerFI: Forwards billInquiry (Bill ID) _ Req to PBB
     note left of PayerFI: Receives billInquiry_Resp from PBB
-    PayerFI->>Payer: Pay_Bill_Resp \n(Biller Name, Due Date\nAmount,Bill Status )
+    PayerFI->>Payer: Pay_Bill_Resp \n(Biller Name, Due Date\nAmount, Currency, Bill Status )
 
     note over Payer, PayerFI: LEG 2: BILL PAYMENT CONFIRMATION
     Payer-->>PayerFI: Confirms Bill Payment
@@ -566,9 +576,7 @@ sequenceDiagram
 
 ```
 
-
-
-### P2G Bill Payment via Request to Pay Flow
+### 9.3.5 P2G Bill Payment via Request to Pay Flow
 
 ```mermaid
 sequenceDiagram
@@ -624,9 +632,7 @@ title P2G Bill Payment via RTP
     PayerFI-->>PaymentsBB: paymentStatusUpdate(Ack)
 ```
 
-### P2G Bill Payment with Voucher
-
-
+### 9.3.6 P2G Bill Payment with Voucher
 
 ```mermaid
 sequenceDiagram
