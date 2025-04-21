@@ -8,6 +8,8 @@ workflows:
   test_everything:
     jobs:
       - test-harness/create-config:
+          pre-steps:
+            - run: echo "hello" > /home/circleci/parameters.json
           post-steps: # Persist to workspace has to be defined in main workflow
             - persist_to_workspace:
                 root: workspace
