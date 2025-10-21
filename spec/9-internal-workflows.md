@@ -16,20 +16,15 @@ The workflow represents the process of onboarding beneficiaries in the ID Mapper
 
 In the Multi-currency case the G2P program which is associated with a payment account in a currency must match the currency of the acount the individual receives the payment in. Therefore Steps 1-3 in the below workflow are indicative of steps needed in the Registration Building Block to ensure this
 
-```mermaid
+```mermaid fullWidth="false"
 sequenceDiagram
-
 note left of RBB: Functional ID is issued to Beneficiary, Request parameters can be json array for bulk onboarding
 note left of RBB: Ascertain currency offered, decide Program ID based on currency and use it for onboarding  
-
 RBB -->> IM:  Register_Beneficiary (Request ID,\nSource BB ID, Array of Beneficiaries)
 IM -->> PBB:  Register_Beneficiary (Request ID,\nSource BB ID, Array of Beneficiaries)
-
 note left of PBB: Validate parameters, Authenticate Source Building block exists
-
 PBB -->> AM: Register_Beneficiary (Request ID,\nSource BB ID, Array of Beneficiaries)
 note left of AM: For each Payee Functional ID, Duplicate Check, Register in mapper
-
 AM -->> PBB: Register_Beneficiary_Respone(Request_ID,\nResponse Code,Array of Failed cases)
 PBB -->> IM:  Register_Beneficiary_Respone(Request_ID,\nResponse Code,Array of Failed cases)
 IM -->> RBB:  Register_Beneficiary_Respone(Request_ID,\nResponse Code,Array of Failed cases)
@@ -55,29 +50,20 @@ This flow represents the prevalidation process of accounts in a bulk disbursemen
 
 To support Multiple Independent Currencies Approach, It would be necessary to include currency within the information passed.
 
-```mermaid
+```mermaid fullWidth="false"
 sequenceDiagram
 title Prevalidation of Accounts
-
 note right of SBB: Prepare Bulk Disbursement instructions containing <br>1. FunctionalID <br>2. Amount <br>3. Currency <br>4. Description/Narration <br>4. Instruction ID
-
 SBB -> PBB:  Prepayment_Validation(Batch_ID, Payment Instructions)
-
 note left of PBB: 1. Debulking <br>2. Check each Payee Functional ID in mapper <br>3. Record Failed Instructions
-
 loop Send Payee Bank wise Sub-Batches
 PBB -> PrBank: Bulk_ValidateAccount (Batch_ID, Destination_BIC,Payment Instructions)
 PrBank -> PyBank: Account Validation Request as per Incumbent Scheme Norm
-
 note left of PyBank: 1. Validate A/C exists <br>2. Validate it can receive Credit <br>3. Validate Credit limit won't exhaust
-
 PyBank -> PrBank: Account Validation Response as per Incumbent Scheme Norm
 PrBank -> PBB: BulkValidateAccount_Response (BatchID, Array of Failed Instructions)
 end
-
 PBB -> SBB: Prepayment_Validation_Response(BatchID, Array of Failed Instructions)
-
-
 ```
 
 1. The process begins with the Source BB (SBB) preparing bulk disbursement instructions containing key information such as the Functional ID, amount, currency (for multicurrency), narration, and instruction ID.
@@ -100,23 +86,17 @@ Pre-conditions: Functional IDs intended to be recipients of funds must be pre-re
 
 Data Inputs: Source BB provides relevant confirmation to the Payments BB to begin credit transfer for successfully pre-validated accounts.
 
-```mermaid
+```mermaid fullWidth="false"
 sequenceDiagram
 title Bulk Disbursement into an online Financial Address
-
 SBB ->> PBB: BulkPayment(Batch_ID, Payment Instructions)
 PBB ->> PrBank: getAuthorization()
 PrBank ->> PBB: getAuthorization_Response()
-
 loop Send Payee Bank wise Sub-Batches
 PBB ->> PrBank: BulkPayment_ReceiverFI(Batch_ID, Destination_BIC, Payment Instructions)
 end
-
 note over PrBank: Payer Bank processes each Receiving FI Batch <br> and processes instructions as batch or single instructions, <br>depending on available transaction rails.
-
 PrBank ->> PBB: BulkPayment_StatusPush(BatchID, Credit Instructions)
-
-
 ```
 
 1. The process starts with Source Building Block (SBB) sending a BulkPayment request containing a Batch\_ID and a set of payment instructions to the Payment Building Block (PBB).
@@ -142,9 +122,8 @@ These use cases and the relationship between each one of them are shown and furt
 
 The use cases are described in the diagram below:
 
-```mermaid
+```mermaid fullWidth="false"
 graph TD
-
 Voucher_provisioning --> Voucher_Printing --> Merchant_Redemption
 Voucher_Printing --> Agent_Cashout
 Merchant_registration --> Merchant_Redemption
@@ -207,9 +186,6 @@ end
 alt Error 599
     Payment BB-->Source BB: Network connection timeout error
 end
-
-
-
 ```
 
 Flow Description:
@@ -236,7 +212,7 @@ Alternative: the voucher could be activated immediately on being requested. This
 
 The voucher redemption process is shown in the diagram below.
 
-```mermaid
+```mermaid fullWidth="false"
 sequenceDiagram
 title Voucher Redemption
 
@@ -247,7 +223,6 @@ Source BB (Merchant Interface) ->> Payment BB: Submit voucher and merchant detai
 alt Error 400
     Payment BB-->>Source BB (Merchant Interface): Invalid request
 end
-
 Payment BB ->> Payment BB: Check Voucher
 
 alt Error 458
@@ -282,7 +257,6 @@ end
 
 Payment BB ->> Payment BB: Consume Voucher
 Payment BB ->> Source BB (Merchant Interface): Amount credited to merchant account and voucher is consumed
-
 ```
 
 Flow Description:
@@ -459,7 +433,7 @@ Main Responsibilities of Payment BB in the flow
 
 **Push Payment Flow with Bill Inquiry Flow**
 
-```mermaid
+```mermaid fullWidth="false"
 sequenceDiagram
 title Push Payment Flow with Bill Inquiry
     title P2G Bill Payment via RTP
@@ -508,7 +482,6 @@ title Push Payment Flow with Bill Inquiry
         PaymentsBB->>BillAggregator: markBillPaid(Bill ID, ReceiptNum, PaymentStatus) _ Req 
         note right of PaymentsBB: Payments BB keeps sending \n Bill Payment Advice to BillAggregator \n until Response received from BillAggregator
     end 
-
     BillAggregator-->>PaymentsBB: markBillPaid (Ack)
     BillAggregator->>PaymentsBB: markBillPaid(MarkStatus, RespCode(C)) _ Resp 
     PaymentsBB->>PayerFI: paymentStatusUpdate(Payment Status, Txn ID, RespCode) _ Resp
@@ -546,7 +519,7 @@ title Push Payment Flow with Bill Inquiry
 
 ### 9.3.4 Payer FI – Customer Bill Payment Flow <a href="#toc142074926" id="toc142074926"></a>
 
-```mermaid
+```mermaid fullWidth="false"
 sequenceDiagram
     title PayBill Sequence - Customer/FSP
     participant Payer as Payer
@@ -572,23 +545,20 @@ sequenceDiagram
         PayerFI->>PayerFI: No Debit
         PayerFI->>Payer: Sends Txn Failure Message (Txn_Fail_Ref ID)
         note right of PayerFI: Bill Paid Status (Txn_Fail_Ref ID)
-    end
-
+end
 ```
 
 ### 9.3.5 P2G Bill Payment via Request to Pay Flow
 
-```mermaid
+```mermaid fullWidth="false"
 sequenceDiagram
 title P2G Bill Payment via RTP
     participant PayerFI as "Payer FI"
     participant PaymentsBB as "PaymentsBB"
     participant ALS as "ALS"
     participant BillAggregator as "Bill Aggregator GovtEntity"
-    
     BillAggregator->>PaymentsBB: 1. billerRtpReq (txnID, rtpId, billId, requestType, aliasID (C))
     PaymentsBB-->>BillAggregator: billerRtpReq (Ack)
-    
     alt RTP Type = 00
         PaymentsBB->>PayerFI: Jump to \"SEND RTP TO PAYER FI\" Step
     else RTP Type = 01
@@ -596,11 +566,9 @@ title P2G Bill Payment via RTP
         ALS->>PaymentsBB: Returns back with Payer FI details.
         PaymentsBB->>PayerFI: Jump to \"SEND RTP TO PAYER FI\" Step
     end
-    
     Note over PaymentsBB, PayerFI: SEND RTP TO PAYER FI
     PaymentsBB->>PayerFI: 2. payerRtpReq (txnId, billId, [Bill Details])
     PayerFI-->>PaymentsBB: payerRtpResp (Ack)
-    
     Note over PayerFI: Initiate \"RTP Notification Sequence - Customer<->FSP\"
     PayerFI->>PaymentsBB: 3. payerRtpResp (txnId, referenceId)
     PaymentsBB-->>PayerFI: payerRtpResp (Ack)
@@ -634,7 +602,7 @@ title P2G Bill Payment via RTP
 
 ### 9.3.6 P2G Bill Payment with Voucher
 
-```mermaid
+```mermaid fullWidth="false"
 sequenceDiagram
     title Payment By Voucher
     
@@ -674,6 +642,5 @@ sequenceDiagram
     PaymentsBB ->> PR: paymentStatusUpdate(Payment Status, Txn ID, RespCode) _ Resp
     
     Payer FI -->> PaymentsBB: paymentStatusUpdate(ack)
-
 ```
 
