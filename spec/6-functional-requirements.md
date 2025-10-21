@@ -53,23 +53,23 @@ Payments orchestration is used to configure the Payments Building Block function
 
 The voucher management system is responsible for prectivation, storage, activation, redemption, validation, suspension, unsuspension, purging, and reporting on vouchers.
 
-### **Voucher Provisioning**
+### **6.2.1 Voucher Provisioning**
 
 This process traditionally involves the generation of group vouchers against some authorized value (budget release or allotment).
 
-* Each voucher should have a unique secret voucher number, a unique identification number (voucher serial number) indicating its position in an inventory of pre-activated ~~issued~~ vouchers, and is linked to a fixed amount of value in a particular currency (REQUIRED)\
+* Each voucher should have a unique secret voucher number, a unique identification number (voucher serial number) indicating its position in an inventory of pre-activated vouchers, and is linked to a fixed amount of value in a particular currency (REQUIRED)\
   \
-  Vouchers will also be associated with a voucher group during ~~provisioning~~ pre-activation. Voucher serial numbers will be unique across currencies should there be vouchers of multiple currencies.
+  Vouchers will also be associated with a voucher group during pre-activation. Voucher serial numbers will be unique across currencies should there be vouchers of multiple currencies.
 * The vouchers should be created with an expiry date and MUST be stored securely (REQUIRED)\
   \
   All vouchers will be expected to have the same duration of expiry and this expiry period will be from the moment the voucher is activated.
-* Alternative design options include dynamically pre-activating a voucher at transaction time and creating variable amounts, but this increases complexity and requires tighter operational controls (OPTIONAL)
+* Alternative design options include dynamically pre-activating a voucher at transaction time and creating variable amounts, but this increases complexity and requires tighter operational controls (RECOMMENDED)
 
-### **Voucher Issuance**
+### **6.2.2 Voucher Issuance**
 
 This process involves the Registration Building Block (or any other Building Block for that matter) requesting a voucher number from the voucher management system through an API.
 
-* Once confirmation is received that the voucher has been released it flags the voucher as activated. Design decisions include making this step optional. Having an additional step increases security by ensuring that the voucher is not used until it is in the hands of the beneficiary (RECOMMENDED)
+* Once confirmation is received that the voucher has been released it flags the voucher as activated. Design decisions include making this step recommended. Having an additional step increases security by ensuring that the voucher is not used until it is in the hands of the beneficiary (RECOMMENDED)
 * Presentation of the voucher. At a minimum, this presentation should have the voucher number as well as the voucher serial number (REQUIRED)\
   \
   Once a voucher has been issued by the calling Building Block (Registration Building Block) it will be presented to the beneficiary in a form that is determined by the calling Building Block (refer to voucher workflow). The format of the final voucher presentation will be determined by the function of the calling Building Block. It could include the details of the beneficiary, which when placed on the voucher presentation, will help the merchant authenticate the beneficiary at the point of redemption
@@ -114,19 +114,22 @@ The voucher management server shall have a storage subsystem to store the vouche
 
 The account lookup directory service identifies the Financial Service Providers (FSP) where the merchant/agent/payee’s account is located.
 
-* Account lookup directory service (REQUIRED)\
-  \
-  The account lookup directory service provides a directory that maps the beneficiary's unique identifier (which matches the record in the social registry system) to the transaction account where the beneficiary wishes to receive their G2P payment, allowing the government to address payments to a specific individual. The identifier can be a national ID, phone number, or other number or alias that can uniquely identify individuals across social protection and financial sector databases. The information will be kept in a tokenised form in the account lookup directory service.\
-  \
-  In the case where there is a national payment switch, the account lookup directory service will be maintained by the FSPs, In the scenario, where there is no payment switch, the government would need to manage the account lookup directory service and provide a mechanism for linking it to the FSPs.
+Account lookup directory service (REQUIRED)
+
+* The account lookup directory service provides a directory that maps the beneficiary's unique identifier (which matches the record in the social registry system) to the transaction account where the beneficiary wishes to receive their G2P payment, allowing the government to address payments to a specific individual. The identifier can be a national ID, phone number, or other number or alias that can uniquely identify individuals across social protection and financial sector databases. The information will be kept in a tokenised form in the account lookup directory service.
+* In the case where there is a national payment switch, the account lookup directory service will be maintained by the FSPs, In the scenario, where there is no payment switch, the government would need to manage the account lookup directory service and provide a mechanism for linking it to the FSPs.
 
 ## 6.4 Payment Request Initiation
 
-* A request can come from either internal or external sources (REQUIRED)
-  * An external source could be another GovStack Building Block (e.g. the Registration Building Block or Social Benefits Registry Building Block or Payroll). Either source must be appropriately authenticated and authorized to initiate the request.
-* The initiation can be synchronous (typically for a single payment) or asynchronous (typically for batch payments) (REQUIRED)
-* The request must contain at a minimum: the payer identifier, the payee identifier, the amount, the currency, the policy, and the initiating source’s unique transaction ID. In the case of the internal payment request, it should also contain an ID provided by the payment orchestration module (REQUIRED)
-* Certain processes in the transaction flow might require proof of intent from the user, for example, entering the PIN/Password or pressing an ’accept‘ key to initiate the payment process. Such events and their outcomes should be recorded for audit trail purposes. However, the PINs and passwords should not be stored in logs or if they have to, PINs and passwords should be hashed out (RECOMMENDED)
+A request can come from either internal or external sources (REQUIRED)
+
+* An external source could be another GovStack Building Block (e.g. the Registration Building Block or Social Benefits Registry Building Block or Payroll). Either source must be appropriately authenticated and authorized to initiate the request.
+
+The initiation can be synchronous (typically for a single payment) or asynchronous (typically for batch payments) (REQUIRED)
+
+The request must contain at a minimum: the payer identifier, the payee identifier, the amount, the currency, the policy, and the initiating source’s unique transaction ID. In the case of the internal payment request, it should also contain an ID provided by the payment orchestration module (REQUIRED)
+
+Certain processes in the transaction flow might require proof of intent from the user, for example, entering the PIN/Password or pressing an ’accept‘ key to initiate the payment process. Such events and their outcomes should be recorded for audit trail purposes. However, the PINs and passwords should not be stored in logs or if they have to, PINs and passwords should be hashed out (RECOMMENDED)
 
 ## 6.5 Payment Gateway
 
@@ -153,11 +156,10 @@ The payment portal will:
 
 ## 6.7 Event Management
 
-* Create logs and notifications for specific actions on any transaction (REQUIRED)\
-  \
-  This functionality supports different events related to triggering specific actions on payment outcomes such as issuing receipts upon successful payment, automating payments in case of bulk transactions, passing information to other Building Blocks as necessary, and handling exceptional cases for instance user/system errors amongst others.\
-  \
-  All notification events shall have a timestamp associated with them and be kept as part of the audit log.
+Create logs and notifications for specific actions on any transaction (REQUIRED)
+
+* This functionality supports different events related to triggering specific actions on payment outcomes such as issuing receipts upon successful payment, automating payments in case of bulk transactions, passing information to other Building Blocks as necessary, and handling exceptional cases for instance user/system errors amongst others.
+* All notification events shall have a timestamp associated with them and be kept as part of the audit log.
 
 ## 6.8 Reconciliation
 
@@ -191,20 +193,25 @@ The payments BB must be able to internally schedule tasks as needed using depend
 
 Each component of the Payments Building Block should be capable of producing both application and transaction logs. This is important to ensure that the system can be adequately monitored and troubleshooting can be performed efficiently and effectively.
 
-* Application or event logs will capture events that each component performs and should contain at least the following information (REQUIRED):
-  * application/user ID
-  * event date and time
-  * terminal identity (name and/or IP address)
-  * event-related information (message or code)
-  * event success or failure
-* The components should also generate transaction logs that capture at least the following information (REQUIRED):
-  * transaction date and time
-  * transaction source
-  * transaction destination
-  * supplementary data
-  * transaction status (success, failed, in progress)
-* The event logs and the transaction logs should NOT capture any sensitive data such as voucher numbers, passwords, etc. (REQUIRED)
-* There should be an individual transaction record for every payment transaction. For example, if a batch payment process is executed there should be a transaction record for each individual transaction and a separate event log for the entire batch (RECOMMENDED)
+Application or event logs will capture events that each component performs and should contain at least the following information (REQUIRED):
+
+* application/user ID
+* event date and time
+* terminal identity (name and/or IP address)
+* event-related information (message or code)
+* event success or failure
+
+The components should also generate transaction logs that capture at least the following information (REQUIRED):
+
+* transaction date and time
+* transaction source
+* transaction destination
+* supplementary data
+* transaction status (success, failed, in progress)
+
+The event logs and the transaction logs should NOT capture any sensitive data such as voucher numbers, passwords, etc. (REQUIRED)
+
+There should be an individual transaction record for every payment transaction. For example, if a batch payment process is executed there should be a transaction record for each individual transaction and a separate event log for the entire batch (RECOMMENDED)
 
 ## 6.12 Audit Logging
 
@@ -227,9 +234,11 @@ Audit trails are required to provide assurance of the integrity of the requests 
 
 ## 6.13 Reporting Services
 
-* The data store will be write-only from the core service and should be read-only by external components (RECOMMENDED)
-* The data model on the reporting data store can be different from the internal operational data models that the switch uses (RECOMMENDED)
-* The component provided by the switch will be translating internal events and internal data models to the external data store models. This component can be replaced (RECOMMENDED)
+The data store will be write-only from the core service and should be read-only by external components (RECOMMENDED)
+
+The data model on the reporting data store can be different from the internal operational data models that the switch uses (RECOMMENDED)
+
+The component provided by the switch will be translating internal events and internal data models to the external data store models. This component can be replaced (RECOMMENDED)
 
 ## 6.14 Security layer
 
@@ -246,28 +255,31 @@ At the transport layer:
 
 ## 6.15 Data Protection
 
-* Use of a hardware security module (HSM) or equivalent to provide cryptographic keys for critical functions such as encryption, decryption, and authentication for the use of applications, identities, and databases (REQUIRED)
+Use of a hardware security module (HSM) or equivalent to provide cryptographic keys for critical functions such as encryption, decryption, and authentication for the use of applications, identities, and databases (REQUIRED)
 
 ## 6.16 Bulk payment service
 
-*   G2P bulk disbursement (RECOMMENDED)\
-    \
-    The following are the prerequisites required before bulk payments can be initiated:
+G2P bulk disbursement (RECOMMENDED)\
+\
+The following are the prerequisites required before bulk payments can be initiated:
 
-    * Funding requirements
-      * The funding requirements must operate within the budget/ceiling.
-      * The number of funding accounts and the life cycle processes will vary depending on the payment infrastructure scenarios.
-    * Bulk payments file
-      * For the salary payments use case, this would be generated by the payroll system.
-      * For the unconditional social cash transfer use case, this would be generated by a process that would be triggered as per a pre-agreed frequency and the information about the payments to be made would be extracted from the registry (a database containing the information about beneficiaries for a particular government social cash transfer programme). The process of generating this payments file is outside the Payments Building Block.
+Funding requirements:
 
-    There are three options for the disbursement:
+* The funding requirements must operate within the budget/ceiling.
+* The number of funding accounts and the life cycle processes will vary depending on the payment infrastructure scenarios.
 
-    * Manual process for Government/Department to send the retail payment details to each Financial Services Provider (FSP) (i.e. either by email or other means). This would be the case where there is a lack of interoperability among FSPs.
-    * Upload the batch disbursement file in the payment web portal for each FSP to retrieve in the case of a centralised Account Lookup Directory Service.
-    * Automate the disbursement process through the decentralised Account Lookup Directory Service and the payment gateway.
+Bulk payments file:
 
-    **Option 1**: Retail payment information is sent securely to each Payment Service Provider for disbursement
+* For the salary payments use case, this would be generated by the payroll system.
+* For the unconditional social cash transfer use case, this would be generated by a process that would be triggered as per a pre-agreed frequency and the information about the payments to be made would be extracted from the registry (a database containing the information about beneficiaries for a particular government social cash transfer programme). The process of generating this payments file is outside the Payments Building Block.
+
+There are three options for the disbursement:
+
+* Manual process for Government/Department to send the retail payment details to each Financial Services Provider (FSP) (i.e. either by email or other means). This would be the case where there is a lack of interoperability among FSPs.
+* Upload the batch disbursement file in the payment web portal for each FSP to retrieve in the case of a centralised Account Lookup Directory Service.
+* Automate the disbursement process through the decentralised Account Lookup Directory Service and the payment gateway.
+
+**Option 1**: Retail payment information is sent securely to each Payment Service Provider for disbursement
 
 <figure><img src=".gitbook/assets/image20.png" alt=""><figcaption></figcaption></figure>
 

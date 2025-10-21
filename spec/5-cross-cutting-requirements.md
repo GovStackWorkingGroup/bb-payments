@@ -8,67 +8,67 @@ description: >-
 
 ## 5.1 Requirements
 
-## 5.1.1 External Identification, Registration, and Enrollment Logic (REQUIRED)
+### 5.1.1 External Identification, Registration, and Enrollment Logic (REQUIRED)
 
 The Payments Building Block assumes that all identification, registration, and enrollment logic is done externally and are compliant with regulated payments and banking systems within a jurisdiction.
 
-## 5.1.2 Registration Requirements (RECOMMENDED)
+### 5.1.2 Registration Requirements (RECOMMENDED)
 
 The Payment System or Scheme in a country may require that participating payor or payee entities, whether health clinics, ministries, or individuals must have been registered with a regulated banking or non-banking entity prior to the use of the Payments Building Block.
 
-## 5.1.3 Compliance Verification (OPTIONAL)
+### 5.1.3 Compliance Verification (RECOMMENDED)
 
 In the context of Central Bank Digital Currency or Central Bank Accounts for individuals, the payment system block would assume that the regulatory conditions must have been verified for compliance and that payor and payee entities must have been properly registered according to the rules in that scheme.
 
-## 5.1.4 Statutory and Operational Requirements (REQUIRED)
+### 5.1.4 Statutory and Operational Requirements (REQUIRED)
 
 The Payments Building Block assumes that the statutory and operational requirements around accounts (i.e. know your customer/anti-money laundering/counter-terrorist financing) must have been completed by an outside system, which is capable of communicating that status in appropriate timeframes.
 
-## 5.1.5 Real-time Response (RECOMMENDED)
+### 5.1.5 Real-time Response (RECOMMENDED)
 
 The Payments Building Block assumes that the capabilities of the underlying infrastructure must enable transactions to meet a predefined limit to turn-around-time in real-time response.
 
-## 5.1.6 Validation (REQUIRED)
+### 5.1.6 Validation (REQUIRED)
 
 The Payments Building Block should have the ability to validate against a set of external systems for the status of an account, account address and routing information, confirmation of payment, and various error conditions of accounts and specific payments.
 
-## 5.1.7 Authorization (RECOMMENDED)
+### 5.1.7 Authorization (RECOMMENDED)
 
 During operation in certain modes, the Payments Block would be validating against authorizations/releases or allotments provided by the treasury systems for the source of funds.
 
-## 5.1.8 Eligibility Verification (RECOMMENDED)
+### 5.1.8 Eligibility Verification (RECOMMENDED)
 
 Normally, verification of eligibility of beneficiaries for the service should be done in another Block.
 
-## 5.1.9 Budget Availability (REQUIRED)
+### 5.1.9 Budget Availability (REQUIRED)
 
 Budget availability must be checked before voucher creation is requested.
 
-## 5.1.10 Calculation of Payments (OPTIONAL)
+### 5.1.10 Calculation of Payments (RECOMMENDED)
 
 Calculations of payments may depend on several attributes laid down by a specific program.
 
 In an independent multicurrency model, systems must process transactions directly in the selected currency without converting to a base or alternate currency to maintain currency integrity during the transaction process and  ensure transparency and reliability for users, reducing the need for cross-currency conversions and associated costs.
 
-## 5.1.11 Payment Systems (REQUIRED)
+### 5.1.11 Payment Systems (REQUIRED)
 
 Payment systems in the market, either provided by a public entity, a quasi-public entity, or a purely commercial player, are required for the functioning of this Building Block.
 
-## 5.1.12 Settlement (REQUIRED)
+### 5.1.12 Settlement (REQUIRED)
 
 Settlement (gross or net) must be handled externally to this Building Block.
 
 In an independent multicurrency model, the system must support settlements in the same currency as the transaction, ensuring that the funds transferred match the original transaction currency.
 
-## 5.1.13 Security (REQUIRED)
+### 5.1.13 Security (REQUIRED)
 
 The Payments Building Block must meet the security requirements described in the Security Building Block.
 
-## 5.1.14 API Mechanisms (REQUIRED)
+### 5.1.14 API Mechanisms (REQUIRED)
 
 The Payments Building Block should meet the mechanisms for consuming and publishing APIs as described in the Information Mediator Building Block.
 
-## 5.1.15 Architecture (REQUIRED)
+### 5.1.15 Architecture (REQUIRED)
 
 The Payments Building Block must meet the requirements described in the Architecture Building Block.
 
@@ -112,6 +112,6 @@ The Merchant Ecosystem and the Merchant Registry are both outside the scope of t
 
 The following standards are applicable to data structures in the Payments Building Block:
 
-ISO 20022; Universal financial industry message scheme
+[ISO 20022](https://www.iso.org/standard/57341.html): Universal financial industry message scheme
 
-ISO 4217:  Currency Codes
+[ISO 4217](https://www.iso.org/iso-4217-currency-codes.html):  Currency Codes
