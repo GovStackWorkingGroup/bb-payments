@@ -72,7 +72,7 @@ The Payments Building Block should meet the mechanisms for consuming and publish
 
 The Payments Building Block must meet the requirements described in the Architecture Building Block.
 
-### 5.1.16 Multicurrency Accounts (OPTIONAL)
+### 5.1.16 Multicurrency Accounts (RECOMMENDED)
 
 The treasury will maintain separate accounts and financial records for each currency. The source building block where the payment request is initiated will specify the currency for the payment to the Payments building block.&#x20;
 
