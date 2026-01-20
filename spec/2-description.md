@@ -35,7 +35,7 @@ Generally, the Building Block is supportive of multiple types of payment use cas
 * **Government to Government (G2G)**
   * Payments between two government entities (i.e. between Ministries/Departments and public sector institutions).
 
-Government to Business payments (G2B) and Government to Government (G2G) are not covered in this specification and will be covered in the second phase.
+Government to Government (G2G) are not covered in this specification and will be covered in a later phase.
 
 ## Government-to-Person Payment Principles <a href="#docs-internal-guid-c38a9447-7fff-fcb5-e6eb-c6419072f004" id="docs-internal-guid-c38a9447-7fff-fcb5-e6eb-c6419072f004"></a>
 

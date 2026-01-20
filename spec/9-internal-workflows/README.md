@@ -287,7 +287,7 @@ Assumptions:
 
 **Sample Redemption**
 
-![Source: Kenya Government and WFP Disburse Relief Cash to Drought Stricken Families accessed 05-Sep-21](<.gitbook/assets/image12 (1).png>)
+![Source: Kenya Government and WFP Disburse Relief Cash to Drought Stricken Families accessed 05-Sep-21](<../.gitbook/assets/image12 (1).png>)
 
 Note:
 
@@ -369,7 +369,7 @@ The main function of Payment BB in this case is allocating unique IDs to the reg
 
 The relationship between billers/ aggregators and how they identify specific bills from the consumers numbers is the billers'/aggregators' responsibility only and out of scope for Payments BB.
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption><p>Biller/Aggregator Onboarding</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption><p>Biller/Aggregator Onboarding</p></figcaption></figure>
 
 **Pre-req to Biller Onboarding**
 

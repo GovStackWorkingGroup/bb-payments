@@ -70,7 +70,7 @@ The Payments Building Block must provide a security layer which protects the sys
 
 ### 4.15 Bulk payment service
 
-The Payments Building Block must provide bulk payment services. This bulk payment service is invoked in the case of G2P bulk disbursement.
+The Payments Building Block must provide bulk payment services. This bulk payment service is invoked in the case of G2P or G2B bulk disbursement.
 
 ### 4.16  Support for multicurrency payments
 
