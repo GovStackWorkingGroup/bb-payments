@@ -34,6 +34,7 @@ Multicurrency is important because it enables seamless transactions across diffe
 * Added service API guidance for [8.4 Government to Business](../8-service-apis.md) and [8.5 Business to Government](../8-service-apis/8.5-business-to-government-b2g-payments.md)
 * Added [9.4 Government to Business](../9-internal-workflows/9.4-government-to-business-g2b.md) and [9.5 Business to Government](../9-internal-workflows/9.5-business-to-government-b2g.md) guidance
 * Re-structuring of [chapter 9](../9-internal-workflows.md) to spread the content on sub-pages for readability&#x20;
+* Added 2 uses cases: [Government to Business](../use-cases/government-to-business-g2b-use-case.md) and [Business to Government](../use-cases/business-to-government-b2g-use-case.md) for guidance on how to use these features.
 
 #### **Other changes in this release.**
 
