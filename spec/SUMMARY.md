@@ -1,8 +1,8 @@
 # Table of contents
 
-* [Payments](README.md)
+* [Payments Building Block Specification](README.md)
 * [1 Version History](1-version-history/README.md)
-  * [Change log](1-version-history/change-log.md)
+  * [Release Notes](1-version-history/release-notes.md)
 * [2 Description](2-description.md)
 * [3 Terminology](3-terminology.md)
 * [4 Key Digital Functionalities](4-key-digital-functionalities.md)
@@ -16,11 +16,14 @@
   * [8.4 Government to Business (G2B) payments](8-service-apis/8.4-government-to-business-g2b-payments.md)
   * [8.5 Business to Government (B2G) payments](8-service-apis/8.5-business-to-government-b2g-payments.md)
 * [9 Internal Workflows](9-internal-workflows.md)
-  * [9.4 Government to Business (G2B) Workflows](9-internal-workflows/9.4-government-to-business-g2b-workflows.md)
-  * [9.5 Business to Government (B2G) Workflows](9-internal-workflows/9.5-business-to-government-b2g-workflows.md)
-  * [9.1 G2P Bulk Payment Workflows](9-internal-workflows/9.1-g2p-bulk-payment-workflows.md)
+  * [9.1 G2P Bulk Payment](9-internal-workflows/9.1-g2p-bulk-payment.md)
   * [9.2 Voucher Payments](9-internal-workflows/9.2-voucher-payments.md)
   * [9.3 P2G Bill Payments](9-internal-workflows/9.3-p2g-bill-payments.md)
+  * [9.4 Government to Business (G2B)](9-internal-workflows/9.4-government-to-business-g2b.md)
+  * [9.5 Business to Government (B2G)](9-internal-workflows/9.5-business-to-government-b2g.md)
 * [10 Other Resources](10-other-resources.md)
-* [Government to Business (G2B) Use Case](government-to-business-g2b-use-case.md)
-* [Business to Government (B2G) Use Case](business-to-government-b2g-use-case.md)
+
+## Use cases
+
+* [Government to Business (G2B) Use Case](use-cases/government-to-business-g2b-use-case.md)
+* [Business to Government (B2G) Use Case](use-cases/business-to-government-b2g-use-case.md)

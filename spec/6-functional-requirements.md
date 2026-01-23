@@ -259,8 +259,8 @@ Use of a hardware security module (HSM) or equivalent to provide cryptographic k
 
 ## 6.16 Bulk payment service
 
-G2P bulk disbursement (RECOMMENDED)\
-\
+### 6.16.1 G2P bulk disbursement (RECOMMENDED)
+
 The following are the prerequisites required before bulk payments can be initiated:
 
 Funding requirements:
@@ -306,7 +306,7 @@ Figure: Key digital requirements of Bulk Payments expressed as a high-level bloc
 
 <figure><img src=".gitbook/assets/Picture2.png" alt=""><figcaption></figcaption></figure>
 
-### 6.17 P2G Bill payments
+### 6.16.3 P2G Bill payments
 
 The Billing ecosystem would consist of various actors performing core and secondary processes to complete the bill payment function. Some of the actors only play an auxiliary role to enable bill payment.
 
