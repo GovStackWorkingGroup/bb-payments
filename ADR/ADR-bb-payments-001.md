@@ -16,6 +16,8 @@ Payments BB to be split into smaller components to better fit composability and 
 Vijay Mauree, Payments WG Facilitator
 
 ### Supporting References:
+- [Discussion Board of Functionalities and Extensions](https://docs.google.com/spreadsheets/d/15lP9uKaiuZkWH4ZJWZaPn3Osh5UpHx1JMaO9o8TIVM8/edit?gid=298943032#gid=298943032)
+
 
 ### Voting Outcome (if applicable):
 
