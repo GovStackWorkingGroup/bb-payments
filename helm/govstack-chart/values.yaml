@@ -1,6 +1,6 @@
 ph-ee-g2psandbox:
   ph-ee-engine:
-   
+
     zeebe-cluster-helm:
       enabled: true
 
@@ -10,24 +10,26 @@ ph-ee-g2psandbox:
         enabled: true
 
     zeebe-operate-helm:
+      enabled: true
       ingress:
         enabled: false
-      
-    kibana:
-      ingress:
-      enabled: false 
 
-    operations:
-      
+    kibana:
+      enabled: true
+      ingress:
+        enabled: false
+
+    #operations:
+
     ph_ee_connector_ams_mifos:
       enabled: true
-      image: docker.io/openmf/ph-ee-connector-ams-mifos:v1.3.0
+      image: docker.io/openmf/ph-ee-connector-ams-mifos:v1.7.0
       ingress:
-        enabled: false                 
+        enabled: false
 
     ph_ee_connector_mojaloop:
       enabled: true
-      image: docker.io/openmf/ph-ee-connector-mojaloop:v1.2.0
+      image: docker.io/openmf/ph-ee-connector-mojaloop:v1.5.0
       ingress:
         enabled: false
 
@@ -35,93 +37,104 @@ ph-ee-g2psandbox:
 
     channel:
       enabled: true
-      image: docker.io/openmf/ph-ee-connector-channel:v1.6.1
+      image: docker.io/openmf/ph-ee-connector-channel:v1.11.0
       operations:
-        url: "http://ops-bk.sandbox.fynarfin.io/api/v1"
+        url: "http://ph-ee-operations-app:80/api/v1"
       server:
         ssl:
           keyPassword: "password"
-          keyStorePassword: "password"   
+          keyStorePassword: "password"
       ingress:
         enabled: false
-             
+
     operations_app:
       enabled: true
-      image: docker.io/openmf/ph-ee-operations-app:v1.5.0
+      image: docker.io/openmf/ph-ee-operations-app:v1.17.1
       tenants: "rhino,gorilla"
       ingress:
         enabled: false
 
     operations_web:
-      enabled: true 
-      image: docker.io/openmf/ph-ee-operations-web:v1.3.2
+      enabled: true
+      image: docker.io/openmf/ph-ee-operations-web:v1.20.0
       ingress:
-        enabled: false           
+        enabled: false
 
     ph_ee_connector_gsma:
       enabled: true
-      image: docker.io/openmf/ph-ee-connector-gsma:v1.0.2
+      image: docker.io/openmf/ph-ee-connector-gsma:v1.3.0
       ingress:
         enabled: false
 
     ph_ee_connector_slcb:
       enabled: false
-    
+
     mpesa:
       enabled: false
-      
+
     roster_connector:
       enabled: false
-      
+
     paygops_connector:
       enabled: false
-      
+
     notifications:
       enabled: true
-      image: docker.io/openmf/ph-ee-notifications:v1.0.0
+      image: docker.io/openmf/ph-ee-notifications:v1.4.0
       NOTIFICATION_FAILURE_ENABLED: "false"
       ingress:
-        enabled: false 
+        enabled: false
 
     connector_bulk:
       enabled: true
-      image: docker.io/openmf/ph-ee-bulk-processor:v1.5.0
+      image: docker.io/openmf/ph-ee-bulk-processor:v1.12.0
+      LOGGING_LEVEL_ROOT: "DEBUG"
       tenants: "rhino,gorilla"
       aws:
-        region: "us-east-2"
+        region: "ap-south-1"
         access_key: "AKIAX32JM37TZOJ5AKFB"
         secret_key: "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"
       operations_app:
-        contactpoint: "https://ops-bk.sandbox.fynarfin.io/"
+        contactpoint: "http://ph-ee-operations-app:80"
         endpoints:
-          batch_transaction: "/api/v1/batch/transactions"  
+          batch_transaction: "/api/v1/batch/transactions"
       ingress:
         enabled: false
 
     zeebe_ops:
       enabled: true
-      image: docker.io/openmf/ph-ee-zeebe-ops:v1.1.0
+      image: docker.io/openmf/ph-ee-zeebe-ops:v1.4.0
       tenants: "rhino,gorilla"
       ingress:
         enabled: false
 
     messagegateway:
       enabled: true
-      image: docker.io/openmf/message-gateway:v1.0.0
+      image: docker.io/openmf/message-gateway:v1.1.0
       secret:
         value:
           api_key: "eKiC1_JWdKy7eaTGQFHxXXjXjacr60W9Zntl"
           project_id: "PJ5ff552ce01d2978c"
       ingress:
         enabled: false
-                            
+
     importer_es:
       enabled: true
-      image: docker.io/openmf/openmf/ph-ee-importer-es:v1.4.0
+      image: docker.io/openmf/ph-ee-importer-es:v1.14.0
 
     importer_rdbms:
       enabled: true
-      image: docker.io/openmf/ph-ee-importer-rdbms:v1.4.1
+      image: docker.io/openmf/ph-ee-importer-rdbms:v1.13.1
+
+    mockpayment:
+      enabled: true
+      image: docker.io/openmf/ph-ee-connector-mock-payment-schema:v1.6.0
+      limits:
+        memory: "1024M"
+        cpu: "500m"
+      requests:
+        memory: "512M"
+        cpu: "100m"
 
     wildcardhostname: ""
     tls: ""
@@ -140,4 +153,17 @@ ph-ee-g2psandbox:
       enabled: true
       replica:
         replicaCount: 0
-        
+
+    integration_test:
+      enabled: true
+      replicas: 1
+      image: docker.io/openmf/ph-ee-integration-test:v1.6.2
+      gradle:
+        command: ./gradlew test -Dcucumber.filter.tags="@gov"
+
+  account_mapper:
+    image: openmf/ph-ee-identity-account-mapper:v1.6.0
+    enabled: true
+    LOGGING_LEVEL_ROOT: INFO
+    ingress:
+      enabled: false
